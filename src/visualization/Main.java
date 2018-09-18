@@ -10,6 +10,8 @@ import javafx.event.EventHandler;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import simulation.CellGraph;
+import simulation.factory.GameOfLife;
 
 public class Main extends Application {
     public static final int SCREEN_WIDTH = 700;
@@ -40,11 +42,16 @@ public class Main extends Application {
         modelPanel.getChildren().add(model_panel_text);
         modelPanel.setSpacing(25);
 
-        Text simulation_text = new Text("Simulation");
         VBox simulationPanel = new VBox();
         simulationPanel.setStyle("-fx-border-color: black;\n");
-        simulationPanel.getChildren().add(simulation_text);
-        simulationPanel.setSpacing(25);
+
+        //  NASTY - JUST
+        CellGraph<Integer> cg = GameOfLife.generate(2, 2, new int[][]{
+                {0, 0},
+                {1, 1},
+        });
+        simulationPanel.getChildren().add(cg.view());
+        //
 
         HBox controlPanel = new HBox();
         controlPanel.setStyle("-fx-border-color: black;\n");
@@ -58,6 +65,7 @@ public class Main extends Application {
         Button stop = new Button("Stop");
         //        stop.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e)->{// do something});
         Button begin = new Button("Begin");
+        begin.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> cg.tick());
         //        begin.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e)->{// do something});
         Button increase = new Button("Up");
         //        increase.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e)->{// do something});

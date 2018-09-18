@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 public class CellGraph<T> {
-    public static final int SIMULATION_SX = 400;
-    public static final int SIMULATION_SY = 400;
+    public static final double SIMULATION_SX = 529.5;
+    public static final double SIMULATION_SY = 435;
 
     protected List<Cell<T>> cells;
     private Map<Cell<T>, ArrayList<Cell<T>>> neighbors;
