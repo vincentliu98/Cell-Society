@@ -14,7 +14,7 @@ public class XMLRouter {
      * For each parameter name key in the Map, which , set the parameter in panel
      *
      */
-    public static Map<String, Object> setParams(String filename, simulationModelPanel panel) {
+    public static Map<String, Object> setParams(String filename, SimulationModelPanel panel) {
         ReaderWriter rw;
         File file = new File(filename);
         Scanner sc = null;
