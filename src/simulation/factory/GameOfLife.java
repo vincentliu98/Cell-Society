@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ *  Convenience class to generate "Game Of Life" CellGraph
+ */
 public class GameOfLife {
     private static Pair<Integer, Integer> lineToGrid(int x, int c) { return new Pair<>(x%c, x/c); }
     private static int gridToLine(int x, int y, int c) { return y * c + x; }
@@ -26,7 +30,7 @@ public class GameOfLife {
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
                 var cell = new Cell<>(initial[i][j], new Rectangle(j*width, i*height, width, height));
-                cell.view().setFill(rule.chooseColor(cell));
+                cell.view().setFill(rule.chooseColor(cell.value()));
                 cells.add(cell);
             }
         }
