@@ -2,6 +2,8 @@ package visualization;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import simulation.CellGraph;
+import simulation.factory.GameOfLife;
 
 /**
  * This is the main class for the GUI to run
