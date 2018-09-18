@@ -14,7 +14,7 @@ public class XMLRouter {
      * For each parameter name key in the Map, which , set the parameter in panel
      *
      */
-    public static Map<String, Object> setParams(String filename, SimulationModelPanel panel) {
+    public static Map<String, Object> setParams(String filename) {//, SimulationModelPanel panel) {
         ReaderWriter rw;
         File file = new File(filename);
         Scanner sc = null;
@@ -31,8 +31,7 @@ public class XMLRouter {
         }
         if (line.contains("Game of Life")){
              rw = new GameOfLifeReaderWriter();
-             System.out.print(line);
-             return rw.read(filename);
+             return rw.read(sc);
         }
         return null;
     }
@@ -40,7 +39,7 @@ public class XMLRouter {
     public static void callWriter(String modelName) {
     }
 
-//    public static void main(String[] args) {
-//        setParams("data/Game_of_Life_1.xml");
-//    }
+    public static void main(String[] args) {
+        setParams("data/Game_of_Life_1.xml");
+    }
 }
