@@ -4,9 +4,12 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import simulation.CellGraph;
+import simulation.factory.GameOfLife;
 
 /**
  * This is the Graphical User Interface for displaying the simulation models.
@@ -54,12 +57,12 @@ public class GUI {
         simulationPanel.setStyle("-fx-border-color: black;\n");
 
         //  NASTY - JUST
-        //CellGraph<Integer> cg = GameOfLife.generate(2, 2, new int[][]{
-        //        {0, 0},
-        //        {1, 1},
-        //});
-        //simulationPanel.getChildren().add(cg.view());
-        //
+        CellGraph<Integer> cg = GameOfLife.generate(2, 2, new int[][]{
+                {0, 0},
+                {1, 1},
+        });
+        simulationPanel.getChildren().add(cg.view());
+
 
         HBox controlPanel = new HBox();
         controlPanel.setStyle("-fx-border-color: black;\n");
@@ -73,7 +76,7 @@ public class GUI {
         Button stop = new Button("Stop");
         //        stop.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e)->{// do something});
         Button begin = new Button("Begin");
-        //begin.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> cg.tick());
+        begin.addEventFilter(MouseEvent.MOUSE_CLICKED, e -> cg.tick());
         //        begin.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e)->{// do something});
         Button increase = new Button("Up");
         //        increase.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e)->{// do something});
