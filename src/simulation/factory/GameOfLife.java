@@ -55,4 +55,14 @@ public class GameOfLife {
 
         return new CellGraph<>(cells, neighbors, rule);
     }
+
+    public static CellGraph<Integer> generate() {
+        return GameOfLife.generate(5, 5, new int[][]{
+                {1, 0, 1, 0, 1},
+                {0, 1, 0, 1, 0},
+                {1, 0, 1, 0, 1},
+                {0, 1, 0, 1, 0},
+                {1, 0, 1, 0, 1}
+        });
+    }
 }

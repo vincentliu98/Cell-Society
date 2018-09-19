@@ -10,6 +10,7 @@ import java.util.List;
 public class GameOfLifeRule implements UpdateRule<Integer> {
     public static final int DEAD = 0;
     public static final int ALIVE = 1;
+    public static final String MODEL_NAME = "Game Of Life";
 
     @Override
     public Integer nextValue(Integer myVal, List<Integer> neighborVal) {
@@ -22,4 +23,7 @@ public class GameOfLifeRule implements UpdateRule<Integer> {
 
     @Override
     public Color chooseColor(Integer myVal) { return myVal == DEAD ? Color.WHITE : Color.BLACK; }
+
+    @Override
+    public String modelName() { return MODEL_NAME; }
 }

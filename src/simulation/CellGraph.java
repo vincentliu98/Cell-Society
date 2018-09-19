@@ -29,6 +29,7 @@ public class CellGraph<T> {
     private Map<Cell<T>, ArrayList<Cell<T>>> neighbors;
     protected UpdateRule<T> rule;
     private Group view;
+    private int tickCount;
 
     public CellGraph(
         List<Cell<T>> cells_,
@@ -40,14 +41,18 @@ public class CellGraph<T> {
         rule = rule_;
         view = new Group();
         cells.forEach(c -> view.getChildren().add(c.view()));
+        tickCount = 0;
     }
 
     public void tick() {
+        tickCount ++;
         updateAll();
         commitAll();
         updateView();
     }
     public Node view() { return view; }
+    public int tickCount() { return tickCount; }
+    public String modelName() { return rule.modelName(); }
 
     private void updateAll() { cells.forEach(c -> c.update(rule, extractValue(c))); }
     private void commitAll() { cells.forEach(Cell::commit); }

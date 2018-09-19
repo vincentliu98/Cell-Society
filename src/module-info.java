@@ -4,5 +4,5 @@ module cellsociety.team10 {
     requires javafx.graphics;
     requires javafx.media;
 
-    exports xml;
+    exports visualization;
 }
