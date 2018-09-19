@@ -13,6 +13,7 @@ import java.util.List;
  * Again, using an UpdateRule instance, it updates its Color based on its value
  *
  * @param <T> The type of the value that this cell holds
+ * @author Inchan Hwang
  */
 public class Cell<T> {
     private T value, next;

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 /**
  *  Convenience class to generate "Game Of Life" CellGraph
+ *  @author Inchan Hwang
  */
 public class GameOfLife {
     public static CellGraph<Integer> generate(

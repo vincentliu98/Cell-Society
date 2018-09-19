@@ -8,6 +8,10 @@ import utility.IntegerPair;
 
 import java.util.ArrayList;
 
+/**
+ *  Convenience class to generate "Segregation" CellGraph
+ *  @author Inchan Hwang
+ */
 public class Segregation {
     public static CellGraph<IntegerPair> generate(
             int row, int column, int[][] initial, double tolerance

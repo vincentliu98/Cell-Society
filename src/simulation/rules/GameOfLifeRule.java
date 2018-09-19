@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  *  UpdateRules for the Game of Life
+ *  @author Inchan Hwang
  */
 public class GameOfLifeRule implements UpdateRule<Integer> {
     public static final int DEAD = 0;
