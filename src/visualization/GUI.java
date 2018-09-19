@@ -12,10 +12,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.CellGraph;
 import simulation.factory.GameOfLife;
+import simulation.factory.Segregation;
 import simulation.factory.SpreadingFire;
 import simulation.rules.GameOfLifeRule;
+import simulation.rules.SegregationRule;
 import simulation.rules.SpreadingFireRule;
-
 
 /**
  * This is the Graphical User Interface for displaying the simulation models.
@@ -40,7 +41,7 @@ public class GUI {
 
     public static final String[] SIMULATION_MODELS = new String[] {
             GameOfLifeRule.MODEL_NAME,
-            "Segregation",
+            SegregationRule.MODEL_NAME,
             "Wa-Tor",
             SpreadingFireRule.MODEL_NAME
     };
@@ -176,8 +177,11 @@ public class GUI {
 
     public void handleModelChange() {
         if(graph.modelName().equals(chooseModel.getValue())) return;
+
         if(chooseModel.getValue().equals(GameOfLifeRule.MODEL_NAME)) {
-            initializeSimulation(GameOfLife.generate()); // generate default
+            initializeSimulation(GameOfLife.generate());
+        } else if(chooseModel.getValue().equals(SegregationRule.MODEL_NAME)) {
+            initializeSimulation(Segregation.generate());
         } else if(chooseModel.getValue().equals(SpreadingFireRule.MODEL_NAME)) {
             initializeSimulation(SpreadingFire.generate());
         }

@@ -1,16 +1,16 @@
 package simulation.factory;
 
-        import javafx.scene.shape.Rectangle;
-        import javafx.util.Pair;
-        import simulation.Cell;
-        import simulation.CellGraph;
-        import simulation.rules.GameOfLifeRule;
-        import simulation.rules.SpreadingFireRule;
-        import simulation.rules.UpdateRule;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Pair;
+import simulation.Cell;
+import simulation.CellGraph;
+import simulation.rules.SpreadingFireRule;
+import simulation.rules.UpdateRule;
 
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *  Convenience class to generate "Spreading of Fire" CellGraph
@@ -38,7 +38,7 @@ public class SpreadingFire {
             }
         }
 
-        Map<Cell<Integer>, ArrayList<Cell<Integer>>> neighbors = new HashMap<>();
+        Map<Cell<Integer>, List<Cell<Integer>>> neighbors = new HashMap<>();
         for(int i = 0 ; i < cells.size() ; i ++) {
             var cur = cells.get(i);
             neighbors.put(cur, new ArrayList<>());

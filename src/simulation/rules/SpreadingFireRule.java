@@ -1,6 +1,7 @@
 package simulation.rules;
 
 import javafx.scene.paint.Color;
+import simulation.Cell;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class SpreadingFireRule implements UpdateRule<Integer> {
 
     @Override
     public Integer nextValue(Integer myVal, List<Integer> neighborVal) {
-        if (myVal == TREE && (neighborVal.stream().filter(a -> a == BURNING).count() > 0)){
+        if (myVal == TREE && (neighborVal.stream().anyMatch(a -> a == BURNING))){
             return Math.random() < probCatch ? BURNING : TREE;
         }
         else if (myVal == EMPTY) return myVal;
@@ -39,6 +40,9 @@ public class SpreadingFireRule implements UpdateRule<Integer> {
         }
         return null;
     }
+
+    @Override
+    public void beforeCommit(List<Cell<Integer>> cells) { }
 
     @Override
     public String modelName() { return MODEL_NAME; }
