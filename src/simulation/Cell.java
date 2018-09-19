@@ -25,7 +25,9 @@ public class Cell<T> {
     public void update(UpdateRule<T> rule, List<T> neighborVals) { next = rule.nextValue(value, neighborVals); }
     public void commit() { value = next; }
     public void updateView(UpdateRule<T> rule) { view.setFill(rule.chooseColor(value)); }
+    public void setNext(T next_) { next = next_; }
 
     public T value() { return value; }
+    public T next() { return next; }
     public Shape view() { return view; }
 }

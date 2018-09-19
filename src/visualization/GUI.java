@@ -6,16 +6,15 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.CellGraph;
 import simulation.factory.GameOfLife;
+import simulation.factory.Segregation;
 import simulation.rules.GameOfLifeRule;
-
-import java.util.ArrayList;
+import simulation.rules.SegregationRule;
 
 /**
  * This is the Graphical User Interface for displaying the simulation models.
@@ -40,7 +39,7 @@ public class GUI {
 
     public static final String[] SIMULATION_MODELS = new String[] {
             GameOfLifeRule.MODEL_NAME,
-            "Segregation",
+            SegregationRule.MODEL_NAME,
             "Wa-Tor",
             "Spreading Fire"
     };
@@ -178,6 +177,8 @@ public class GUI {
         if(graph.modelName().equals(chooseModel.getValue())) return;
         if(chooseModel.getValue().equals(GameOfLifeRule.MODEL_NAME)) {
             initializeSimulation(GameOfLife.generate()); // generate default
+        } else if(chooseModel.getValue().equals(SegregationRule.MODEL_NAME)) {
+            initializeSimulation(Segregation.generate());
         }
     }
 }
