@@ -1,6 +1,7 @@
 package simulation.rules;
 
 import javafx.scene.paint.Color;
+import simulation.Cell;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ import java.util.List;
 public interface UpdateRule<T> {
     T nextValue(T myVal, List<T> neighborVal);
     Color chooseColor(T myVal);
+    void beforeCommit(List<Cell<T>> cells);
+    String modelName();
 }
