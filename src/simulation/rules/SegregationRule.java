@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 /**
  *  SegregationRule implements Segregation Model.
  *  The integer pair represents (STAY/LEAVE, RED/BLUE)
+ * @author Inchan Hwang
  */
 public class SegregationRule implements UpdateRule<IntegerPair> {
     public static final int STAY = 0;

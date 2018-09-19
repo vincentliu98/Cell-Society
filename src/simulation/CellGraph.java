@@ -17,6 +17,7 @@ import java.util.Map;
  * It applies necessary / updates / beforeCommit actions / commits / updateViews to all cells
  *
  * @param <T> Type of the Cell's value
+ * @author Inchan Hwang
  */
 public class CellGraph<T> {
     public static final double SIMULATION_SX = 529.5;
