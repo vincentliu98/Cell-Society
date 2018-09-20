@@ -1,9 +1,8 @@
 package xml;
 
-import javafx.geometry.Point2D;
 import javafx.util.Pair;
-import simulation.Cell;
-import simulation.CellGraph;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,13 +15,12 @@ import java.util.Map;
  */
 public class SimulationData {
     // name in data file that will indicate it represents data for this type of object
-    public static final String DATA_TYPE = "Simulation";
+    public static final String DATA_TYPE = "GameOfLife";
 
     // field names expected to appear in data file holding values for this object
     public static final List<String> DATA_FIELDS = List.of(
         "type",
-        "cellMap",
-        "speed"
+        "cellArrayList"
 
     );
     //field names expected to appear within each cell, do not currently need to access this list
@@ -34,18 +32,16 @@ public class SimulationData {
 
     // specific data values for this instance
     private String myType;
-    private Map<Pair, Integer> myCellMap;
-    private double mySpeed;
+    private ArrayList<ArrayList<Integer>> myCellArrayList;
     private Map<String, Object> myDataValues;
 
 
     /**
      * Create game data from given data.
      */
-    public SimulationData(String type, Map<Pair, Integer> cellMap, double speed) {
+    public SimulationData(String type, ArrayList<ArrayList<Integer>> cellArrayList) {
         myType = type;
-        myCellMap = cellMap;
-        mySpeed = speed;
+        myCellArrayList = cellArrayList;
         // NOTE: this is useful so our code does not fail due to a NullPointerException
         myDataValues = new HashMap<>();
     }
@@ -57,8 +53,7 @@ public class SimulationData {
      */
     public SimulationData(Map<String, Object> dataValues) {
         this(((String) dataValues.get(DATA_FIELDS.get(0))),
-                ((Map<Pair, Integer>) dataValues.get(DATA_FIELDS.get(1))),
-                ((double) dataValues.get(DATA_FIELDS.get(2))));
+                ((ArrayList<ArrayList<Integer>>) dataValues.get(DATA_FIELDS.get(1))));
         myDataValues = dataValues;
     }
 
@@ -67,12 +62,8 @@ public class SimulationData {
         return myType;
     }
 
-    public Map<Pair, Integer> getCellMap () {
-        return myCellMap;
-    }
-
-    public double getSpeed () {
-        return mySpeed;
+    public ArrayList<ArrayList<Integer>> getMyCellArrayList() {
+        return myCellArrayList;
     }
 
     /**
