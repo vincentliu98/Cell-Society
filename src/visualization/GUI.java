@@ -5,22 +5,23 @@ import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import simulation.CellGraph;
 import simulation.factory.GameOfLife;
 import simulation.factory.Segregation;
 import simulation.factory.SpreadingFire;
-import simulation.rules.GameOfLifeRule;
-import simulation.rules.SegregationRule;
-import simulation.rules.SpreadingFireRule;
+import simulation.models.GameOfLifeModel;
+import simulation.models.SegregationModel;
+import simulation.models.SpreadingFireModel;
+import visualization.model_panels.GameOfLifePanel;
+import visualization.model_panels.ModelPanel;
 
 /**
  * This is the Graphical User Interface for displaying the simulation models.
  * It contains three components:
  *  1. modelPanel that displays model name and specific parameters
- *  2. simulationPanel that displays the real-time simulation
+ *  2. simPanel that displays the real-time simulation
  *  3. controlPanel that allows the user to adjust settings
  *
  * The controlPanel contains multiple buttons that will handle events, such as loading settings from XML file, start/pause
@@ -28,7 +29,6 @@ import simulation.rules.SpreadingFireRule;
  *
  * @author Vincent Liu
  */
-
 public class GUI {
     public static final int SCREEN_WIDTH = 700;
     public static final int SCREEN_HEIGHT = 550;
@@ -38,15 +38,16 @@ public class GUI {
     public static final double SECOND_DELAY = MILLISECOND_DELAY / 1000.;
 
     public static final String[] SIMULATION_MODELS = new String[] {
-            GameOfLifeRule.MODEL_NAME,
-            SegregationRule.MODEL_NAME,
+            GameOfLifeModel.MODEL_NAME,
+            SegregationModel.MODEL_NAME,
             "Wa-Tor",
-            SpreadingFireRule.MODEL_NAME
+            SpreadingFireModel.MODEL_NAME
     };
 
     private GridPane root;
-    private SimulationController simControl;
-    private VBox simulationPanel, modelPanel;
+    private SimulationControlPanel simControlPanel;
+    private ModelPanel modelPanel;
+    private VBox simPanel;
 
     private CellGraph<?> graph;
 
@@ -69,30 +70,26 @@ public class GUI {
         root.setHgap(10);
 
         // add three major layouts
-        var model_panel_text = new Text("Model Panel");
-        modelPanel = new VBox();
-        modelPanel.setStyle("-fx-border-color: black;\n");
-        modelPanel.getChildren().add(model_panel_text);
-        modelPanel.setSpacing(25);
-
-        simulationPanel = new VBox();
-        simulationPanel.setStyle("-fx-border-color: black;\n");
-
-        simControl = new SimulationController(graph);
+        modelPanel = new GameOfLifePanel();
+        simControlPanel = new SimulationControlPanel(graph);
+        simPanel = new VBox();
+        simPanel.setStyle("-fx-border-color: black;\n");
 
         // add the three major layouts
         root.add(modelPanel, 0, 0);
-        root.add(simulationPanel, 1, 0);
-        root.add(simControl, 0, 1, 2, 1);
+        root.add(simPanel, 1, 0);
+        root.add(simControlPanel, 0, 1, 2, 1);
 
         initializeSimulation(GameOfLife.generate());
     }
 
     private void initializeSimulation(CellGraph<?> cg) {
         graph = cg;
-        simControl.reset(cg);
-        simulationPanel.getChildren().clear();
-        simulationPanel.getChildren().add(cg.view());
+        simControlPanel.reset(cg);
+        simPanel.getChildren().clear();
+        simPanel.getChildren().add(cg.view());
+
+        // TODO: GET model parameters and put it into modelPanel
     }
 
     public void runGUI (Stage primaryStage) {
@@ -110,20 +107,20 @@ public class GUI {
     }
 
     public void step(double duration) {
-        if(simControl.canTick(duration)) graph.tick();
-        simControl.setNumTick(graph.tickCount());
+        if(simControlPanel.canTick(duration)) graph.tick();
+        simControlPanel.setNumTick(graph.tickCount());
         handleModelChange();
     }
 
     public void handleModelChange() {
-        var modelName = simControl.getChosenModel();
+        var modelName = simControlPanel.getChosenModel();
         if(graph.modelName().equals(modelName)) return;
 
-        if(modelName.equals(GameOfLifeRule.MODEL_NAME)) {
+        if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
             initializeSimulation(GameOfLife.generate());
-        } else if(modelName.equals(SegregationRule.MODEL_NAME)) {
+        } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
             initializeSimulation(Segregation.generate());
-        } else if(modelName.equals(SpreadingFireRule.MODEL_NAME)) {
+        } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
             initializeSimulation(SpreadingFire.generate());
         }
     }
