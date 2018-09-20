@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class XMLParser {
         var results = new HashMap<String, Object>();
         for (var field : SimulationData.DATA_FIELDS) {
             if (field.equals(SimulationData.DATA_FIELDS.get(1))) {
-                ArrayList<ArrayList<Integer>> cellArrayList = makeCellArrayList(root);
+                ArrayList<ArrayList<Object>> cellArrayList = makeCellArrayList(root);
                 results.put(field, cellArrayList);
             }
             else {
@@ -60,19 +61,44 @@ public class XMLParser {
         return sim;
     }
 
-    private ArrayList<ArrayList<Integer>> makeCellArrayList(Element root) {
-        ArrayList<ArrayList<Integer>> cellArrayList = new ArrayList<ArrayList<Integer>>();
+    private ArrayList<ArrayList<Object>> makeCellArrayList(Element root) {
+        ArrayList<ArrayList<Object>> cellArrayList = new ArrayList<ArrayList<Object>>();
         int numCells = root.getElementsByTagName("cell").getLength();
         for (int c = 0; c<numCells; c++) {
-            ArrayList<Integer> attrArrayList = new ArrayList<Integer>();
-            List<String> allSubfields = List.copyOf(SimulationData.REGULAR_CELL_SUBFIELDS);
-            for (String sub : SimulationData.REGULAR_CELL_SUBFIELDS) {
-                String attrStr = getTextValueAtIndex(root, sub, c);
-                attrArrayList.add(Integer.parseInt(attrStr.replaceAll("\\s", "")));
+            ArrayList<Object> attrArrayList = new ArrayList<Object>();
+            for (String sub : SimulationData.CELL_SUBFIELDS) {
+                if (sub.equals(SimulationData.CELL_SUBFIELDS.get(1))) {
+                    String neighborStr = getTextValueAtIndex(root, sub, c);
+                    attrArrayList.add(parseNeighbors(neighborStr));
+                }
+                else if (sub.equals(SimulationData.CELL_SUBFIELDS.get(4))) {
+                    attrArrayList.addAll(getValuesArrayList(root, c));
+                }
+                else {
+                    String attrStr = getTextValueAtIndex(root, sub, c);
+                    attrArrayList.add(Integer.parseInt(attrStr.replaceAll("\\s", "")));
+                }
             }
             cellArrayList.add(attrArrayList);
         }
         return cellArrayList;
+    }
+
+    private ArrayList<Integer> parseNeighbors(String neighborStr) {
+        ArrayList<Integer> neighborArrayList = new ArrayList<Integer>();
+        String[] neighborStrArray = neighborStr.replace("\\s","").split(",");
+        for (String s : neighborStrArray)
+            neighborArrayList.add(Integer.parseInt(s));
+        return neighborArrayList;
+    }
+
+    private ArrayList<Integer> getValuesArrayList(Element root, int cellIndex) {
+        ArrayList<Integer> valuesArrayList = new ArrayList<Integer>();
+        for (String sub : SimulationData.VALUE_SUBFIELDS) {
+                String attrStr = getTextValueAtIndex(root, sub, cellIndex);
+                valuesArrayList.add(Integer.parseInt(attrStr.replaceAll("\\s", "")));
+        }
+        return valuesArrayList;
     }
 
     // Get root element of an XML file

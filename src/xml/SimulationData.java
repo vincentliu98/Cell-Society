@@ -24,11 +24,12 @@ public class SimulationData {
 
     );
     //field names expected to appear within each cell
-    public static final List<String> REGULAR_CELL_SUBFIELDS = List.of(
+    public static final List<String> CELL_SUBFIELDS = List.of(
             "uniqueID",
             "neighbors",
             "x",
-            "y"
+            "y",
+            "values"
     );
 
     public static final List<String> VALUE_SUBFIELDS = List.of(
