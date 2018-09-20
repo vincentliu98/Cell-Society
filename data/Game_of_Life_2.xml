@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<data media="Simulation">
-    <type> Game of Life </type>
+<data sim="GameOfLife">
     <cellMap>
         <cell>
             <row> 0 </row>
@@ -502,6 +501,14 @@
             <column> 9 </column>
             <value> 0 </value>
         </cell>
+        <!--<cell>-->
+            <!--<uniqueID> 1</uniqueID>-->
+            <!--<neighbors> 1,2,3,4 </neighbors>-->
+            <!--<xcord> 1</xcord>-->
+            <!--<ycord> 2</ycord>-->
+            <!--<values>-->
+                <!--<isAlive> 1 </isAlive>-->
+            <!--</values>-->
+        <!--</cell>-->
     </cellMap>
-    <speed> 0.1 </speed>
 </data>

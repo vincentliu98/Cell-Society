@@ -1,10 +1,9 @@
 package xml;
 
-import javafx.util.Pair;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import simulation.models.SimulationModel;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -12,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -41,7 +39,7 @@ public class XMLParser {
     /**
      * Get the data contained in this XML file as an object
      */
-    public SimulationData getSimulation(File dataFile) {
+    public SimulationData getSimulationModel(File dataFile) {
         var root = getRootElement(dataFile);
         if (! isValidFile(root, SimulationData.DATA_TYPE)) {
             throw new XMLException(ERROR_MESSAGE, SimulationData.DATA_TYPE);
@@ -140,7 +138,7 @@ public class XMLParser {
     public static void main(String[] args) {
         File test = new  File("data\\Game_of_Life_2.xml");
         XMLParser myParser = new XMLParser("sim");
-        SimulationData mySimulationData = myParser.getSimulation(test);
+        SimulationData mySimulationData = myParser.getSimulationModel(test);
         ArrayList<ArrayList<Integer>> cells = mySimulationData.getMyCellArrayList();
         for (ArrayList<Integer> attrList : cells) {
             for (int attr : attrList) {
