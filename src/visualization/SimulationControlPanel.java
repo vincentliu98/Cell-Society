@@ -10,14 +10,14 @@ import simulation.CellGraph;
 
 import static visualization.GUI.SIMULATION_MODELS;
 
-public class SimulationController extends HBox {
+public class SimulationControlPanel extends HBox {
     private boolean isPlaying;
     private Text numTick, stepRate;
     private double simPeriod, elapsedTime;
     private ComboBox<String> chooseModel;
     private CellGraph<?> graph;
 
-    public SimulationController(CellGraph<?> graph_) {
+    public SimulationControlPanel(CellGraph<?> graph_) {
         graph = graph_;
 
         setStyle("-fx-border-color: black;\n");

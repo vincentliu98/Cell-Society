@@ -4,8 +4,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
 import simulation.Cell;
 import simulation.CellGraph;
-import simulation.rules.UpdateRule;
-import simulation.rules.WaTorRule;
+import simulation.models.SimulationModel;
+import simulation.models.WaTorModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class WaTor {
     public static CellGraph<Integer> generate(
             int row, int column, int[][] initial
     ) {
-        UpdateRule<Integer> rule = new WaTorRule();
+        var model = new WaTorModel();
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
         double width = CellGraph.SIMULATION_SX / column;
         double height = CellGraph.SIMULATION_SY / row;
@@ -33,7 +33,7 @@ public class WaTor {
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
                 var cell = new Cell<>(initial[i][j], new Rectangle(j*width, i*height, width, height));
-                cell.view().setFill(rule.chooseColor(cell.value()));
+                cell.view().setFill(model.chooseColor(cell.value()));
                 cells.add(cell);
             }
         }
@@ -52,7 +52,7 @@ public class WaTor {
             if(y+1 < row) neighbors.get(cur).add(cells.get(gridToLine(x, y+1, column)));
         }
 
-        return new CellGraph<>(cells, neighbors, rule);
+        return new CellGraph<>(cells, neighbors, model);
     }
 
     public static CellGraph<Integer> generate() {

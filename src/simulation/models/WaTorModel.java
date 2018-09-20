@@ -1,4 +1,4 @@
-package simulation.rules;
+package simulation.models;
 
 import javafx.scene.paint.Color;
 import simulation.Cell;
@@ -11,7 +11,7 @@ import java.util.List;
  * @author Vincent Liu
  */
 
-public class WaTorRule implements UpdateRule<Integer> {
+public class WaTorModel implements SimulationModel<Integer> {
     public static final int EMPTY = 0;
     public static final int FISH = 1;
     public static final int SHARK = 2;
@@ -26,6 +26,13 @@ public class WaTorRule implements UpdateRule<Integer> {
         } else if (myVal == FISH) {
             return 0;
         } else return 0;
+    }
+
+    @Override
+    public Integer nextValue(Integer myVal) {
+        return myVal == EMPTY ? FISH :
+                myVal == FISH ? SHARK :
+                 myVal == SHARK ? EMPTY : EMPTY;
     }
 
     @Override

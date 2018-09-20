@@ -1,4 +1,4 @@
-package simulation.rules;
+package simulation.models;
 
 import javafx.scene.paint.Color;
 import simulation.Cell;
@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *  SegregationRule implements Segregation Model.
+ *  SegregationModel implements Segregation Model.
  *  The integer pair represents (STAY/LEAVE, RED/BLUE)
  * @author Inchan Hwang
  */
-public class SegregationRule implements UpdateRule<IntegerPair> {
+public class SegregationModel implements SimulationModel<IntegerPair> {
     public static final int STAY = 0;
     public static final int LEAVE = 1;
     public static final int EMPTY = 0;
@@ -24,7 +24,7 @@ public class SegregationRule implements UpdateRule<IntegerPair> {
     public static final String MODEL_NAME = "Segregation";
 
     private double tolerance;
-    public SegregationRule(double tolerance_) { tolerance = tolerance_; }
+    public SegregationModel(double tolerance_) { tolerance = tolerance_; }
 
     @Override
     public IntegerPair nextValue(IntegerPair myVal, List<IntegerPair> neighborVal) {
@@ -33,6 +33,14 @@ public class SegregationRule implements UpdateRule<IntegerPair> {
         return new IntegerPair(
                 (nDiff/((double) neighborVal.size()) > tolerance || myVal.getValue() == EMPTY) ? LEAVE : STAY,
                 myVal.getValue());
+    }
+
+    @Override
+    public IntegerPair nextValue(IntegerPair myVal) {
+        return new IntegerPair(myVal.getKey(),
+                myVal.getValue() == EMPTY ? BLUE :
+                        myVal.getValue() == BLUE ? RED :
+                        myVal.getValue() == RED ? EMPTY : EMPTY);
     }
 
     @Override

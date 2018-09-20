@@ -1,4 +1,4 @@
-package simulation.rules;
+package simulation.models;
 
 import javafx.scene.paint.Color;
 import simulation.Cell;
@@ -11,7 +11,7 @@ import java.util.List;
  * @author Vincent Liu
  */
 
-public class SpreadingFireRule implements UpdateRule<Integer> {
+public class SpreadingFireModel implements SimulationModel<Integer> {
     public static final int EMPTY = 0;
     public static final int TREE = 1;
     public static final int BURNING = 2;
@@ -26,6 +26,13 @@ public class SpreadingFireRule implements UpdateRule<Integer> {
         else if (myVal == EMPTY) return myVal;
         else if (myVal == BURNING) return EMPTY;
         else return TREE;
+    }
+
+    @Override
+    public Integer nextValue(Integer myVal) {
+        return myVal == EMPTY ? TREE :
+                myVal == TREE ? BURNING :
+                  myVal == BURNING ? EMPTY : EMPTY;
     }
 
     @Override
