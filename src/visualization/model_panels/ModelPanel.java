@@ -12,6 +12,5 @@ public abstract class ModelPanel extends VBox {
     public static final Text TITLE = new Text("Model Panel");
     public ModelPanel() {
         super(25, TITLE);
-        setStyle("-fx-border-color: black;\n");
     }
 }
