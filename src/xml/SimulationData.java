@@ -1,6 +1,7 @@
 package xml;
 
 import javafx.geometry.Point2D;
+import javafx.util.Pair;
 import simulation.Cell;
 import simulation.CellGraph;
 import java.util.HashMap;
@@ -16,26 +17,32 @@ import java.util.Map;
 public class SimulationData {
     // name in data file that will indicate it represents data for this type of object
     public static final String DATA_TYPE = "Simulation";
+
     // field names expected to appear in data file holding values for this object
-    // NOTE: simple way to create an immutable list
     public static final List<String> DATA_FIELDS = List.of(
         "type",
         "cellMap",
         "speed"
 
     );
+    //field names expected to appear within each cell, do not currently need to access this list
+    public static final List<String> CELLMAP_SUBFIELDS = List.of(
+            "row",
+            "column",
+            "value"
+    );
 
     // specific data values for this instance
     private String myType;
-    private String myCellMap;
-    private String mySpeed;
-    private Map<String, String> myDataValues;
+    private Map<Pair, Integer> myCellMap;
+    private double mySpeed;
+    private Map<String, Object> myDataValues;
 
 
     /**
      * Create game data from given data.
      */
-    public SimulationData(String type, String cellMap, String speed) {
+    public SimulationData(String type, Map<Pair, Integer> cellMap, double speed) {
         myType = type;
         myCellMap = cellMap;
         mySpeed = speed;
@@ -48,10 +55,10 @@ public class SimulationData {
      *
      * @param dataValues map of field names to their values
      */
-    public SimulationData(Map<String, String> dataValues) {
-        this(dataValues.get(DATA_FIELDS.get(0)),
-                dataValues.get(DATA_FIELDS.get(1)),
-                dataValues.get(DATA_FIELDS.get(2)));
+    public SimulationData(Map<String, Object> dataValues) {
+        this(((String) dataValues.get(DATA_FIELDS.get(0))),
+                ((Map<Pair, Integer>) dataValues.get(DATA_FIELDS.get(1))),
+                ((double) dataValues.get(DATA_FIELDS.get(2))));
         myDataValues = dataValues;
     }
 
@@ -60,13 +67,13 @@ public class SimulationData {
         return myType;
     }
 
-//    public Map<Point2D, Integer> getCellMap () {
-//        return myCellMap;
-//    }
-//
-//    public double getSpeed () {
-//        return mySpeed;
-//    }
+    public Map<Pair, Integer> getCellMap () {
+        return myCellMap;
+    }
+
+    public double getSpeed () {
+        return mySpeed;
+    }
 
     /**
      * @see Object#toString()

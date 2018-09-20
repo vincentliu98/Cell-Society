@@ -14,6 +14,7 @@ public class GameOfLifeRule implements UpdateRule<Integer> {
     public static final int ALIVE = 1;
     public static final String MODEL_NAME = "Game Of Life";
 
+
     @Override
     public Integer nextValue(Integer myVal, List<Integer> neighborVal) {
         long nLives = neighborVal.stream().filter(c -> c == ALIVE).count();

@@ -1,5 +1,6 @@
 package xml;
 
+import javafx.util.Pair;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -10,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -44,12 +46,21 @@ public class XMLParser {
             throw new XMLException(ERROR_MESSAGE, SimulationData.DATA_TYPE);
         }
         // read data associated with the fields given by the object
-        var results = new HashMap<String, String>();
+        var results = new HashMap<String, Object>();
         for (var field : SimulationData.DATA_FIELDS) {
-            System.out.print(field);
             if (field.equals("cellMap")) {
-                getTextValue(root, "cell");
-
+                Map cellMap = new HashMap<Pair, Integer>();
+                int numCells = root.getElementsByTagName("cell").getLength();
+                for (int i = 0; i<numCells; i++) {
+                    String rowStr = getTextValueAtIndex(root, "row", i);
+                    String colStr = getTextValueAtIndex(root, "column", i);
+                    String valStr = getTextValueAtIndex(root, "value", i);
+                    int row = Integer.parseInt(rowStr.replaceAll("\\s", ""));
+                    int col = Integer.parseInt(colStr.replaceAll("\\s", ""));
+                    int val = Integer.parseInt(valStr.replaceAll("\\s", ""));
+                    cellMap.put(new Pair(row, col), val);
+                }
+                results.put(field, cellMap);
             }
             else {
                 results.put(field, getTextValue(root, field));
@@ -93,15 +104,14 @@ public class XMLParser {
         }
     }
 
-    // Get the chlidren of the i'th element with tag tagName
-    private NodeList getChildren(Element e, int i, String tagName) {
+    private String getTextValueAtIndex (Element e, String tagName, int i) {
         var nodeList = e.getElementsByTagName(tagName);
         if (nodeList != null && nodeList.getLength() > 0) {
-            return nodeList.item(i).getChildNodes();
+            return nodeList.item(i).getTextContent();
         }
         else {
             // FIXME: empty string or null, is it an error to not find the text value?
-            return null;
+            return "";
         }
     }
 
