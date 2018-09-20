@@ -2,7 +2,6 @@ package xml;
 
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
-import simulation.models.SimulationModel;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -65,16 +65,11 @@ public class XMLParser {
         int numCells = root.getElementsByTagName("cell").getLength();
         for (int c = 0; c<numCells; c++) {
             ArrayList<Integer> attrArrayList = new ArrayList<Integer>();
-            for (String sub : SimulationData.CELLMAP_SUBFIELDS) {
+            List<String> allSubfields = List.copyOf(SimulationData.REGULAR_CELL_SUBFIELDS);
+            for (String sub : SimulationData.REGULAR_CELL_SUBFIELDS) {
                 String attrStr = getTextValueAtIndex(root, sub, c);
                 attrArrayList.add(Integer.parseInt(attrStr.replaceAll("\\s", "")));
             }
-            String rowStr = getTextValueAtIndex(root, "row", c);
-            String colStr = getTextValueAtIndex(root, "column", c);
-            String valStr = getTextValueAtIndex(root, "value", c);
-            int row = Integer.parseInt(rowStr.replaceAll("\\s", ""));
-            int col = Integer.parseInt(colStr.replaceAll("\\s", ""));
-            int val = Integer.parseInt(valStr.replaceAll("\\s", ""));
             cellArrayList.add(attrArrayList);
         }
         return cellArrayList;

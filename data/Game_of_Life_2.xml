@@ -16,7 +16,7 @@
             <x> 1 </x>
             <y> 0 </y>
             <values>
-                <isAlive> 1 </isAlive>
+                <isAlive> 0 </isAlive>
             </values>
         </cell>
         <cell>
@@ -34,7 +34,7 @@
             <x> 0 </x>
             <y> 1 </y>
             <values>
-                <isAlive> 1 </isAlive>
+                <isAlive> 0 </isAlive>
             </values>
         </cell>
         <cell>
@@ -51,6 +51,33 @@
             <neighbors> 1,2,11,21,22 </neighbors>
             <x> 2 </x>
             <y> 1 </y>
+            <values>
+                <isAlive> 0 </isAlive>
+            </values>
+        </cell>
+        <cell>
+            <uniqueID> 20 </uniqueID>
+            <neighbors> 10,11,21 </neighbors>
+            <x> 0 </x>
+            <y> 2 </y>
+            <values>
+                <isAlive> 1 </isAlive>
+            </values>
+        </cell>
+        <cell>
+            <uniqueID> 21 </uniqueID>
+            <neighbors> 10,11,12,20,22 </neighbors>
+            <x> 1 </x>
+            <y> 2 </y>
+            <values>
+                <isAlive> 0 </isAlive>
+            </values>
+        </cell>
+        <cell>
+            <uniqueID> 22 </uniqueID>
+            <neighbors> 11,12,21 </neighbors>
+            <x> 2 </x>
+            <y> 2 </y>
             <values>
                 <isAlive> 1 </isAlive>
             </values>
