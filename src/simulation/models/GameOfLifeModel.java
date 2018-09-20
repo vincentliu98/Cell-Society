@@ -2,6 +2,7 @@ package simulation.models;
 
 import javafx.scene.paint.Color;
 import simulation.Cell;
+import simulation.CellGraph;
 
 import java.util.List;
 
@@ -15,12 +16,16 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
     public static final String MODEL_NAME = "Game Of Life";
 
     @Override
-    public Integer nextValue(Integer myVal, List<Integer> neighborVal) {
-        long nLives = neighborVal.stream().filter(c -> c == ALIVE).count();
-        if(nLives <= 2) return DEAD;
-        else if(nLives == 3) return ALIVE;
-        else if(nLives == 4) return myVal;
-        else return DEAD;
+    public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) {
+        long nLives = neighbors.stream().filter(c -> c.value() == ALIVE).count();
+        me.setNext(nLives <= 2 ? DEAD :
+                    nLives == 3 ? ALIVE :
+                    nLives == 4 ? me.value() : DEAD);
+    }
+
+    @Override
+    public void globalUpdate(CellGraph<Integer> graph) {
+
     }
 
     @Override
@@ -28,9 +33,6 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
 
     @Override
     public Color chooseColor(Integer myVal) { return myVal == DEAD ? Color.WHITE : Color.BLACK; }
-
-    @Override
-    public void beforeCommit(List<Cell<Integer>> cells) { }
 
     @Override
     public String modelName() { return MODEL_NAME; }

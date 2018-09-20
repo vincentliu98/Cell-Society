@@ -2,6 +2,7 @@ package simulation.models;
 
 import javafx.scene.paint.Color;
 import simulation.Cell;
+import simulation.CellGraph;
 
 import java.util.List;
 
@@ -19,37 +20,29 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     private double probCatch = 0.9;
 
     @Override
-    public Integer nextValue(Integer myVal, List<Integer> neighborVal) {
-        if (myVal == TREE && (neighborVal.stream().anyMatch(a -> a == BURNING))){
-            return Math.random() < probCatch ? BURNING : TREE;
+    public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) {
+        if (me.value() == TREE && (neighbors.stream().anyMatch(a -> a.value() == BURNING))){
+            me.setNext(Math.random() < probCatch ? BURNING : TREE);
         }
-        else if (myVal == EMPTY) return myVal;
-        else if (myVal == BURNING) return EMPTY;
-        else return TREE;
+        else if (me.value() == EMPTY) me.setNext(me.value());
+        else if (me.value() == BURNING) me.setNext(EMPTY);
+        else me.setNext(TREE);
     }
+
+    @Override
+    public void globalUpdate(CellGraph<Integer> graph) { }
 
     @Override
     public Integer nextValue(Integer myVal) {
         return myVal == EMPTY ? TREE :
-                myVal == TREE ? BURNING :
-                  myVal == BURNING ? EMPTY : EMPTY;
+                myVal == TREE ? BURNING : EMPTY;
     }
 
     @Override
     public Color chooseColor(Integer myVal) {
-        switch(myVal){
-            case EMPTY:
-                return Color.YELLOW;
-            case TREE:
-                return Color.GREEN;
-            case BURNING:
-                return Color.RED;
-        }
-        return null;
+        return myVal == EMPTY ? Color.YELLOW :
+                myVal == TREE ? Color.GREEN : Color.RED;
     }
-
-    @Override
-    public void beforeCommit(List<Cell<Integer>> cells) { }
 
     @Override
     public String modelName() { return MODEL_NAME; }

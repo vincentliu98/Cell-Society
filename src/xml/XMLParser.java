@@ -1,17 +1,16 @@
 package xml;
 
-import javafx.util.Pair;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import simulation.models.SimulationModel;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -40,7 +39,7 @@ public class XMLParser {
     /**
      * Get the data contained in this XML file as an object
      */
-    public SimulationData getSimulation(File dataFile) {
+    public SimulationData getSimulationModel(File dataFile) {
         var root = getRootElement(dataFile);
         if (! isValidFile(root, SimulationData.DATA_TYPE)) {
             throw new XMLException(ERROR_MESSAGE, SimulationData.DATA_TYPE);
@@ -48,26 +47,37 @@ public class XMLParser {
         // read data associated with the fields given by the object
         var results = new HashMap<String, Object>();
         for (var field : SimulationData.DATA_FIELDS) {
-            if (field.equals("cellMap")) {
-                Map cellMap = new HashMap<Pair, Integer>();
-                int numCells = root.getElementsByTagName("cell").getLength();
-                for (int i = 0; i<numCells; i++) {
-                    String rowStr = getTextValueAtIndex(root, "row", i);
-                    String colStr = getTextValueAtIndex(root, "column", i);
-                    String valStr = getTextValueAtIndex(root, "value", i);
-                    int row = Integer.parseInt(rowStr.replaceAll("\\s", ""));
-                    int col = Integer.parseInt(colStr.replaceAll("\\s", ""));
-                    int val = Integer.parseInt(valStr.replaceAll("\\s", ""));
-                    cellMap.put(new Pair(row, col), val);
-                }
-                results.put(field, cellMap);
+            if (field.equals(SimulationData.DATA_FIELDS.get(1))) {
+                ArrayList<ArrayList<Integer>> cellArrayList = makeCellArrayList(root);
+                results.put(field, cellArrayList);
             }
             else {
                 results.put(field, getTextValue(root, field));
             }
+            System.out.print(results.get(field).getClass());
         }
         SimulationData sim = new SimulationData(results);
         return sim;
+    }
+
+    private ArrayList<ArrayList<Integer>> makeCellArrayList(Element root) {
+        ArrayList<ArrayList<Integer>> cellArrayList = new ArrayList<ArrayList<Integer>>();
+        int numCells = root.getElementsByTagName("cell").getLength();
+        for (int c = 0; c<numCells; c++) {
+            ArrayList<Integer> attrArrayList = new ArrayList<Integer>();
+            for (String sub : SimulationData.CELLMAP_SUBFIELDS) {
+                String attrStr = getTextValueAtIndex(root, sub, c);
+                attrArrayList.add(Integer.parseInt(attrStr.replaceAll("\\s", "")));
+            }
+            String rowStr = getTextValueAtIndex(root, "row", c);
+            String colStr = getTextValueAtIndex(root, "column", c);
+            String valStr = getTextValueAtIndex(root, "value", c);
+            int row = Integer.parseInt(rowStr.replaceAll("\\s", ""));
+            int col = Integer.parseInt(colStr.replaceAll("\\s", ""));
+            int val = Integer.parseInt(valStr.replaceAll("\\s", ""));
+            cellArrayList.add(attrArrayList);
+        }
+        return cellArrayList;
     }
 
     // Get root element of an XML file
@@ -127,7 +137,14 @@ public class XMLParser {
 
     public static void main(String[] args) {
         File test = new  File("data\\Game_of_Life_2.xml");
-        XMLParser myParser = new XMLParser("media");
-        myParser.getSimulation(test);
+        XMLParser myParser = new XMLParser("sim");
+        SimulationData mySimulationData = myParser.getSimulationModel(test);
+        ArrayList<ArrayList<Integer>> cells = mySimulationData.getMyCellArrayList();
+        for (ArrayList<Integer> attrList : cells) {
+            for (int attr : attrList) {
+                System.out.printf("%d ", attr);
+            }
+            System.out.printf("%s%n","");
+        }
     }
 }

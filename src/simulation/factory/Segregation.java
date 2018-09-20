@@ -2,41 +2,42 @@ package simulation.factory;
 
 import javafx.scene.shape.Rectangle;
 import simulation.Cell;
-import simulation.CellGraph;
+import simulation.Simulator;
 import simulation.models.SegregationModel;
 import utility.IntegerPair;
 
 import java.util.ArrayList;
 
 /**
- *  Convenience class to generate "Segregation" CellGraph
+ *  Convenience class to generate "Segregation" Simulator
  *  @author Inchan Hwang
  */
 public class Segregation {
-    public static CellGraph<IntegerPair> generate(
+    public static Simulator<IntegerPair> generate(
             int row, int column, int[][] initial, double tolerance
     ) {
         var model = new SegregationModel(tolerance);
         ArrayList<Cell<IntegerPair>> cells = new ArrayList<>();
-        double width = CellGraph.SIMULATION_SX / column;
-        double height = CellGraph.SIMULATION_SY / row;
+        double width = Simulator.SIMULATION_SX / column;
+        double height = Simulator.SIMULATION_SY / row;
 
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
                 var cell = new Cell<>(
                         new IntegerPair(SegregationModel.STAY, initial[i][j]),
-                        new Rectangle(j * width, i * height, width, height)
+                        new Rectangle(j * width, i * height, width, height),
+                        model
                 );
                 cell.view().setFill(model.chooseColor(cell.value()));
                 cells.add(cell);
             }
         }
 
-        var neighbors = new SquareGridUtils<IntegerPair>().get8Neighbors(cells, row, column);
-        return new CellGraph<>(cells, neighbors, model);
+        var graph = new SquareGridUtils<IntegerPair>().graphWith8Neighbors(cells, row, column);
+        return new Simulator<>(graph, model);
     }
 
-    public static CellGraph<IntegerPair> generate() {
+    public static Simulator<IntegerPair> generate() {
         return Segregation.generate(5, 5, new int[][]{
                 {1, 2, 2, 2, 1},
                 {2, 0, 0, 0, 2},

@@ -1,12 +1,11 @@
 package simulation.factory;
 
 import simulation.Cell;
+import simulation.CellGraph;
 import utility.IntegerPair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *  Convenience class to generate "Segregation" CellGraph
@@ -16,8 +15,8 @@ public class SquareGridUtils<T> {
     private IntegerPair lineToGrid(int x, int c) { return new IntegerPair(x%c, x/c); }
     private int gridToLine(int x, int y, int c) { return y * c + x; }
 
-    public Map<Cell<T>, List<Cell<T>>> get8Neighbors(List<Cell<T>> cells, int r, int c) {
-        Map<Cell<T>, List<Cell<T>>> neighbors = new HashMap<>();
+    public CellGraph<T> graphWith8Neighbors(List<Cell<T>> cells, int r, int c) {
+        CellGraph<T> neighbors = new CellGraph<>();
         for(int i = 0 ; i < cells.size() ; i ++) {
             var cur = cells.get(i);
             neighbors.put(cur, new ArrayList<>());
@@ -36,8 +35,8 @@ public class SquareGridUtils<T> {
         } return neighbors;
     }
 
-    public Map<Cell<T>, List<Cell<T>>> get4Neighbors(List<Cell<T>> cells, int r, int c) {
-        Map<Cell<T>, List<Cell<T>>> neighbors = new HashMap<>();
+    public CellGraph<T> graphWith4Neighbors(List<Cell<T>> cells, int r, int c) {
+        CellGraph<T> neighbors = new CellGraph<>();
         for(int i = 0 ; i < cells.size() ; i ++) {
             var cur = cells.get(i);
             neighbors.put(cur, new ArrayList<>());
@@ -45,7 +44,6 @@ public class SquareGridUtils<T> {
             var x = p.getKey();
             var y = p.getValue();
 
-            // only check 4 neighbors
             if(x-1 >= 0) neighbors.get(cur).add(cells.get(gridToLine(x-1, y, c)));
             if(x+1 < c) neighbors.get(cur).add(cells.get(gridToLine(x+1, y, c)));
             if(y-1 >= 0) neighbors.get(cur).add(cells.get(gridToLine(x, y-1, c)));
