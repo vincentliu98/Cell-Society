@@ -7,13 +7,15 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import simulation.CellGraph;
+import simulation.Simulator;
 import simulation.factory.GameOfLife;
 import simulation.factory.Segregation;
 import simulation.factory.SpreadingFire;
+import simulation.factory.WaTor;
 import simulation.models.GameOfLifeModel;
 import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
+import simulation.models.WaTorModel;
 import visualization.model_panels.GameOfLifePanel;
 import visualization.model_panels.ModelPanel;
 
@@ -40,7 +42,7 @@ public class GUI {
     public static final String[] SIMULATION_MODELS = new String[] {
             GameOfLifeModel.MODEL_NAME,
             SegregationModel.MODEL_NAME,
-            "Wa-Tor",
+            WaTorModel.MODEL_NAME,
             SpreadingFireModel.MODEL_NAME
     };
 
@@ -49,7 +51,7 @@ public class GUI {
     private ModelPanel modelPanel;
     private VBox simPanel;
 
-    private CellGraph<?> graph;
+    private Simulator<?> simulator;
 
     public GUI () {
         root = new GridPane();
@@ -71,7 +73,7 @@ public class GUI {
 
         // add three major layouts
         modelPanel = new GameOfLifePanel();
-        simControlPanel = new SimulationControlPanel(graph);
+        simControlPanel = new SimulationControlPanel(simulator);
         simPanel = new VBox();
         simPanel.setStyle("-fx-border-color: black;\n");
 
@@ -83,11 +85,11 @@ public class GUI {
         initializeSimulation(GameOfLife.generate());
     }
 
-    private void initializeSimulation(CellGraph<?> cg) {
-        graph = cg;
-        simControlPanel.reset(cg);
+    private void initializeSimulation(Simulator<?> sim) {
+        simulator = sim;
+        simControlPanel.reset(simulator);
         simPanel.getChildren().clear();
-        simPanel.getChildren().add(cg.view());
+        simPanel.getChildren().add(simulator.view());
 
         // TODO: GET model parameters and put it into modelPanel
     }
@@ -107,14 +109,15 @@ public class GUI {
     }
 
     public void step(double duration) {
-        if(simControlPanel.canTick(duration)) graph.tick();
-        simControlPanel.setNumTick(graph.tickCount());
+        if(simControlPanel.canTick(duration)) simulator.tick();
+        simControlPanel.setNumTick(simulator.tickCount());
+        simControlPanel.updateStepRate();
         handleModelChange();
     }
 
     public void handleModelChange() {
         var modelName = simControlPanel.getChosenModel();
-        if(graph.modelName().equals(modelName)) return;
+        if(simulator.modelName().equals(modelName)) return;
 
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
             initializeSimulation(GameOfLife.generate());
@@ -122,6 +125,8 @@ public class GUI {
             initializeSimulation(Segregation.generate());
         } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
             initializeSimulation(SpreadingFire.generate());
+        } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
+            initializeSimulation(WaTor.generate());
         }
     }
 }

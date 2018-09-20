@@ -6,7 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import simulation.CellGraph;
+import simulation.Simulator;
 
 import static visualization.GUI.SIMULATION_MODELS;
 
@@ -15,10 +15,10 @@ public class SimulationControlPanel extends HBox {
     private Text numTick, stepRate;
     private double simPeriod, elapsedTime;
     private ComboBox<String> chooseModel;
-    private CellGraph<?> graph;
+    private Simulator<?> simulator;
 
-    public SimulationControlPanel(CellGraph<?> graph_) {
-        graph = graph_;
+    public SimulationControlPanel(Simulator<?> sim) {
+        simulator = sim;
 
         setStyle("-fx-border-color: black;\n");
         setSpacing(25);
@@ -43,7 +43,7 @@ public class SimulationControlPanel extends HBox {
         });
 
         var tick = new Button("Tick");
-        tick.setOnMouseClicked(e -> graph.tick());
+        tick.setOnMouseClicked(e -> simulator.tick());
 
         var increase = new Button("Up");
         increase.setOnMouseClicked(e -> {
@@ -90,8 +90,8 @@ public class SimulationControlPanel extends HBox {
     }
     public String getChosenModel() { return chooseModel.getValue(); }
     public void setNumTick(int ticks) { numTick.setText("# of ticks: "+ticks); }
-    public void reset(CellGraph<?> graph_) {
-        isPlaying = false; elapsedTime = 0; simPeriod = 2;
-        graph = graph_;
+    public void reset(Simulator<?> sim) {
+        isPlaying = false; elapsedTime = 0; simPeriod = 1;
+        simulator = sim;
     }
 }

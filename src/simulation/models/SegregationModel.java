@@ -2,12 +2,12 @@ package simulation.models;
 
 import javafx.scene.paint.Color;
 import simulation.Cell;
+import simulation.CellGraph;
 import utility.IntegerPair;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  *  SegregationModel implements Segregation Model.
@@ -27,39 +27,38 @@ public class SegregationModel implements SimulationModel<IntegerPair> {
     public SegregationModel(double tolerance_) { tolerance = tolerance_; }
 
     @Override
-    public IntegerPair nextValue(IntegerPair myVal, List<IntegerPair> neighborVal) {
-        long nDiff = neighborVal.stream().filter(c ->
-                c.getValue() > 0 || (!c.getValue().equals(myVal.getValue()))).count();
-        return new IntegerPair(
-                (nDiff/((double) neighborVal.size()) > tolerance || myVal.getValue() == EMPTY) ? LEAVE : STAY,
-                myVal.getValue());
+    public void localUpdate(Cell<IntegerPair> me, List<Cell<IntegerPair>> neighbors) {
+        long nDiff = neighbors.stream().filter(c ->
+                c.value().getValue() > 0 || (!c.value().getValue().equals(me.value().getValue()))).count();
+        me.setNext(new IntegerPair(
+                (nDiff/((double) neighbors.size()) > tolerance || me.value().getValue() == EMPTY) ? LEAVE : STAY,
+                me.value().getValue()));
+    }
+
+    @Override
+    public void globalUpdate(CellGraph<IntegerPair> graph) {
+        var leavers = graph.getCells(c -> c.next().getKey() == LEAVE);
+        ArrayList<Integer> colors = new ArrayList<>();
+        for(var leaver: leavers) colors.add(leaver.next().getValue());
+        Collections.shuffle(colors);
+
+        int idx = 0;
+        for(var leaver: leavers) {
+            leaver.setNext(new IntegerPair(leaver.next().getKey(), colors.get(idx++)));
+        }
     }
 
     @Override
     public IntegerPair nextValue(IntegerPair myVal) {
         return new IntegerPair(myVal.getKey(),
                 myVal.getValue() == EMPTY ? BLUE :
-                        myVal.getValue() == BLUE ? RED :
-                        myVal.getValue() == RED ? EMPTY : EMPTY);
+                 myVal.getValue() == BLUE ? RED : EMPTY);
     }
 
     @Override
     public Color chooseColor(IntegerPair myVal) {
         return myVal.getValue() == RED ? Color.RED:
-                myVal.getValue() == BLUE ? Color.BLUE:
-                 myVal.getValue() == EMPTY ? Color.WHITE : Color.BLACK;
-    }
-
-    @Override
-    public void beforeCommit(List<Cell<IntegerPair>> cells) {
-        var leavers = cells.stream().filter(c -> c.next().getKey() == LEAVE).collect(Collectors.toList());
-        ArrayList<Integer> colors = new ArrayList<>();
-        for(var leaver: leavers) colors.add(leaver.next().getValue());
-
-        Collections.shuffle(colors);
-        for(int i = 0 ; i < leavers.size() ; i ++) {
-            leavers.get(i).setNext(new IntegerPair(leavers.get(i).next().getKey(), colors.get(i)));
-        }
+                myVal.getValue() == BLUE ? Color.BLUE : Color.WHITE;
     }
 
     @Override
