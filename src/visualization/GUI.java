@@ -4,8 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -47,13 +45,10 @@ public class GUI {
     };
 
     private GridPane root;
+    private SimulationController simControl;
     private VBox simulationPanel, modelPanel;
-    private Text numSim, stepRate, modelName;
-    private ComboBox<String> chooseModel;
 
     private CellGraph<?> graph;
-    private boolean isPlaying;
-    private double simPeriod, elapsedTime;
 
     public GUI () {
         root = new GridPane();
@@ -82,69 +77,22 @@ public class GUI {
 
         simulationPanel = new VBox();
         simulationPanel.setStyle("-fx-border-color: black;\n");
-        initializeSimulation(GameOfLife.generate());
 
-        var controlPanel = new HBox();
-        controlPanel.setStyle("-fx-border-color: black;\n");
-        controlPanel.setSpacing(25);
+        simControl = new SimulationController(graph);
 
-        controlPanel.getChildren().add(simulationControllers());
         // add the three major layouts
         root.add(modelPanel, 0, 0);
         root.add(simulationPanel, 1, 0);
-        root.add(controlPanel, 0, 1, 2, 1);
+        root.add(simControl, 0, 1, 2, 1);
+
+        initializeSimulation(GameOfLife.generate());
     }
 
     private void initializeSimulation(CellGraph<?> cg) {
         graph = cg;
+        simControl.reset(cg);
         simulationPanel.getChildren().clear();
         simulationPanel.getChildren().add(cg.view());
-        isPlaying = false; elapsedTime = 0; simPeriod = 2; // 2 seconds
-    }
-
-    private GridPane simulationControllers() {
-        var infoGrid = new GridPane();
-        infoGrid.setHgap(35);
-        infoGrid.setVgap(15);
-        infoGrid.setPadding(new Insets(5,30,5,30));
-
-        modelName = new Text("       Select Model");
-        numSim = new Text("# of Simulation: 0");
-        stepRate = new Text("Step Rate: " + 1/simPeriod + "/s");
-
-        // add elements into the controlPanel
-        var save = new Button("Save");
-        var load = new Button("Load");
-        var playStop = new Button("Play");
-        playStop.setOnMouseClicked(e -> {
-            isPlaying = !isPlaying;
-            playStop.setText(isPlaying ? "Stop" : "Play");
-            elapsedTime = 0;
-        });
-
-        var tick = new Button("Tick");
-        tick.setOnMouseClicked(e -> graph.tick());
-        var increase = new Button("Up");
-        increase.setOnMouseClicked(e -> simPeriod = Math.max(0.1, simPeriod-0.1));
-        var decrease = new Button("Down");
-        decrease.setOnMouseClicked(e -> simPeriod = Math.min(5, simPeriod+0.1));
-
-        chooseModel = new ComboBox<>();
-        chooseModel.getItems().addAll(SIMULATION_MODELS);
-        chooseModel.setValue(SIMULATION_MODELS[0]);
-
-        infoGrid.add(save, 0, 0);
-        infoGrid.add(load, 0, 1);
-        infoGrid.add(playStop, 1, 0);
-        infoGrid.add(tick, 1, 1);
-        infoGrid.add(increase, 2, 0);
-        infoGrid.add(decrease, 2, 1);
-        infoGrid.add(numSim, 3, 0);
-        infoGrid.add(stepRate, 3, 1);
-        infoGrid.add(modelName, 4, 0);
-        infoGrid.add(chooseModel, 4, 1);
-
-        return infoGrid;
     }
 
     public void runGUI (Stage primaryStage) {
@@ -162,27 +110,20 @@ public class GUI {
     }
 
     public void step(double duration) {
-        stepRate.setText("Step Rate: " + ((double) Math.round(1/simPeriod * 100) / 100)  + "/s");
-        numSim.setText("# of Simulation: "+graph.tickCount());
+        if(simControl.canTick(duration)) graph.tick();
+        simControl.setNumTick(graph.tickCount());
         handleModelChange();
-
-        if(isPlaying) {
-            elapsedTime += duration;
-            if (elapsedTime >= simPeriod) {
-                graph.tick();
-                elapsedTime = 0;
-            }
-        }
     }
 
     public void handleModelChange() {
-        if(graph.modelName().equals(chooseModel.getValue())) return;
+        var modelName = simControl.getChosenModel();
+        if(graph.modelName().equals(modelName)) return;
 
-        if(chooseModel.getValue().equals(GameOfLifeRule.MODEL_NAME)) {
+        if(modelName.equals(GameOfLifeRule.MODEL_NAME)) {
             initializeSimulation(GameOfLife.generate());
-        } else if(chooseModel.getValue().equals(SegregationRule.MODEL_NAME)) {
+        } else if(modelName.equals(SegregationRule.MODEL_NAME)) {
             initializeSimulation(Segregation.generate());
-        } else if(chooseModel.getValue().equals(SpreadingFireRule.MODEL_NAME)) {
+        } else if(modelName.equals(SpreadingFireRule.MODEL_NAME)) {
             initializeSimulation(SpreadingFire.generate());
         }
     }
