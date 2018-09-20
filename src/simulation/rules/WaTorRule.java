@@ -1,6 +1,7 @@
 package simulation.rules;
 
 import javafx.scene.paint.Color;
+import simulation.Cell;
 
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class WaTorRule implements UpdateRule<Integer> {
     public Color chooseColor(Integer myVal) {
         return null;
     }
+
+    @Override
+    public void beforeCommit(List<Cell<Integer>> cells) { }
 
     @Override
     public String modelName() { return MODEL_NAME; }

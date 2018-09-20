@@ -9,6 +9,7 @@ import simulation.rules.WaTorRule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +38,7 @@ public class WaTor {
             }
         }
 
-        Map<Cell<Integer>, ArrayList<Cell<Integer>>> neighbors = new HashMap<>();
+        Map<Cell<Integer>, List<Cell<Integer>>> neighbors = new HashMap<>();
         for(int i = 0 ; i < cells.size() ; i ++) {
             var cur = cells.get(i);
             neighbors.put(cur, new ArrayList<>());
