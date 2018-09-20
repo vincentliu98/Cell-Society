@@ -24,9 +24,7 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
     }
 
     @Override
-    public void globalUpdate(CellGraph<Integer> graph) {
-
-    }
+    public void globalUpdate(CellGraph<Integer> graph) { }
 
     @Override
     public Integer nextValue(Integer myVal) { return myVal == ALIVE ? DEAD : ALIVE; }

@@ -35,7 +35,7 @@ public class Simulator<T> {
 
     public Node view() { return view; }
     public int tickCount() { return tickCount; }
-    public void setUpdateRule(SimulationModel<T> model_) { model = model_; }
+    public void setSimulationModel(SimulationModel<T> model_) { model = model_; }
     public String modelName() { return model.modelName(); }
 
     private void localUpdate() { graph.getCells().forEach(c -> c.localUpdate(model, graph.getNeighbors(c))); }

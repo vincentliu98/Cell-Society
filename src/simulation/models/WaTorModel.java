@@ -67,8 +67,9 @@ public class WaTorModel implements SimulationModel<Fish> {
             moveTo = fishCell;
         } else if(emptyCell != null) moveTo = emptyCell;
 
-        if(moveTo == null) {me.setNext(me.value()); return;}
+        if(moveTo == null) { System.out.println("stuck"); me.setNext(me.value()); return; }
         moveTo.setNext(me.value());
+        System.out.println("move");
 
         if(actionCode == CODE_BREED) {
             me.value().breed();
