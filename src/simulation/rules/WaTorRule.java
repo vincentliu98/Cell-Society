@@ -6,7 +6,7 @@ import simulation.Cell;
 import java.util.List;
 
 /**
- *  UpdateRules for the Spreading Of Fire
+ *  UpdateRules for the WaTor
  *
  * @author Vincent Liu
  */
@@ -21,6 +21,7 @@ public class WaTorRule implements UpdateRule<Integer> {
     @Override
     public Integer nextValue(Integer myVal, List<Integer> neighborVal) {
         if (myVal == SHARK) {
+            // look around, if no fish,
             return 0;
         } else if (myVal == FISH) {
             return 0;
