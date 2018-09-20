@@ -20,7 +20,6 @@ public class SimulationControlPanel extends HBox {
     public SimulationControlPanel(Simulator<?> sim) {
         simulator = sim;
 
-        setStyle("-fx-border-color: black;\n");
         setSpacing(25);
 
         var grid = new GridPane();

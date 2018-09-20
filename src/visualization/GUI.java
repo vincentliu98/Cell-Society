@@ -71,11 +71,9 @@ public class GUI {
         root.setVgap(10);
         root.setHgap(10);
 
-        // add three major layouts
         modelPanel = new GameOfLifePanel();
         simControlPanel = new SimulationControlPanel(simulator);
         simPanel = new VBox();
-        simPanel.setStyle("-fx-border-color: black;\n");
 
         // add the three major layouts
         root.add(modelPanel, 0, 0);
