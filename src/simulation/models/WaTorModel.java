@@ -41,40 +41,41 @@ public class WaTorModel implements SimulationModel<Fish> {
         var ac = me.value().tick(me.value().kind() == FISH ? fishBreedPeriod : sharkBreedPeriod,
                                   me.value().kind() == FISH ? 0 : sharkStarvePeriod);
 
-        if(ac == CODE_STARVE) { me.setNext(null); return; }
+        if(ac == CODE_STARVE) return;
 
         if(me.value().kind() == FISH) handleFish(me, neighbors, ac);
         else handleShark(me, neighbors, ac);
     }
 
     private void handleFish(Cell<Fish> me, List<Cell<Fish>> neighbors, int actionCode) {
+        if(me.next() != null && me.next().kind() == SHARK) return;
         var emptyCell = pickEmpty(neighbors);
-        if(emptyCell == null) { me.setNext(me.value()); return; }
+        if(emptyCell == null) return;
         emptyCell.setNext(me.value());
+
         if(actionCode == CODE_BREED) {
             me.value().breed();
             me.setNext(new Fish());
-        } else me.setNext(null);
+        }
     }
 
     private void handleShark(Cell<Fish> me, List<Cell<Fish>> neighbors, int actionCode) {
-        Cell<Fish> moveTo = null;
         var fishCell = pickFish(neighbors);
         var emptyCell = pickEmpty(neighbors);
 
+        Cell<Fish> moveTo;
         if(fishCell != null) {
             me.value().eat();
             moveTo = fishCell;
         } else if(emptyCell != null) moveTo = emptyCell;
+        else { me.setNext(me.value()); return; }
 
-        if(moveTo == null) { System.out.println("stuck"); me.setNext(me.value()); return; }
         moveTo.setNext(me.value());
-        System.out.println("move");
 
         if(actionCode == CODE_BREED) {
             me.value().breed();
             me.setNext(new Shark());
-        } else me.setNext(null);
+        }
     }
 
     private Cell<Fish> pickFish(List<Cell<Fish>> neighbors) {
@@ -88,19 +89,19 @@ public class WaTorModel implements SimulationModel<Fish> {
        return t.size() == 0 ? null : t.get(new Random().nextInt(t.size()));
     }
 
-
     @Override
     public void globalUpdate(CellGraph<Fish> graph) { }
 
     @Override
     public Fish nextValue(Fish myVal) {
-        return myVal.kind() == FISH ? new Shark() : new Fish();
+        return myVal == null ? new Fish() :
+                myVal.kind() == FISH ? new Shark() : null;
     }
 
     @Override
     public Color chooseColor(Fish myVal) {
        return myVal == null ? Color.LIGHTCYAN :
-               myVal.kind() == FISH ? Color.BEIGE : Color.BLUE;
+               myVal.kind() == FISH ? Color.LIGHTGREEN : Color.BLUE;
     }
 
     @Override

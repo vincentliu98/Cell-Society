@@ -38,8 +38,8 @@ public class Simulator<T> {
     public void setSimulationModel(SimulationModel<T> model_) { model = model_; }
     public String modelName() { return model.modelName(); }
 
-    private void localUpdate() { graph.getCells().forEach(c -> c.localUpdate(model, graph.getNeighbors(c))); }
+    private void localUpdate() { for(var c: graph.getCells()) model.localUpdate(c, graph.getNeighbors(c)); }
     private void globalUpdate() { model.globalUpdate(graph); }
-    private void commitAll() { graph.getCells().forEach(Cell::commit); }
+    private void commitAll() { for(var c: graph.getCells()) c.commit(); }
     private void updateView() { graph.getCells().forEach(c -> c.updateView(model)); }
 }

@@ -82,7 +82,7 @@ public class GUI {
         root.add(simPanel, 1, 0);
         root.add(simControlPanel, 0, 1, 2, 1);
 
-        initializeSimulation(GameOfLife.generate());
+        initializeSimulation(GameOfLife.generate(10));
     }
 
     private void initializeSimulation(Simulator<?> sim) {
@@ -120,13 +120,13 @@ public class GUI {
         if(simulator.modelName().equals(modelName)) return;
 
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
-            initializeSimulation(GameOfLife.generate());
+            initializeSimulation(GameOfLife.generate(10));
         } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
             initializeSimulation(Segregation.generate());
         } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
             initializeSimulation(SpreadingFire.generate());
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
-            initializeSimulation(WaTor.generate());
+            initializeSimulation(WaTor.generate(100));
         }
     }
 }
