@@ -1,12 +1,12 @@
 package simulation.factory;
 
-import javafx.scene.shape.Rectangle;
 import simulation.Cell;
 import simulation.Simulator;
 import simulation.models.SimulationModel;
 import simulation.models.SpreadingFireModel;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *  Convenience class to generate "Spreading of Fire" CellGraph
@@ -24,8 +24,7 @@ public class SpreadingFire {
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
                 var value = initial[i][j];
-                var cell = new Cell<>(value, model,
-                        new Rectangle(width, height, model.chooseColor(value)), (j+0.5)*width, (i+0.5)*height);
+                var cell = new Cell<>(value, (j+0.5)*width, (i+0.5)*height);
                 cells.add(cell);
             }
         }
@@ -34,13 +33,16 @@ public class SpreadingFire {
         return new Simulator<>(graph, model);
     }
 
-    public static Simulator<Integer> generate() {
-        return SpreadingFire.generate(5, 5, new int[][]{
-                {0, 0, 0, 0, 0},
-                {0, 1, 1, 1, 0},
-                {0, 1, 2, 1, 0},
-                {0, 1, 1, 1, 0},
-                {0, 0, 0, 0, 0}
-        });
+    public static Simulator<Integer> generate(int n) {
+        var rng = new Random();
+        int tmp[][] = new int[n][n];
+        for(int i = 0 ; i < n ; i ++) {
+            for(int j = 0 ; j < n ; j ++ ) {
+                var x = rng.nextDouble();
+                tmp[i][j] = x < 0.7 ? SpreadingFireModel.TREE :
+                             x < 0.75 ? SpreadingFireModel.BURNING : SpreadingFireModel.EMPTY;
+            }
+        }
+        return SpreadingFire.generate(n, n, tmp);
     }
 }

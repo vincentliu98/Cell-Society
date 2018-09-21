@@ -3,7 +3,9 @@ package simulation.models;
 import javafx.scene.paint.Color;
 import simulation.Cell;
 import simulation.CellGraph;
+import xml.writer.GameOfLifeWriter;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -18,9 +20,10 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
     @Override
     public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) {
         long nLives = neighbors.stream().filter(c -> c.value() == ALIVE).count();
-        me.setNext(nLives <= 2 ? DEAD :
-                    nLives == 3 ? ALIVE :
-                    nLives == 4 ? me.value() : DEAD);
+        me.setNext( me.value() == ALIVE ?
+                        (nLives < 2 ? DEAD :
+                          nLives < 4 ? ALIVE : DEAD) :
+                        (nLives == 3 ? ALIVE : DEAD));
     }
 
     @Override
@@ -34,4 +37,9 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
 
     @Override
     public String modelName() { return MODEL_NAME; }
+
+    @Override
+    public GameOfLifeWriter getXMLWriter(CellGraph<Integer> graph, File outFile) {
+        return new GameOfLifeWriter(this, graph, outFile);
+    }
 }

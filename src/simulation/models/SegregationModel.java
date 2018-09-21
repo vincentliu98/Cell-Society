@@ -4,7 +4,9 @@ import javafx.scene.paint.Color;
 import simulation.Cell;
 import simulation.CellGraph;
 import utility.IntegerPair;
+import xml.writer.XMLWriter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,9 +31,9 @@ public class SegregationModel implements SimulationModel<IntegerPair> {
     @Override
     public void localUpdate(Cell<IntegerPair> me, List<Cell<IntegerPair>> neighbors) {
         long nDiff = neighbors.stream().filter(c ->
-                c.value().getValue() > 0 || (!c.value().getValue().equals(me.value().getValue()))).count();
+                c.value().getValue() > 0 && (!c.value().getValue().equals(me.value().getValue()))).count();
         me.setNext(new IntegerPair(
-                (nDiff/((double) neighbors.size()) > tolerance || me.value().getValue() == EMPTY) ? LEAVE : STAY,
+                (me.value().getValue() == EMPTY || (nDiff/((double) neighbors.size()) > tolerance)) ? LEAVE : STAY,
                 me.value().getValue()));
     }
 
@@ -63,4 +65,9 @@ public class SegregationModel implements SimulationModel<IntegerPair> {
 
     @Override
     public String modelName() { return MODEL_NAME; }
+
+    @Override
+    public XMLWriter<IntegerPair> getXMLWriter(CellGraph<IntegerPair> graph, File outFile) {
+        return null; // TODO: Implement!!
+    }
 }

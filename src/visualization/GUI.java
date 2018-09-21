@@ -4,8 +4,13 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import simulation.Simulator;
 import simulation.factory.GameOfLife;
@@ -18,6 +23,8 @@ import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 import visualization.model_panels.GameOfLifePanel;
 import visualization.model_panels.ModelPanel;
+
+import java.io.File;
 
 /**
  * This is the Graphical User Interface for displaying the simulation models.
@@ -46,6 +53,7 @@ public class GUI {
             SpreadingFireModel.MODEL_NAME
     };
 
+    private Window window;
     private GridPane root;
     private SimulationControlPanel simControlPanel;
     private ModelPanel modelPanel;
@@ -72,7 +80,8 @@ public class GUI {
         root.setHgap(10);
 
         modelPanel = new GameOfLifePanel();
-        simControlPanel = new SimulationControlPanel(simulator);
+        simControlPanel = new SimulationControlPanel(simulator, e -> handleFileLoad(), e-> handleFileSave());
+
         simPanel = new VBox();
 
         // add the three major layouts
@@ -80,19 +89,19 @@ public class GUI {
         root.add(simPanel, 1, 0);
         root.add(simControlPanel, 0, 1, 2, 1);
 
-        initializeSimulation(GameOfLife.generate(10));
+        initializeSimulation(GameOfLife.generate(100));
     }
 
-    private void initializeSimulation(Simulator<?> sim) {
+    protected void initializeSimulation(Simulator<?> sim) {
         simulator = sim;
         simControlPanel.reset(simulator);
         simPanel.getChildren().clear();
         simPanel.getChildren().add(simulator.view());
-
-        // TODO: GET model parameters and put it into modelPanel
     }
 
     public void runGUI (Stage primaryStage) {
+        window = primaryStage;
+
         primaryStage.setTitle("Simulations");
         Scene scene = new Scene(root, SCREEN_WIDTH, SCREEN_HEIGHT);
         scene.getStylesheets().add("style.css");
@@ -110,7 +119,7 @@ public class GUI {
         if(simControlPanel.canTick(duration)) simulator.tick();
         simControlPanel.setNumTick(simulator.tickCount());
         simControlPanel.updateStepRate();
-        handleModelChange();
+        handleModelChange(); // by choose model
     }
 
     public void handleModelChange() {
@@ -118,13 +127,32 @@ public class GUI {
         if(simulator.modelName().equals(modelName)) return;
 
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
-            initializeSimulation(GameOfLife.generate(10));
+            initializeSimulation(GameOfLife.generate(100));
         } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
             initializeSimulation(Segregation.generate());
         } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
-            initializeSimulation(SpreadingFire.generate());
+            initializeSimulation(SpreadingFire.generate(100));
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
             initializeSimulation(WaTor.generate(100));
         }
+    }
+
+    private void handleFileLoad() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showOpenDialog(window);
+        if(file == null) return;
+        //var parser = new XMLParser();
+        // var newSimulator = generatedSimulatorOr Something like that ()
+        //simControlPanel.setChosenModel(newSimulator.modelName());
+        //root.initializeSimulation(newSimulator);
+    }
+
+    private void handleFileSave() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showSaveDialog(window);
+        if(file == null) return; // display "OH NO!" DIALOG
+        simulator.getWriter(file).generate();
     }
 }

@@ -3,7 +3,9 @@ package simulation.models;
 import javafx.scene.paint.Color;
 import simulation.Cell;
 import simulation.CellGraph;
+import xml.writer.XMLWriter;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -19,4 +21,6 @@ public interface SimulationModel<T> {
     T nextValue(T myVal);
     Color chooseColor(T myVal);
     String modelName();
+
+    XMLWriter<T> getXMLWriter(CellGraph<T> graph, File outFile);
 }

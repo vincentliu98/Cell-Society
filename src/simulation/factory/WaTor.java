@@ -1,16 +1,13 @@
 package simulation.factory;
 
-import javafx.scene.shape.Rectangle;
-import javafx.util.Pair;
 import simulation.Cell;
-import simulation.CellGraph;
 import simulation.Simulator;
-import simulation.models.SimulationModel;
 import simulation.models.WaTorModel;
 import simulation.models.wator.Fish;
 import simulation.models.wator.Shark;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *  Convenience class to generate "Wa-Tor" Simulator
@@ -29,8 +26,7 @@ public class WaTor {
             for(int j = 0 ; j < column ; j ++) {
                 var value = initial[i][j] == WaTorModel.FISH ? new Fish() :
                          initial[i][j] == WaTorModel.SHARK ? new Shark() : null;
-                var cell = new Cell<>(value, model,
-                        new Rectangle(width, height, model.chooseColor(value)), (j+0.5)*width, (i+0.5)*height);
+                var cell = new Cell<>(value, (j+0.5)*width, (i+0.5)*height);
                 cells.add(cell);
             }
         }

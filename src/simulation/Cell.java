@@ -15,12 +15,9 @@ public class Cell<T> {
     private Shape view;
     private double cx, cy;
 
-    public Cell(T value_, SimulationModel<T> model_, Shape view_, double cx_, double cy_) {
-        value = value_; view = view_; next = null;
-        view.setOnMouseClicked(e -> handleClick(model_));
+    public Cell(T value_, double cx_, double cy_) {
+        value = value_; next = null;
         cx = cx_; cy = cy_;
-        view.setLayoutX(cx - view.getLayoutBounds().getMinX() - ShapeUtils.meanX(view));
-        view.setLayoutY(cy - view.getLayoutBounds().getMinY() - ShapeUtils.meanY(view));
     }
 
     public void commit() { value = next; next = null; }
@@ -29,6 +26,13 @@ public class Cell<T> {
 
     public T value() { return value; }
     public T next() { return next; }
-    public void setNext(T next_) { next = next_; }
+    public double cx() { return cx; }
+    public double cy() { return cy; }
     public Shape view() { return view; }
+
+    public void setNext(T next_) { next = next_; }
+    public void setShape(Shape view_) {
+        view = view_;
+        ShapeUtils.centerShape(view, cx, cy);
+    }
 }

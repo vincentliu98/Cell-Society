@@ -2,9 +2,12 @@ package simulation;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
+import simulation.models.GameOfLifeModel;
 import simulation.models.SimulationModel;
+import xml.writer.GameOfLifeWriter;
+import xml.writer.XMLWriter;
 
-import java.util.List;
+import java.io.File;
 
 /**
  * Simulator
@@ -12,8 +15,6 @@ import java.util.List;
  * @author Inchan Hwang
  */
 public class Simulator<T> {
-    // field names expected to appear in data file holding values for this object
-
     public static final double SIMULATION_SX = 529.5;
     public static final double SIMULATION_SY = 435;
 
@@ -25,6 +26,10 @@ public class Simulator<T> {
 
     public Simulator(CellGraph<T> graph_, SimulationModel<T> model_) {
         graph = graph_; model = model_;
+        graph.getCells().forEach(c -> {
+            c.view().setOnMouseClicked(e -> c.handleClick(model));
+            c.updateView(model);
+        });
         view = new Group(graph.getViews());
         tickCount = 0;
     }
@@ -39,11 +44,12 @@ public class Simulator<T> {
 
     public Node view() { return view; }
     public int tickCount() { return tickCount; }
-    public void setSimulationModel(SimulationModel<T> model_) { model = model_; }
     public String modelName() { return model.modelName(); }
+    public XMLWriter<T> getWriter(File outFile) { return model.getXMLWriter(graph, outFile); }
 
     private void localUpdate() { for(var c: graph.getCells()) model.localUpdate(c, graph.getNeighbors(c)); }
     private void globalUpdate() { model.globalUpdate(graph); }
     private void commitAll() { for(var c: graph.getCells()) c.commit(); }
     private void updateView() { graph.getCells().forEach(c -> c.updateView(model)); }
+    public void setSimulationModel(SimulationModel<T> model_) { model = model_; }
 }

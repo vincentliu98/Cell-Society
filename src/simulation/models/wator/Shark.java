@@ -4,7 +4,11 @@ import simulation.models.WaTorModel;
 
 public class Shark extends Fish {
     private int starveCounter;
-    public Shark() { super(); starveCounter = 0; }
+    public Shark() { this(0, 0); }
+    public Shark(int breedingCounter, int starveCounter_) {
+        super(breedingCounter);
+        starveCounter = starveCounter_;
+    }
 
     @Override
     public int tick(int breedPeriod, int starvePeriod) {

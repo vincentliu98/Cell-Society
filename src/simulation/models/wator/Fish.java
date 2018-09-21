@@ -5,7 +5,9 @@ import simulation.models.WaTorModel;
 public class Fish {
     protected int breedCounter, actionCode;
 
-    public Fish() { breedCounter = 0; }
+    public Fish() { this(0); }
+    public Fish(int breedCounter_) { breedCounter = breedCounter_; }
+
     public int tick(int breedPeriod, int starvePeriod) {
         actionCode = (++breedCounter > breedPeriod) ? WaTorModel.CODE_BREED : WaTorModel.CODE_NOTHING;
         return actionCode;

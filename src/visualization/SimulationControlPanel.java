@@ -1,29 +1,31 @@
 package visualization;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import simulation.Simulator;
-
-import java.io.File;
 
 import static visualization.GUI.SIMULATION_MODELS;
 
 public class SimulationControlPanel extends HBox {
-    private boolean isPlaying, isFileLoaded;
+    private boolean isPlaying;
     private Text numTick, stepRate;
     private double simPeriod, elapsedTime;
     private ComboBox<String> chooseModel;
     private Simulator<?> simulator;
 
-    public SimulationControlPanel(Simulator<?> sim) {
+    public SimulationControlPanel(
+            Simulator<?> sim,
+            EventHandler<? super MouseEvent> onLoad,
+            EventHandler<? super MouseEvent> onSave
+    ) {
         super(25);
-        isPlaying = isFileLoaded = false;
-
+        isPlaying = false;
         simulator = sim;
 
         var grid = new GridPane();
@@ -35,11 +37,12 @@ public class SimulationControlPanel extends HBox {
         numTick = new Text("# of ticks: 0");
         stepRate = new Text("Step Rate: " + 1/simPeriod + "/s");
 
-        // add elements into the controlPanel
         var save = new Button("Save");
+        save.setOnMouseClicked(onSave);
 
         var load = new Button("Load");
-        load.setOnMouseClicked(e -> handleFileLoad());
+        load.setOnMouseClicked(onLoad);
+
         var playStop = new Button("Play");
         playStop.setOnMouseClicked(e -> {
             isPlaying = !isPlaying;
@@ -80,15 +83,6 @@ public class SimulationControlPanel extends HBox {
         getChildren().add(grid);
     }
 
-    private void handleFileLoad() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog(null);
-        if(file == null) return;
-//        var parser = new XMLParser();
-//        var simData = parser.getSimulationModel(file);
-    }
-
     public boolean canTick(double duration) {
         if(isPlaying) {
             elapsedTime += duration;
@@ -103,6 +97,7 @@ public class SimulationControlPanel extends HBox {
         stepRate.setText("Step Rate: " + ((double) Math.round(1/simPeriod * 100) / 100) + "/s");
     }
     public String getChosenModel() { return chooseModel.getValue(); }
+    public void setChosenModel(String s) { chooseModel.setValue(s); }
     public void setNumTick(int ticks) { numTick.setText("# of ticks: "+ticks); }
     public void reset(Simulator<?> sim) {
         isPlaying = false; elapsedTime = 0; simPeriod = 1;

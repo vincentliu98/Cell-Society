@@ -1,6 +1,5 @@
 package simulation.factory;
 
-import javafx.scene.shape.Rectangle;
 import simulation.Cell;
 import simulation.Simulator;
 import simulation.models.SegregationModel;
@@ -13,9 +12,7 @@ import java.util.ArrayList;
  *  @author Inchan Hwang
  */
 public class Segregation {
-    public static Simulator<IntegerPair> generate(
-            int row, int column, int[][] initial, double tolerance
-    ) {
+    public static Simulator<IntegerPair> generate(int row, int column, int[][] initial, double tolerance) {
         var model = new SegregationModel(tolerance);
         ArrayList<Cell<IntegerPair>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / column;
@@ -24,9 +21,7 @@ public class Segregation {
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
                 var value = new IntegerPair(SegregationModel.STAY, initial[i][j]);
-                var cell = new Cell<>(value, model,
-                        new Rectangle(width, height, model.chooseColor(value)), (j+0.5)*width, (i+0.5)*height);
-
+                var cell = new Cell<>(value, (j+0.5)*width, (i+0.5)*height);
                 cells.add(cell);
             }
         }
@@ -42,6 +37,6 @@ public class Segregation {
                 {2, 0, 2, 0, 2},
                 {2, 0, 0, 0, 2},
                 {1, 2, 2, 2, 1}
-        }, 0.2);
+        }, 0.3);
     }
 }
