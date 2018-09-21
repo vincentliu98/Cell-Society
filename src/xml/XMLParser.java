@@ -2,6 +2,7 @@ package xml;
 
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+import simulation.CellGraph;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,31 +19,25 @@ import java.util.HashMap;
  * @author Rhondu Smithwick
  * @author Robert C. Duvall
  */
-public class XMLParser {
-    // Readable error message that can be displayed by the GUI
+public class XMLParser<T> {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
-    // name of root attribute that notes the type of file expecting to parse
-    private final String TYPE_ATTRIBUTE;
     // keep only one documentBuilder because it is expensive to make and can reset it before parsing
     private final DocumentBuilder DOCUMENT_BUILDER;
 
-    
+
     /**
      * Create a parser for XML files of given type.
      */
-    public XMLParser (String type) {
-        DOCUMENT_BUILDER = getDocumentBuilder();
-        TYPE_ATTRIBUTE = type;
-    }
+    public XMLParser () { DOCUMENT_BUILDER = getDocumentBuilder(); }
 
     /**
      * Get the data contained in this XML file as an object
      */
     public SimulationData getSimulationModel(File dataFile) {
         var root = getRootElement(dataFile);
-        if (! isValidFile(root, SimulationData.DATA_TYPE)) {
-            throw new XMLException(ERROR_MESSAGE, SimulationData.DATA_TYPE);
-        }
+//        if (! isValidFile(root, SimulationData.DATA_TYPE)) {
+//            throw new XMLException(ERROR_MESSAGE, SimulationData.DATA_TYPE);
+//        }
         // read data associated with the fields given by the object
         var results = new HashMap<String, Object>();
         for (var field : SimulationData.DATA_FIELDS) {
@@ -59,8 +54,8 @@ public class XMLParser {
         return sim;
     }
 
-    private ArrayList<ArrayList<Object>> makeCellArrayList(Element root) {
-        ArrayList<ArrayList<Object>> cellArrayList = new ArrayList<ArrayList<Object>>();
+    private CellGraph makeCellGraph(Element root) {
+        CellGraph graph = new CellGraph<Integer>();
         int numCells = root.getElementsByTagName("cell").getLength();
         for (int c = 0; c<numCells; c++) {
             ArrayList<Object> attrArrayList = new ArrayList<Object>();
@@ -76,12 +71,12 @@ public class XMLParser {
                     attrArrayList.add(Integer.parseInt(attrStr.replaceAll("\\s", "")));
                 }
             }
-            cellArrayList.add(attrArrayList);
+//            cellArrayList.add(attrArrayList);
         }
-        return cellArrayList;
+        return graph;
     }
 
-    private ArrayList<ArrayList<Object>> makeCellGraph(Element root) {
+    private ArrayList<ArrayList<Object>> makeCellArrayList(Element root) {
         ArrayList<ArrayList<Object>> cellArrayList = new ArrayList<ArrayList<Object>>();
         int numCells = root.getElementsByTagName("cell").getLength();
         for (int c = 0; c<numCells; c++) {
@@ -133,11 +128,6 @@ public class XMLParser {
         }
     }
 
-    // Returns if this is a valid XML file for the specified object type
-    private boolean isValidFile (Element root, String type) {
-        return getAttribute(root, TYPE_ATTRIBUTE).equals(type);
-    }
-
     // Get value of Element's attribute
     private String getAttribute (Element e, String attributeName) {
         return e.getAttribute(attributeName);
@@ -178,7 +168,7 @@ public class XMLParser {
 
     public static void main(String[] args) {
         File test = new  File("data\\Game_of_Life_2.xml");
-        XMLParser myParser = new XMLParser("sim");
+        XMLParser myParser = new XMLParser();
         SimulationData mySimulationData = myParser.getSimulationModel(test);
         ArrayList<ArrayList<Integer>> cells = mySimulationData.getMyCellArrayList();
         for (ArrayList<Integer> attrList : cells) {

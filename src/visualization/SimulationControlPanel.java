@@ -87,7 +87,7 @@ public class SimulationControlPanel extends HBox {
         File file = fileChooser.showOpenDialog(null);
         if(file == null) return;
         var parser = new XMLParser();
-        parser.getSimulationModel(file);
+        var simData = parser.getSimulationModel(file);
     }
 
     public boolean canTick(double duration) {

@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class SimulationData {
     // name in data file that will indicate it represents data for this type of object
-    public static final String DATA_TYPE = "GameOfLife";
+    public static final String DATA_TYPE = "Game Of Life";
 
     // field names expected to appear in data file holding values for this object
     public static final List<String> DATA_FIELDS = List.of(
