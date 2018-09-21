@@ -50,4 +50,24 @@ public class SquareGridUtils<T> {
             if(y+1 < r) neighbors.get(cur).add(cells.get(gridToLine(x, y+1, c)));
         } return neighbors;
     }
+
+    public CellGraph<T> graphWith8NeighborsNoBoundary(List<Cell<T>> cells, int r, int c) {
+        CellGraph<T> neighbors = new CellGraph<>();
+        for(int i = 0 ; i < cells.size() ; i ++) {
+            var cur = cells.get(i);
+            neighbors.put(cur, new ArrayList<>());
+            var p = lineToGrid(i, c);
+            var x = p.getKey();
+            var y = p.getValue();
+
+            neighbors.get(cur).add(cells.get(gridToLine((x-1+c)%c, y, c)));
+            neighbors.get(cur).add(cells.get(gridToLine((x+1+c)%c, y, c)));
+            neighbors.get(cur).add(cells.get(gridToLine(x, (y-1+r)%r, c)));
+            neighbors.get(cur).add(cells.get(gridToLine(x, (y+1+r)%r, c)));
+            neighbors.get(cur).add(cells.get(gridToLine((x-1+c)%c, (y-1+r)%r, c)));
+            neighbors.get(cur).add(cells.get(gridToLine((x+1+c)%c, (y-1+r)%r, c)));
+            neighbors.get(cur).add(cells.get(gridToLine((x-1+c)%c, (y+1+r)%r, c)));
+            neighbors.get(cur).add(cells.get(gridToLine((x+1+c)%c, (y+1+r)%r, c)));
+        } return neighbors;
+    }
 }

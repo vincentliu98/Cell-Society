@@ -4,12 +4,15 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import simulation.models.SimulationModel;
 
+import java.util.List;
+
 /**
  * Simulator
  * @param <T> Type of the Cell's value
  * @author Inchan Hwang
  */
 public class Simulator<T> {
+
     public static final double SIMULATION_SX = 529.5;
     public static final double SIMULATION_SY = 435;
 
@@ -38,8 +41,8 @@ public class Simulator<T> {
     public void setSimulationModel(SimulationModel<T> model_) { model = model_; }
     public String modelName() { return model.modelName(); }
 
-    private void localUpdate() { graph.getCells().forEach(c -> c.localUpdate(model, graph.getNeighbors(c))); }
+    private void localUpdate() { for(var c: graph.getCells()) model.localUpdate(c, graph.getNeighbors(c)); }
     private void globalUpdate() { model.globalUpdate(graph); }
-    private void commitAll() { graph.getCells().forEach(Cell::commit); }
+    private void commitAll() { for(var c: graph.getCells()) c.commit(); }
     private void updateView() { graph.getCells().forEach(c -> c.updateView(model)); }
 }

@@ -6,21 +6,25 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import simulation.Simulator;
+
+import java.io.File;
 
 import static visualization.GUI.SIMULATION_MODELS;
 
 public class SimulationControlPanel extends HBox {
-    private boolean isPlaying;
+    private boolean isPlaying, isFileLoaded;
     private Text numTick, stepRate;
     private double simPeriod, elapsedTime;
     private ComboBox<String> chooseModel;
     private Simulator<?> simulator;
 
     public SimulationControlPanel(Simulator<?> sim) {
-        simulator = sim;
+        super(25);
+        isPlaying = isFileLoaded = false;
 
-        setSpacing(25);
+        simulator = sim;
 
         var grid = new GridPane();
         grid.setHgap(35);
@@ -33,7 +37,9 @@ public class SimulationControlPanel extends HBox {
 
         // add elements into the controlPanel
         var save = new Button("Save");
+
         var load = new Button("Load");
+        load.setOnMouseClicked(e -> handleFileLoad());
         var playStop = new Button("Play");
         playStop.setOnMouseClicked(e -> {
             isPlaying = !isPlaying;
@@ -72,6 +78,15 @@ public class SimulationControlPanel extends HBox {
         grid.add(chooseModel, 4, 1);
 
         getChildren().add(grid);
+    }
+
+    private void handleFileLoad() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showOpenDialog(null);
+        if(file == null) return;
+//        var parser = new XMLParser();
+//        var simData = parser.getSimulationModel(file);
     }
 
     public boolean canTick(double duration) {

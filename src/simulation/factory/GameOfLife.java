@@ -6,6 +6,7 @@ import simulation.Simulator;
 import simulation.models.GameOfLifeModel;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *  Convenience class to generate "Game Of Life" CellGraph
@@ -20,8 +21,8 @@ public class GameOfLife {
 
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
-                var cell = new Cell<>(initial[i][j], new Rectangle(j*width, i*height, width, height), model);
-                cell.view().setFill(model.chooseColor(cell.value()));
+                var cell = new Cell<>(initial[i][j], model,
+                        new Rectangle(width, height, model.chooseColor(initial[i][j])), (j+0.5)*width, (i+0.5)*height);
                 cells.add(cell);
             }
         }
@@ -30,13 +31,15 @@ public class GameOfLife {
         return new Simulator<>(graph, model);
     }
 
-    public static Simulator<Integer> generate() {
-        return GameOfLife.generate(5, 5, new int[][]{
-                {1, 0, 1, 0, 1},
-                {0, 1, 0, 1, 0},
-                {1, 0, 1, 0, 1},
-                {0, 1, 0, 1, 0},
-                {1, 0, 1, 0, 1}
-        });
+    public static Simulator<Integer> generate(int n) {
+        var rng = new Random();
+        int tmp[][] = new int[n][n];
+        for(int i = 0 ; i < n ; i ++) {
+            for(int j = 0 ; j < n ; j ++ ) {
+                var x = rng.nextInt();
+                tmp[i][j] = x < 0.5 ? 0 : 1;
+            }
+        }
+        return GameOfLife.generate(n, n, tmp);
     }
 }

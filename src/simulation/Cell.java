@@ -2,8 +2,7 @@ package simulation;
 
 import javafx.scene.shape.Shape;
 import simulation.models.SimulationModel;
-
-import java.util.List;
+import utility.ShapeUtils;
 
 /**
  * Cell implements a basic unit of CA.
@@ -14,14 +13,17 @@ import java.util.List;
 public class Cell<T> {
     private T value, next;
     private Shape view;
+    private double cx, cy;
 
-    public Cell(T value_, Shape view_, SimulationModel<T> model_) {
-        value = value_; view = view_;
+    public Cell(T value_, SimulationModel<T> model_, Shape view_, double cx_, double cy_) {
+        value = value_; view = view_; next = null;
         view.setOnMouseClicked(e -> handleClick(model_));
+        cx = cx_; cy = cy_;
+        view.setLayoutX(cx - view.getLayoutBounds().getMinX() - ShapeUtils.meanX(view));
+        view.setLayoutY(cy - view.getLayoutBounds().getMinY() - ShapeUtils.meanY(view));
     }
 
-    public void localUpdate(SimulationModel<T> model, List<Cell<T>> neighbors) { model.localUpdate(this, neighbors); }
-    public void commit() { value = next; }
+    public void commit() { value = next; next = null; }
     public void updateView(SimulationModel<T> model) { view.setFill(model.chooseColor(value)); }
     public void handleClick(SimulationModel<T> model) { value = model.nextValue(value); updateView(model); }
 
