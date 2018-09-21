@@ -5,7 +5,9 @@ import simulation.Cell;
 import simulation.CellGraph;
 import simulation.models.wator.Fish;
 import simulation.models.wator.Shark;
+import xml.writer.XMLWriter;
 
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -106,5 +108,10 @@ public class WaTorModel implements SimulationModel<Fish> {
 
     @Override
     public String modelName() { return MODEL_NAME; }
+
+    @Override
+    public XMLWriter<Fish> getXMLWriter(CellGraph<Fish> graph, File outFile) {
+        return null; // TODO: IMPLEMENT!!!!!!!
+    }
 
 }

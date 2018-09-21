@@ -36,7 +36,7 @@ public class GameOfLife {
         int tmp[][] = new int[n][n];
         for(int i = 0 ; i < n ; i ++) {
             for(int j = 0 ; j < n ; j ++ ) {
-                var x = rng.nextInt();
+                var x = rng.nextDouble();
                 tmp[i][j] = x < 0.5 ? 0 : 1;
             }
         }

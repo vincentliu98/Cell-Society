@@ -28,6 +28,8 @@ public class Cell<T> {
 
     public T value() { return value; }
     public T next() { return next; }
+    public double cx() { return cx; }
+    public double cy() { return cy; }
     public void setNext(T next_) { next = next_; }
     public Shape view() { return view; }
 }

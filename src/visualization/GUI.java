@@ -19,7 +19,8 @@ import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 import visualization.model_panels.GameOfLifePanel;
 import visualization.model_panels.ModelPanel;
-import xml.XMLParser;
+import xml.writer.GameOfLifeWriter;
+import xml.writer.XMLWriter;
 
 import java.io.File;
 
@@ -85,7 +86,7 @@ public class GUI {
         root.add(simPanel, 1, 0);
         root.add(simControlPanel, 0, 1, 2, 1);
 
-        initializeSimulation(GameOfLife.generate(10));
+        initializeSimulation(GameOfLife.generate(100));
     }
 
     protected void initializeSimulation(Simulator<?> sim) {
@@ -121,11 +122,11 @@ public class GUI {
         if(simulator.modelName().equals(modelName)) return;
 
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
-            initializeSimulation(GameOfLife.generate(10));
+            initializeSimulation(GameOfLife.generate(100));
         } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
             initializeSimulation(Segregation.generate());
         } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
-            initializeSimulation(SpreadingFire.generate());
+            initializeSimulation(SpreadingFire.generate(100));
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
             initializeSimulation(WaTor.generate(100));
         }
@@ -136,7 +137,7 @@ public class GUI {
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(null);
         if(file == null) return;
-        var parser = new XMLParser();
+        //var parser = new XMLParser();
         // var newSimulator = generatedSimulatorOr Something like that ()
         //simControlPanel.setChosenModel(newSimulator.modelName());
         //root.initializeSimulation(newSimulator);
@@ -145,8 +146,8 @@ public class GUI {
     private void handleFileSave() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog(null);
-        if(file == null) return;
-        // SAVE blah blah blah
+        File file = fileChooser.showSaveDialog(null);
+        if(file == null) return; // display "OH NO!" DIALOG
+        simulator.getWriter(file).generate();
     }
 }

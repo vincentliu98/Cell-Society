@@ -4,7 +4,9 @@ import javafx.scene.paint.Color;
 import simulation.Cell;
 import simulation.CellGraph;
 import utility.IntegerPair;
+import xml.writer.XMLWriter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -63,4 +65,9 @@ public class SegregationModel implements SimulationModel<IntegerPair> {
 
     @Override
     public String modelName() { return MODEL_NAME; }
+
+    @Override
+    public XMLWriter<IntegerPair> getXMLWriter(CellGraph<IntegerPair> graph, File outFile) {
+        return null; // TODO: Implement!!
+    }
 }

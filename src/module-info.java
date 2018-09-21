@@ -6,5 +6,9 @@ module cellsociety.team10 {
     requires java.xml;
 
     exports xml;
+    exports xml.writer;
     exports visualization;
+    exports simulation;
+    exports simulation.models;
+    exports utility;
 }
