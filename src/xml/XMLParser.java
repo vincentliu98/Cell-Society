@@ -1,6 +1,5 @@
 package xml;
 
-import javafx.util.Pair;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
@@ -10,9 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 
 /**
