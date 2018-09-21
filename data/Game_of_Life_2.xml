@@ -1,86 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<data sim="Game Of Life">
-    <cellMap>
+<data sim="GameOfLife">
         <cell>
             <uniqueID> 0 </uniqueID>
             <neighbors> 1,10,11 </neighbors>
             <x> 0.166666666666667 </x>
             <y> 0.166666666666667 </y>
-            <values>
-                <isAlive> 1 </isAlive>
-            </values>
+            <isAlive> 1 </isAlive>
         </cell>
         <cell>
             <uniqueID> 1 </uniqueID>
             <neighbors> 0,2,10,11,12 </neighbors>
             <x> 0.5 </x>
             <y> 0.166666666666667 </y>
-            <values>
-                <isAlive> 0 </isAlive>
-            </values>
+            <isAlive> 0 </isAlive>
         </cell>
         <cell>
             <uniqueID> 2 </uniqueID>
             <neighbors> 1,11,12 </neighbors>
             <x> 0.833333333333333 </x>
             <y> 0.166666666666667 </y>
-            <values>
-                <isAlive> 1 </isAlive>
-            </values>
+            <isAlive> 1 </isAlive>
         </cell>
         <cell>
             <uniqueID> 10 </uniqueID>
             <neighbors> 0,1,11,20,21 </neighbors>
             <x> 0.166666666666667 </x>
             <y> 0.5 </y>
-            <values>
-                <isAlive> 0 </isAlive>
-            </values>
+            <isAlive> 0 </isAlive>
         </cell>
         <cell>
             <uniqueID> 11 </uniqueID>
             <neighbors> 0,1,2,10,12,20,21,22 </neighbors>
             <x> 0.5 </x>
             <y> 0.5 </y>
-            <values>
-                <isAlive> 1 </isAlive>
-            </values>
+            <isAlive> 1 </isAlive>
         </cell>
         <cell>
             <uniqueID> 12 </uniqueID>
             <neighbors> 1,2,11,21,22 </neighbors>
             <x> 0.833333333333333 </x>
             <y> 0.5 </y>
-            <values>
-                <isAlive> 0 </isAlive>
-            </values>
+            <isAlive> 0 </isAlive>
         </cell>
         <cell>
             <uniqueID> 20 </uniqueID>
             <neighbors> 10,11,21 </neighbors>
             <x> 0.166666666666667 </x>
             <y> 0.833333333333333 </y>
-            <values>
-                <isAlive> 1 </isAlive>
-            </values>
+            <isAlive> 1 </isAlive>
         </cell>
         <cell>
             <uniqueID> 21 </uniqueID>
             <neighbors> 10,11,12,20,22 </neighbors>
             <x> 0.5 </x>
             <y> 0.833333333333333 </y>
-            <values>
-                <isAlive> 0 </isAlive>
-            </values>
+            <isAlive> 0 </isAlive>
         </cell>
         <cell>
             <uniqueID> 22 </uniqueID>
             <neighbors> 11,12,21 </neighbors>
             <x> 0.833333333333333 </x>
             <y> 0.833333333333333 </y>
-            <values>
-                <isAlive> 1 </isAlive>
-            </values>
+            <isAlive> 1 </isAlive>
         </cell>
-    </cellMap>
 </data>
