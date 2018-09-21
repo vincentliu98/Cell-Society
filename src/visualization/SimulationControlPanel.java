@@ -8,7 +8,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import simulation.Simulator;
-import xml.XMLParser;
 
 import java.io.File;
 
@@ -86,8 +85,8 @@ public class SimulationControlPanel extends HBox {
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(null);
         if(file == null) return;
-        var parser = new XMLParser();
-        var simData = parser.getSimulationModel(file);
+//        var parser = new XMLParser();
+//        var simData = parser.getSimulationModel(file);
     }
 
     public boolean canTick(double duration) {
