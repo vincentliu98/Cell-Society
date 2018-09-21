@@ -1,9 +1,7 @@
 package xml;
 
-import javafx.util.Pair;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
-import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.models.GameOfLifeModel;
@@ -16,7 +14,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -38,7 +37,7 @@ public class XMLParser<T> {
     // keep only one documentBuilder because it is expensive to make and can reset it before parsing
     private final DocumentBuilder DOCUMENT_BUILDER;
 
-    
+
     /**
      * Create a parser for XML files of given type.
      */
