@@ -19,8 +19,7 @@ public class Cell<T> {
         value = value_; view = view_; next = null;
         view.setOnMouseClicked(e -> handleClick(model_));
         cx = cx_; cy = cy_;
-        view.setLayoutX(cx - view.getLayoutBounds().getMinX() - ShapeUtils.meanX(view));
-        view.setLayoutY(cy - view.getLayoutBounds().getMinY() - ShapeUtils.meanY(view));
+        ShapeUtils.centerShape(view, cx, cy);
     }
 
     public void commit() { value = next; next = null; }

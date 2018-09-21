@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -87,7 +88,8 @@ public class XMLParser<T> {
             System.out.print(results.get(field).getClass());
         }
         SimulationData sim = new SimulationData(results);
-        return sim;
+
+        return null;
     }
 
     private CellGraph makeCellGraph(Element root) {

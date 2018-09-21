@@ -29,9 +29,9 @@ public class SegregationModel implements SimulationModel<IntegerPair> {
     @Override
     public void localUpdate(Cell<IntegerPair> me, List<Cell<IntegerPair>> neighbors) {
         long nDiff = neighbors.stream().filter(c ->
-                c.value().getValue() > 0 || (!c.value().getValue().equals(me.value().getValue()))).count();
+                c.value().getValue() > 0 && (!c.value().getValue().equals(me.value().getValue()))).count();
         me.setNext(new IntegerPair(
-                (nDiff/((double) neighbors.size()) > tolerance || me.value().getValue() == EMPTY) ? LEAVE : STAY,
+                (me.value().getValue() == EMPTY || (nDiff/((double) neighbors.size()) > tolerance)) ? LEAVE : STAY,
                 me.value().getValue()));
     }
 
