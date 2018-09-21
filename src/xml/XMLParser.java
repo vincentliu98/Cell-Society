@@ -3,16 +3,16 @@ package xml;
 import javafx.util.Pair;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+import simulation.Cell;
+import simulation.CellGraph;
+import simulation.models.GameOfLifeModel;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -21,8 +21,7 @@ import java.util.List;
  * @author Rhondu Smithwick
  * @author Robert C. Duvall
  */
-public class XMLParser {
-    // Readable error message that can be displayed by the GUI
+public class XMLParser<T> {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
     // name of root attribute that notes the type of file expecting to parse
     private final String TYPE_ATTRIBUTE;
@@ -62,8 +61,8 @@ public class XMLParser {
         return sim;
     }
 
-    private ArrayList<ArrayList<Object>> makeCellArrayList(Element root) {
-        ArrayList<ArrayList<Object>> cellArrayList = new ArrayList<ArrayList<Object>>();
+    private CellGraph makeCellGraph(Element root) {
+        CellGraph graph = new CellGraph<Integer>();
         int numCells = root.getElementsByTagName("cell").getLength();
         for (int c = 0; c<numCells; c++) {
             ArrayList<Object> attrArrayList = new ArrayList<Object>();
@@ -79,12 +78,12 @@ public class XMLParser {
                     attrArrayList.add(Integer.parseInt(attrStr.replaceAll("\\s", "")));
                 }
             }
-            cellArrayList.add(attrArrayList);
+//            cellArrayList.add(attrArrayList);
         }
-        return cellArrayList;
+        return graph;
     }
 
-    private ArrayList<ArrayList<Object>> makeCellGraph(Element root) {
+    private ArrayList<ArrayList<Object>> makeCellArrayList(Element root) {
         ArrayList<ArrayList<Object>> cellArrayList = new ArrayList<ArrayList<Object>>();
         int numCells = root.getElementsByTagName("cell").getLength();
         for (int c = 0; c<numCells; c++) {
