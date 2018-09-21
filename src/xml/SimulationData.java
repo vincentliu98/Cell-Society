@@ -23,11 +23,17 @@ public class SimulationData {
         "cellArrayList"
 
     );
-    //field names expected to appear within each cell, do not currently need to access this list
-    public static final List<String> CELLMAP_SUBFIELDS = List.of(
-            "row",
-            "column",
-            "value"
+    //field names expected to appear within each cell
+    public static final List<String> CELL_SUBFIELDS = List.of(
+            "uniqueID",
+            "neighbors",
+            "x",
+            "y",
+            "values"
+    );
+
+    public static final List<String> VALUE_SUBFIELDS = List.of(
+            "isAlive"
     );
 
     // specific data values for this instance

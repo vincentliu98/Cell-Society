@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<simulation>
+<data sim = "GameOfLife">
     <type> Game of Life </type>
     <cell>
         <row> 0 </row>
@@ -502,4 +502,4 @@
         <value> 0 </value>
     </cell>
     <author> Jay Pande </author>
-</simulation>
+</data>
