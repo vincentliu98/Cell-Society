@@ -4,12 +4,15 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import simulation.models.SimulationModel;
 
+import java.util.List;
+
 /**
  * Simulator
  * @param <T> Type of the Cell's value
  * @author Inchan Hwang
  */
 public class Simulator<T> {
+
     public static final double SIMULATION_SX = 529.5;
     public static final double SIMULATION_SY = 435;
 

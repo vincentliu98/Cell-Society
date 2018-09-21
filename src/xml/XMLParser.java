@@ -5,7 +5,11 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import simulation.Cell;
 import simulation.CellGraph;
+import simulation.Simulator;
 import simulation.models.GameOfLifeModel;
+import simulation.models.SegregationModel;
+import simulation.models.SpreadingFireModel;
+import simulation.models.WaTorModel;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,7 +28,13 @@ import java.util.*;
 public class XMLParser<T> {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
     // name of root attribute that notes the type of file expecting to parse
-    private final String TYPE_ATTRIBUTE;
+//    private final String TYPE_ATTRIBUTE
+    public static final List<String> VALID_TYPE_ATTRIBUTES = List.of(
+            GameOfLifeModel.MODEL_NAME,
+            SegregationModel.MODEL_NAME,
+            SpreadingFireModel.MODEL_NAME,
+            WaTorModel.MODEL_NAME
+    );
     // keep only one documentBuilder because it is expensive to make and can reset it before parsing
     private final DocumentBuilder DOCUMENT_BUILDER;
 
@@ -32,9 +42,8 @@ public class XMLParser<T> {
     /**
      * Create a parser for XML files of given type.
      */
-    public XMLParser (String type) {
+    public XMLParser () {
         DOCUMENT_BUILDER = getDocumentBuilder();
-        TYPE_ATTRIBUTE = type;
     }
 
     /**
@@ -42,9 +51,30 @@ public class XMLParser<T> {
      */
     public SimulationData getSimulationModel(File dataFile) {
         var root = getRootElement(dataFile);
-        if (! isValidFile(root, SimulationData.DATA_TYPE)) {
-            throw new XMLException(ERROR_MESSAGE, SimulationData.DATA_TYPE);
+//        if (! isValidFile(root, SimulationData.DATA_TYPE)) {
+//            throw new XMLException(ERROR_MESSAGE, SimulationData.DATA_TYPE);
+//        }
+        // read data associated with the fields given by the object
+        var results = new HashMap<String, Object>();
+        for (var field : SimulationData.DATA_FIELDS) {
+            if (field.equals(SimulationData.DATA_FIELDS.get(1))) {
+                ArrayList<ArrayList<Object>> cellArrayList = makeCellArrayList(root);
+                results.put(field, cellArrayList);
+            }
+            else {
+                results.put(field, getTextValue(root, field));
+            }
+            System.out.print(results.get(field).getClass());
         }
+        SimulationData sim = new SimulationData(results);
+        return sim;
+    }
+
+    public Simulator getSimulator(File dataFile) {
+        var root = getRootElement(dataFile);
+//        if (! isValidFile(root, SimulationData.DATA_TYPE)) {
+//            throw new XMLException(ERROR_MESSAGE, SimulationData.DATA_TYPE);
+//        }
         // read data associated with the fields given by the object
         var results = new HashMap<String, Object>();
         for (var field : SimulationData.DATA_FIELDS) {
@@ -136,9 +166,9 @@ public class XMLParser<T> {
     }
 
     // Returns if this is a valid XML file for the specified object type
-    private boolean isValidFile (Element root, String type) {
-        return getAttribute(root, TYPE_ATTRIBUTE).equals(type);
-    }
+//    private boolean isValidFile (Element root, String type) {
+//        return getAttribute(root, TYPE_ATTRIBUTE).equals(type);
+//    }
 
     // Get value of Element's attribute
     private String getAttribute (Element e, String attributeName) {
@@ -180,7 +210,7 @@ public class XMLParser<T> {
 
     public static void main(String[] args) {
         File test = new  File("data\\Game_of_Life_2.xml");
-        XMLParser myParser = new XMLParser("sim");
+        XMLParser myParser = new XMLParser();
         SimulationData mySimulationData = myParser.getSimulationModel(test);
         ArrayList<ArrayList<Integer>> cells = mySimulationData.getMyCellArrayList();
         for (ArrayList<Integer> attrList : cells) {
