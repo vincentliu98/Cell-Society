@@ -23,12 +23,10 @@ public class Segregation {
 
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
-                var cell = new Cell<>(
-                        new IntegerPair(SegregationModel.STAY, initial[i][j]),
-                        new Rectangle(j * width, i * height, width, height),
-                        model
-                );
-                cell.view().setFill(model.chooseColor(cell.value()));
+                var value = new IntegerPair(SegregationModel.STAY, initial[i][j]);
+                var cell = new Cell<>(value, model,
+                        new Rectangle(width, height, model.chooseColor(value)), (j+0.5)*width, (i+0.5)*height);
+
                 cells.add(cell);
             }
         }

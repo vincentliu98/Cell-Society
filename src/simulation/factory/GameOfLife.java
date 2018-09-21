@@ -21,8 +21,8 @@ public class GameOfLife {
 
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
-                var cell = new Cell<>(initial[i][j], new Rectangle(j*width, i*height, width, height), model);
-                cell.view().setFill(model.chooseColor(cell.value()));
+                var cell = new Cell<>(initial[i][j], model,
+                        new Rectangle(width, height, model.chooseColor(initial[i][j])), (j+0.5)*width, (i+0.5)*height);
                 cells.add(cell);
             }
         }

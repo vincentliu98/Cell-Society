@@ -2,6 +2,7 @@ package simulation;
 
 import javafx.scene.shape.Shape;
 import simulation.models.SimulationModel;
+import utility.ShapeUtils;
 
 /**
  * Cell implements a basic unit of CA.
@@ -12,10 +13,14 @@ import simulation.models.SimulationModel;
 public class Cell<T> {
     private T value, next;
     private Shape view;
+    private double cx, cy;
 
-    public Cell(T value_, Shape view_, SimulationModel<T> model_) {
+    public Cell(T value_, SimulationModel<T> model_, Shape view_, double cx_, double cy_) {
         value = value_; view = view_; next = null;
         view.setOnMouseClicked(e -> handleClick(model_));
+        cx = cx_; cy = cy_;
+        view.setLayoutX(cx - view.getLayoutBounds().getMinX() - ShapeUtils.meanX(view));
+        view.setLayoutY(cy - view.getLayoutBounds().getMinY() - ShapeUtils.meanY(view));
     }
 
     public void commit() { value = next; next = null; }

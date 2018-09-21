@@ -27,12 +27,10 @@ public class WaTor {
 
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
-                var cell = new Cell<>(
-                        initial[i][j] == WaTorModel.FISH ? new Fish() :
-                         initial[i][j] == WaTorModel.SHARK ? new Shark() : null,
-                        new Rectangle(j*width, i*height, width, height),
-                        model);
-                cell.view().setFill(model.chooseColor(cell.value()));
+                var value = initial[i][j] == WaTorModel.FISH ? new Fish() :
+                         initial[i][j] == WaTorModel.SHARK ? new Shark() : null;
+                var cell = new Cell<>(value, model,
+                        new Rectangle(width, height, model.chooseColor(value)), (j+0.5)*width, (i+0.5)*height);
                 cells.add(cell);
             }
         }
