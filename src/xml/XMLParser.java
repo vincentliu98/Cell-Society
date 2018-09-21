@@ -1,5 +1,6 @@
 package xml;
 
+import javafx.util.Pair;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
@@ -68,11 +69,10 @@ public class XMLParser {
             ArrayList<Object> attrArrayList = new ArrayList<Object>();
             for (String sub : SimulationData.CELL_SUBFIELDS) {
                 if (sub.equals(SimulationData.CELL_SUBFIELDS.get(1))) {
-                    String neighborStr = getTextValueAtIndex(root, sub, c);
-                    attrArrayList.add(parseNeighbors(neighborStr));
+                    attrArrayList.add(parseNeighbors(root, c));
                 }
                 else if (sub.equals(SimulationData.CELL_SUBFIELDS.get(4))) {
-                    attrArrayList.addAll(getValuesArrayList(root, c));
+                    attrArrayList.add(getValuesArrayList(root, c));
                 }
                 else {
                     String attrStr = getTextValueAtIndex(root, sub, c);
@@ -84,7 +84,30 @@ public class XMLParser {
         return cellArrayList;
     }
 
-    private ArrayList<Integer> parseNeighbors(String neighborStr) {
+    private ArrayList<ArrayList<Object>> makeCellGraph(Element root) {
+        ArrayList<ArrayList<Object>> cellArrayList = new ArrayList<ArrayList<Object>>();
+        int numCells = root.getElementsByTagName("cell").getLength();
+        for (int c = 0; c<numCells; c++) {
+            ArrayList<Object> attrArrayList = new ArrayList<Object>();
+            for (String sub : SimulationData.CELL_SUBFIELDS) {
+                if (sub.equals(SimulationData.CELL_SUBFIELDS.get(1))) {
+                    attrArrayList.add(parseNeighbors(root, c));
+                }
+                else if (sub.equals(SimulationData.CELL_SUBFIELDS.get(4))) {
+                    attrArrayList.add(getValuesArrayList(root, c));
+                }
+                else {
+                    String attrStr = getTextValueAtIndex(root, sub, c);
+                    attrArrayList.add(Integer.parseInt(attrStr.replaceAll("\\s", "")));
+                }
+            }
+            cellArrayList.add(attrArrayList);
+        }
+        return cellArrayList;
+    }
+
+    private ArrayList<Integer> parseNeighbors(Element root, int cellIndex) {
+        String neighborStr = getTextValueAtIndex(root, SimulationData.CELL_SUBFIELDS.get(1), cellIndex);
         ArrayList<Integer> neighborArrayList = new ArrayList<Integer>();
         String[] neighborStrArray = neighborStr.replace("\\s","").split(",");
         for (String s : neighborStrArray)
