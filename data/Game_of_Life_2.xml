@@ -2,513 +2,85 @@
 <data sim="GameOfLife">
     <cellMap>
         <cell>
-            <row> 0 </row>
-            <column> 0 </column>
-            <value> 0 </value>
+            <uniqueID> 0 </uniqueID>
+            <neighbors> 1,10,11 </neighbors>
+            <x> 0 </x>
+            <y> 0 </y>
+            <values>
+                <isAlive> 1 </isAlive>
+            </values>
+        </cell>
+        <cell>
+            <uniqueID> 1 </uniqueID>
+            <neighbors> 0,2,10,11,12 </neighbors>
+            <x> 1 </x>
+            <y> 0 </y>
+            <values>
+                <isAlive> 0 </isAlive>
+            </values>
+        </cell>
+        <cell>
+            <uniqueID> 2 </uniqueID>
+            <neighbors> 1,11,12 </neighbors>
+            <x> 2 </x>
+            <y> 0 </y>
+            <values>
+                <isAlive> 1 </isAlive>
+            </values>
+        </cell>
+        <cell>
+            <uniqueID> 10 </uniqueID>
+            <neighbors> 0,1,11,20,21 </neighbors>
+            <x> 0 </x>
+            <y> 1 </y>
+            <values>
+                <isAlive> 0 </isAlive>
+            </values>
+        </cell>
+        <cell>
+            <uniqueID> 11 </uniqueID>
+            <neighbors> 0,1,2,10,12,20,21,22 </neighbors>
+            <x> 1 </x>
+            <y> 1 </y>
+            <values>
+                <isAlive> 1 </isAlive>
+            </values>
+        </cell>
+        <cell>
+            <uniqueID> 12 </uniqueID>
+            <neighbors> 1,2,11,21,22 </neighbors>
+            <x> 2 </x>
+            <y> 1 </y>
+            <values>
+                <isAlive> 0 </isAlive>
+            </values>
+        </cell>
+        <cell>
+            <uniqueID> 20 </uniqueID>
+            <neighbors> 10,11,21 </neighbors>
+            <x> 0 </x>
+            <y> 2 </y>
+            <values>
+                <isAlive> 1 </isAlive>
+            </values>
+        </cell>
+        <cell>
+            <uniqueID> 21 </uniqueID>
+            <neighbors> 10,11,12,20,22 </neighbors>
+            <x> 1 </x>
+            <y> 2 </y>
+            <values>
+                <isAlive> 0 </isAlive>
+            </values>
+        </cell>
+        <cell>
+            <uniqueID> 22 </uniqueID>
+            <neighbors> 11,12,21 </neighbors>
+            <x> 2 </x>
+            <y> 2 </y>
+            <values>
+                <isAlive> 1 </isAlive>
+            </values>
         </cell>
-        <cell>
-            <row> 0 </row>
-            <column> 1 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 0 </row>
-            <column> 2 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 0 </row>
-            <column> 3 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 0 </row>
-            <column> 4 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 0 </row>
-            <column> 5 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 0 </row>
-            <column> 6 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 0 </row>
-            <column> 7 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 0 </row>
-            <column> 8 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 0 </row>
-            <column> 9 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 1 </row>
-            <column> 0 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 1 </row>
-            <column> 1 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 1 </row>
-            <column> 2 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 1 </row>
-            <column> 3 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 1 </row>
-            <column> 4 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 1 </row>
-            <column> 5 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 1 </row>
-            <column> 6 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 1 </row>
-            <column> 7 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 1 </row>
-            <column> 8 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 1 </row>
-            <column> 9 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 2 </row>
-            <column> 0 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 2 </row>
-            <column> 1 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 2 </row>
-            <column> 2 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 2 </row>
-            <column> 3 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 2 </row>
-            <column> 4 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 2 </row>
-            <column> 5 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 2 </row>
-            <column> 6 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 2 </row>
-            <column> 7 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 2 </row>
-            <column> 8 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 2 </row>
-            <column> 9 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 3 </row>
-            <column> 0 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 3 </row>
-            <column> 1 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 3 </row>
-            <column> 2 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 3 </row>
-            <column> 3 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 3 </row>
-            <column> 4 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 3 </row>
-            <column> 5 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 3 </row>
-            <column> 6 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 3 </row>
-            <column> 7 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 3 </row>
-            <column> 8 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 3 </row>
-            <column> 9 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 4 </row>
-            <column> 0 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 4 </row>
-            <column> 1 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 4 </row>
-            <column> 2 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 4 </row>
-            <column> 3 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 4 </row>
-            <column> 4 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 4 </row>
-            <column> 5 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 4 </row>
-            <column> 6 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 4 </row>
-            <column> 7 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 4 </row>
-            <column> 8 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 4 </row>
-            <column> 9 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 5 </row>
-            <column> 0 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 5 </row>
-            <column> 1 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 5 </row>
-            <column> 2 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 5 </row>
-            <column> 3 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 5 </row>
-            <column> 4 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 5 </row>
-            <column> 5 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 5 </row>
-            <column> 6 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 5 </row>
-            <column> 7 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 5 </row>
-            <column> 8 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 5 </row>
-            <column> 9 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 6 </row>
-            <column> 0 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 6 </row>
-            <column> 1 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 6 </row>
-            <column> 2 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 6 </row>
-            <column> 3 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 6 </row>
-            <column> 4 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 6 </row>
-            <column> 5 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 6 </row>
-            <column> 6 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 6 </row>
-            <column> 7 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 6 </row>
-            <column> 8 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 6 </row>
-            <column> 9 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 7 </row>
-            <column> 0 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 7 </row>
-            <column> 1 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 7 </row>
-            <column> 2 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 7 </row>
-            <column> 3 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 7 </row>
-            <column> 4 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 7 </row>
-            <column> 5 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 7 </row>
-            <column> 6 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 7 </row>
-            <column> 7 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 7 </row>
-            <column> 8 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 7 </row>
-            <column> 9 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 8 </row>
-            <column> 0 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 8 </row>
-            <column> 1 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 8 </row>
-            <column> 2 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 8 </row>
-            <column> 3 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 8 </row>
-            <column> 4 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 8 </row>
-            <column> 5 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 8 </row>
-            <column> 6 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 8 </row>
-            <column> 7 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 8 </row>
-            <column> 8 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 8 </row>
-            <column> 9 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 9 </row>
-            <column> 0 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 9 </row>
-            <column> 1 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 9 </row>
-            <column> 2 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 9 </row>
-            <column> 3 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 9 </row>
-            <column> 4 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 9 </row>
-            <column> 5 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 9 </row>
-            <column> 6 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 9 </row>
-            <column> 7 </column>
-            <value> 0 </value>
-        </cell>
-        <cell>
-            <row> 9 </row>
-            <column> 8 </column>
-            <value> 1 </value>
-        </cell>
-        <cell>
-            <row> 9 </row>
-            <column> 9 </column>
-            <value> 0 </value>
-        </cell>
-        <!--<cell>-->
-            <!--<uniqueID> 1</uniqueID>-->
-            <!--<neighbors> 1,2,3,4 </neighbors>-->
-            <!--<xcord> 1</xcord>-->
-            <!--<ycord> 2</ycord>-->
-            <!--<values>-->
-                <!--<isAlive> 1 </isAlive>-->
-            <!--</values>-->
-        <!--</cell>-->
     </cellMap>
 </data>
