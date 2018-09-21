@@ -8,7 +8,6 @@ import simulation.models.SimulationModel;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -21,6 +20,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class XMLWriter<T> {
+    public static final String DELIMITER = ",";
+    public static final int SHAPE_RECTANGLE = 0;
+    public static final int SHAPE_TRIANGLE = 1;
+
     protected SimulationModel<T> sim;
     private CellGraph<T> graph;
     private Map<Cell<T>, Integer> uniqueId;
@@ -41,52 +44,48 @@ public abstract class XMLWriter<T> {
 
     public void generate() {
         try {
-            // root elements
             Element rootElement = doc.createElement("data");
             rootElement.setAttribute("sim", sim.modelName());
+            rootElement.setAttribute("shape", Integer.toString(SHAPE_RECTANGLE)); // TODO:
+            rootElement.setAttribute("width", Double.toString(graph.getShapeWidth()));
+            rootElement.setAttribute("height", Double.toString(graph.getShapeHeight()));
             doc.appendChild(rootElement);
 
-            graph.getCells().forEach(c -> rootElement.appendChild(parseCell(c)));
-            parseModelParams().forEach(rootElement::appendChild);
+            graph.getCells().forEach(c -> rootElement.appendChild(encodeCell(c)));
+            parseModelParams().forEach(p -> rootElement.appendChild(p));
 
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(outFile);
-
-            // write the content into xml file
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-
-            transformer.transform(source, result);
+            TransformerFactory.newInstance().newTransformer().transform(
+                    new DOMSource(doc), new StreamResult(outFile));
         } catch (TransformerException tfe) {
             tfe.printStackTrace(); // Do some user-friendly things
         }
     }
 
-    private Element parseCell(Cell<T> cell) {
+    private Element encodeCell(Cell<T> cell) {
         var parent = doc.createElement("cell");
 
         var id = doc.createElement("uniqueID");
         id.appendChild(doc.createTextNode(uniqueId.get(cell).toString()));
         var neighbors = doc.createElement("neighbors");
         neighbors.appendChild(doc.createTextNode(
-                String.join(",", graph.getNeighbors(cell).stream().map(c ->
+                String.join(DELIMITER, graph.getNeighbors(cell).stream().map(c ->
                         uniqueId.get(c).toString()).collect(Collectors.toList()))
         ));
-        var cx = doc.createElement("x");
+        var cx = doc.createElement("cx");
         cx.appendChild(doc.createTextNode(Double.toString(cell.cx())));
-        var cy = doc.createElement("y");
+        var cy = doc.createElement("cy");
         cy.appendChild(doc.createTextNode(Double.toString(cell.cy())));
 
         parent.appendChild(id);
         parent.appendChild(neighbors);
         parent.appendChild(cx);
         parent.appendChild(cy);
-        parseCellStatus(cell).forEach(parent::appendChild);
+        encodeCellValue(cell.value()).forEach(parent::appendChild);
 
         return parent;
     }
 
-    protected abstract List<Element> parseCellStatus(Cell<T> cell);
+    protected abstract List<Element> encodeCellValue(T value);
 
     protected abstract List<Element> parseModelParams();
 }

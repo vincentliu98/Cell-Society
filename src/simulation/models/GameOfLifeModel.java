@@ -4,7 +4,6 @@ import javafx.scene.paint.Color;
 import simulation.Cell;
 import simulation.CellGraph;
 import xml.writer.GameOfLifeWriter;
-import xml.writer.XMLWriter;
 
 import java.io.File;
 import java.util.List;

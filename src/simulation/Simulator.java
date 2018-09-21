@@ -26,6 +26,10 @@ public class Simulator<T> {
 
     public Simulator(CellGraph<T> graph_, SimulationModel<T> model_) {
         graph = graph_; model = model_;
+        graph.getCells().forEach(c -> {
+            c.view().setOnMouseClicked(e -> c.handleClick(model));
+            c.updateView(model);
+        });
         view = new Group(graph.getViews());
         tickCount = 0;
     }
@@ -47,6 +51,5 @@ public class Simulator<T> {
     private void globalUpdate() { model.globalUpdate(graph); }
     private void commitAll() { for(var c: graph.getCells()) c.commit(); }
     private void updateView() { graph.getCells().forEach(c -> c.updateView(model)); }
-
     public void setSimulationModel(SimulationModel<T> model_) { model = model_; }
 }

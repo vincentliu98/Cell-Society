@@ -1,6 +1,5 @@
 package simulation.factory;
 
-import javafx.scene.shape.Rectangle;
 import simulation.Cell;
 import simulation.Simulator;
 import simulation.models.GameOfLifeModel;
@@ -21,8 +20,7 @@ public class GameOfLife {
 
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
-                var cell = new Cell<>(initial[i][j], model,
-                        new Rectangle(width, height, model.chooseColor(initial[i][j])), (j+0.5)*width, (i+0.5)*height);
+                var cell = new Cell<>(initial[i][j], (j+0.5)*width, (i+0.5)*height);
                 cells.add(cell);
             }
         }

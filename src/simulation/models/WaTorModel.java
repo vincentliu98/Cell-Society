@@ -113,5 +113,4 @@ public class WaTorModel implements SimulationModel<Fish> {
     public XMLWriter<Fish> getXMLWriter(CellGraph<Fish> graph, File outFile) {
         return null; // TODO: IMPLEMENT!!!!!!!
     }
-
 }

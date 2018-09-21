@@ -4,9 +4,13 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Duration;
 import simulation.Simulator;
 import simulation.factory.GameOfLife;
@@ -19,8 +23,6 @@ import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 import visualization.model_panels.GameOfLifePanel;
 import visualization.model_panels.ModelPanel;
-import xml.writer.GameOfLifeWriter;
-import xml.writer.XMLWriter;
 
 import java.io.File;
 
@@ -51,6 +53,7 @@ public class GUI {
             SpreadingFireModel.MODEL_NAME
     };
 
+    private Window window;
     private GridPane root;
     private SimulationControlPanel simControlPanel;
     private ModelPanel modelPanel;
@@ -97,6 +100,8 @@ public class GUI {
     }
 
     public void runGUI (Stage primaryStage) {
+        window = primaryStage;
+
         primaryStage.setTitle("Simulations");
         Scene scene = new Scene(root, SCREEN_WIDTH, SCREEN_HEIGHT);
         scene.getStylesheets().add("style.css");
@@ -135,7 +140,7 @@ public class GUI {
     private void handleFileLoad() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog(null);
+        File file = fileChooser.showOpenDialog(window);
         if(file == null) return;
         //var parser = new XMLParser();
         // var newSimulator = generatedSimulatorOr Something like that ()
@@ -146,7 +151,7 @@ public class GUI {
     private void handleFileSave() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showSaveDialog(null);
+        File file = fileChooser.showSaveDialog(window);
         if(file == null) return; // display "OH NO!" DIALOG
         simulator.getWriter(file).generate();
     }

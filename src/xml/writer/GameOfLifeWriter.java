@@ -1,7 +1,6 @@
 package xml.writer;
 
 import org.w3c.dom.Element;
-import simulation.Cell;
 import simulation.CellGraph;
 import simulation.models.SimulationModel;
 
@@ -14,10 +13,9 @@ public class GameOfLifeWriter extends XMLWriter<Integer> {
     }
 
     @Override
-    protected List<Element> parseCellStatus(Cell<Integer> cell) {
+    protected List<Element> encodeCellValue(Integer value) {
         var isAlive = doc.createElement("isAlive");
-        isAlive.appendChild(doc.createTextNode(cell.value().toString()));
-
+        isAlive.appendChild(doc.createTextNode(value.toString()));
         return List.of(isAlive);
     }
 
