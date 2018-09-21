@@ -12,6 +12,7 @@ import java.util.List;
  * @author Inchan Hwang
  */
 public class Simulator<T> {
+    // field names expected to appear in data file holding values for this object
 
     public static final double SIMULATION_SX = 529.5;
     public static final double SIMULATION_SY = 435;

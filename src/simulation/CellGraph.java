@@ -12,21 +12,6 @@ import java.util.stream.Collectors;
  * @author Inchan Hwang
  */
 public class CellGraph<T> extends HashMap<Cell<T>, List<Cell<T>>> {
-    // field names expected to appear in data file holding values for this object
-    public static final List<String> DATA_FIELDS = List.of(
-            "type",
-            "cellArrayList"
-
-    );
-    //field names expected to appear within each cell
-    public static final List<String> CELL_SUBFIELDS = List.of(
-            "uniqueID",
-            "neighbors",
-            "x",
-            "y",
-            "values"
-    );
-
     public Set<Cell<T>> getCells() { return keySet(); }
     public Set<Cell<T>> getCells(Predicate<Cell<T>> p) {
         return getCells().stream().filter(p).collect(Collectors.toSet());
