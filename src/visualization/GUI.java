@@ -127,13 +127,13 @@ public class GUI {
         if(simulator.modelName().equals(modelName)) return;
 
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
-            initializeSimulation(GameOfLife.generate(100));
+            initializeSimulation(GameOfLife.generate(5));
         } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
-            initializeSimulation(Segregation.generate());
+            initializeSimulation(Segregation.generate(5));
         } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
-            initializeSimulation(SpreadingFire.generate(100));
+            initializeSimulation(SpreadingFire.generate(5));
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
-            initializeSimulation(WaTor.generate(100));
+            initializeSimulation(WaTor.generate(5));
         }
     }
 

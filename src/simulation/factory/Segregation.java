@@ -5,6 +5,7 @@ import simulation.Simulator;
 import simulation.models.SegregationModel;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *  Convenience class to generate "Segregation" Simulator
@@ -28,13 +29,16 @@ public class Segregation {
         return new Simulator<>(graph, model);
     }
 
-    public static Simulator<Integer> generate() {
-        return Segregation.generate(5, 5, new int[][]{
-                {1, 2, 2, 2, 1},
-                {2, 0, 0, 0, 2},
-                {2, 0, 2, 0, 2},
-                {2, 0, 0, 0, 2},
-                {1, 2, 2, 2, 1}
-        }, 0.6);
+    public static Simulator<Integer> generate(int n) {
+        var rng = new Random();
+        int tmp[][] = new int[n][n];
+        for(int i = 0 ; i < n ; i ++) {
+            for(int j = 0 ; j < n ; j ++ ) {
+                var x = rng.nextDouble();
+                tmp[i][j] = x < 0.4 ? 0 :
+                            x < 0.7 ? 1 : 2;
+            }
+        }
+        return generate(n, n, tmp, 0.5);
     }
 }

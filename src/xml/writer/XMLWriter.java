@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
  */
 public abstract class XMLWriter<T> {
     public static final String DELIMITER = ",";
-    public static final int SHAPE_RECTANGLE = 0;
-    public static final int SHAPE_TRIANGLE = 1;
+    public static final String SHAPE_RECTANGLE = "rectangle";
+    public static final String SHAPE_TRIANGLE = "triangle";
 
     private CellGraph<T> graph;
     private Map<Cell<T>, Integer> uniqueId;
@@ -50,13 +50,23 @@ public abstract class XMLWriter<T> {
     public void generate() {
         try {
             Element rootElement = doc.createElement("data");
-            rootElement.setAttribute("sim", getModelName());
-            rootElement.setAttribute("shape", Integer.toString(SHAPE_RECTANGLE)); // TODO:
-            rootElement.setAttribute("width", Double.toString(graph.getShapeWidth()));
-            rootElement.setAttribute("height", Double.toString(graph.getShapeHeight()));
             doc.appendChild(rootElement);
 
+            var modelName = doc.createElement("modelName");
+            modelName.appendChild(doc.createTextNode(getModelName()));
+            rootElement.appendChild(modelName);
+            var shape = doc.createElement("shape");
+            shape.appendChild(doc.createTextNode(SHAPE_RECTANGLE));
+            rootElement.appendChild(shape);
+            var width = doc.createElement("shapeWidth");
+            width.appendChild(doc.createTextNode(Double.toString(graph.getShapeWidth())));
+            rootElement.appendChild(width);
+            var height = doc.createElement("shapeHeight");
+            height.appendChild(doc.createTextNode(Double.toString(graph.getShapeHeight())));
+            rootElement.appendChild(height);
+
             graph.getCells().forEach(c -> rootElement.appendChild(encodeCell(c)));
+
             parseModelParams().forEach(p -> rootElement.appendChild(p));
 
             TransformerFactory.newInstance().newTransformer().transform(
