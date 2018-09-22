@@ -1,7 +1,6 @@
 package visualization;
 
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
@@ -29,9 +28,7 @@ public class SimulationControlPanel extends HBox {
         simulator = sim;
 
         var grid = new GridPane();
-        grid.setHgap(35);
-        grid.setVgap(15);
-        grid.setPadding(new Insets(5,30,5,30));
+        grid.getStyleClass().add("simControlPanel");
 
         var modelName = new Text("       Select Model");
         numTick = new Text("# of ticks: 0");
