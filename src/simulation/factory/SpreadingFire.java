@@ -16,7 +16,7 @@ import java.util.Random;
 
 public class SpreadingFire {
     public static Simulator<Integer> generate(int row, int column, int[][] initial) {
-        SimulationModel<Integer> model = new SpreadingFireModel();
+        SimulationModel<Integer> model = new SpreadingFireModel(0.7);
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / column;
         double height = Simulator.SIMULATION_SY / row;

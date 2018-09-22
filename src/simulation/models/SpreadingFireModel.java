@@ -19,7 +19,12 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     public static final int TREE = 1;
     public static final int BURNING = 2;
     public static final String MODEL_NAME = "Spreading Of Fire";
-    private double probCatch = 0.9;
+
+    private double probCatch;
+
+    public SpreadingFireModel(double probCatch_) {
+        probCatch = probCatch_;
+    }
 
     @Override
     public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) {
@@ -53,5 +58,4 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     public XMLWriter<Integer> getXMLWriter(CellGraph<Integer> graph, File outFile) {
         return null; // TODO: IMPLEMENT!!!
     }
-
 }
