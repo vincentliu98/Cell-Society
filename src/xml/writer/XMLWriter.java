@@ -4,7 +4,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import simulation.Cell;
 import simulation.CellGraph;
-import simulation.models.SimulationModel;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,8 +19,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- *
- * @param <T>
+ *  XMLWriter to write properties of a simulation that are common to
+ *  all particular models. Subclasses must provide the XML Elements
+ *  that are bound to specific models.
  *
  * @author Inchan Hwang
  */
@@ -30,14 +30,13 @@ public abstract class XMLWriter<T> {
     public static final int SHAPE_RECTANGLE = 0;
     public static final int SHAPE_TRIANGLE = 1;
 
-    protected SimulationModel<T> sim;
     private CellGraph<T> graph;
     private Map<Cell<T>, Integer> uniqueId;
     protected Document doc;
     private File outFile;
 
-    public XMLWriter(SimulationModel<T> sim_, CellGraph<T> graph_, File outFile_) {
-        sim = sim_; graph = graph_; outFile = outFile_;
+    public XMLWriter(CellGraph<T> graph_, File outFile_) {
+        graph = graph_; outFile = outFile_;
         try {
             doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
         } catch (ParserConfigurationException e) {
@@ -51,7 +50,7 @@ public abstract class XMLWriter<T> {
     public void generate() {
         try {
             Element rootElement = doc.createElement("data");
-            rootElement.setAttribute("sim", sim.modelName());
+            rootElement.setAttribute("sim", getModelName());
             rootElement.setAttribute("shape", Integer.toString(SHAPE_RECTANGLE)); // TODO:
             rootElement.setAttribute("width", Double.toString(graph.getShapeWidth()));
             rootElement.setAttribute("height", Double.toString(graph.getShapeHeight()));
@@ -90,6 +89,8 @@ public abstract class XMLWriter<T> {
 
         return parent;
     }
+
+    protected abstract String getModelName();
 
     protected abstract List<Element> encodeCellValue(T value);
 

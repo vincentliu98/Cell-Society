@@ -2,20 +2,22 @@ package xml.writer;
 
 import org.w3c.dom.Element;
 import simulation.CellGraph;
-import simulation.models.SimulationModel;
+import simulation.models.GameOfLifeModel;
 
 import java.io.File;
 import java.util.List;
 
 /**
- *
  * @author Inchan Hwang
  */
 
 public class GameOfLifeWriter extends XMLWriter<Integer> {
-    public GameOfLifeWriter(SimulationModel<Integer> sim_, CellGraph<Integer> graph_, File outFile_) {
-        super(sim_, graph_, outFile_);
+    public GameOfLifeWriter(CellGraph<Integer> graph_, File outFile_) {
+        super(graph_, outFile_);
     }
+
+    @Override
+    protected String getModelName() { return GameOfLifeModel.MODEL_NAME; }
 
     @Override
     protected List<Element> encodeCellValue(Integer value) {
