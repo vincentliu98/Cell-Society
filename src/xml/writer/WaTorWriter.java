@@ -9,16 +9,19 @@ import java.io.File;
 import java.util.List;
 
 /**
- *
  * @author Inchan Hwang
  */
 
 public class WaTorWriter extends XMLWriter<Fish> {
-    private WaTorModel wator;
-    public WaTorWriter(WaTorModel sim_, CellGraph<Fish> graph_, File outFile_) {
-        super(sim_, graph_, outFile_);
-        wator = sim_;
+    private WaTorModel model;
+
+    public WaTorWriter(WaTorModel model_, CellGraph<Fish> graph_, File outFile_) {
+        super(graph_, outFile_);
+        model = model_;
     }
+
+    @Override
+    protected String getModelName() { return WaTorModel.MODEL_NAME; }
 
     @Override
     protected List<Element> encodeCellValue(Fish value) {
@@ -42,9 +45,9 @@ public class WaTorWriter extends XMLWriter<Fish> {
         var fishBreedPeriod = doc.createElement("fishBreedPeriod");
         var sharkBreedPeriod = doc.createElement("sharkBreedPeriod");
         var sharkStarvePeriod = doc.createElement("sharkStarvePeriod");
-        fishBreedPeriod.appendChild(doc.createTextNode(Integer.toString(wator.getFishBreedPeriod())));
-        sharkBreedPeriod.appendChild(doc.createTextNode(Integer.toString(wator.getSharkBreedPeriod())));
-        sharkStarvePeriod.appendChild(doc.createTextNode(Integer.toString(wator.getSharkStarvePeriod())));
+        fishBreedPeriod.appendChild(doc.createTextNode(Integer.toString(model.getFishBreedPeriod())));
+        sharkBreedPeriod.appendChild(doc.createTextNode(Integer.toString(model.getSharkBreedPeriod())));
+        sharkStarvePeriod.appendChild(doc.createTextNode(Integer.toString(model.getSharkStarvePeriod())));
         return List.of(fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod);
     }
 }

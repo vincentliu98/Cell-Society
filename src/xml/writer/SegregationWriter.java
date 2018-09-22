@@ -7,13 +7,19 @@ import simulation.models.SegregationModel;
 import java.io.File;
 import java.util.List;
 
+/**
+ * @author Inchan Hwang
+ */
 public class SegregationWriter extends XMLWriter<Integer> {
     private SegregationModel model;
 
-    public SegregationWriter(SegregationModel sim_, CellGraph<Integer> graph_, File outFile_) {
-        super(sim_, graph_, outFile_);
-        model = sim_;
+    public SegregationWriter(SegregationModel model_, CellGraph<Integer> graph_, File outFile_) {
+        super(graph_, outFile_);
+        model = model_;
     }
+
+    @Override
+    protected String getModelName() { return SegregationModel.MODEL_NAME; }
 
     @Override
     protected List<Element> encodeCellValue(Integer value) {

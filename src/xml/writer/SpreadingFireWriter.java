@@ -3,6 +3,7 @@ package xml.writer;
 import org.w3c.dom.Element;
 import simulation.CellGraph;
 import simulation.models.SimulationModel;
+import simulation.models.SpreadingFireModel;
 
 import java.io.File;
 import java.util.List;
@@ -13,9 +14,15 @@ import java.util.List;
  */
 
 public class SpreadingFireWriter extends XMLWriter<Integer> {
-    public SpreadingFireWriter(SimulationModel<Integer> sim_, CellGraph<Integer> graph_, File outFile_) {
-        super(sim_, graph_, outFile_);
+    private SpreadingFireModel model;
+
+    public SpreadingFireWriter(SpreadingFireModel model_, CellGraph<Integer> graph_, File outFile_) {
+        super(graph_, outFile_);
+        model = model_;
     }
+
+    @Override
+    protected String getModelName() { return SpreadingFireModel.MODEL_NAME; }
 
     @Override
     protected List<Element> encodeCellValue(Integer value) {
@@ -25,5 +32,9 @@ public class SpreadingFireWriter extends XMLWriter<Integer> {
     }
 
     @Override
-    protected List<Element> parseModelParams() { return List.of(); }
+    protected List<Element> parseModelParams() {
+        var probCatch = doc.createElement("probCatch");
+        probCatch.appendChild(doc.createTextNode(Double.toString(model.getProbCatch())));
+        return List.of(probCatch);
+    }
 }

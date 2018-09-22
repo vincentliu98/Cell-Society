@@ -40,6 +40,6 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
 
     @Override
     public GameOfLifeWriter getXMLWriter(CellGraph<Integer> graph, File outFile) {
-        return new GameOfLifeWriter(this, graph, outFile);
+        return new GameOfLifeWriter(graph, outFile);
     }
 }
