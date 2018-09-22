@@ -5,6 +5,8 @@ import javafx.scene.shape.Rectangle;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import simulation.Cell;
+import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.factory.Segregation;
 import simulation.models.*;
@@ -43,7 +45,7 @@ public class ParentXMLParser {
     public static final String SHAPE_HEIGHT_TAG = "shapeHeight";
     public static final String SHAPE_RADIUS_TAG = "shapeRadius";
     public static final String SHAPE_TAG = "shape";
-    public static final String RECTANGLE_STRING= "rectangle";
+    public static final String RECTANGLE_STRING = "rectangle";
     public static final String CIRCLE_STRING = "circle";
 
     public static final String CELL_UNIQUE_ID_TAG = "uniqueID";
@@ -66,14 +68,44 @@ public class ParentXMLParser {
         Element root = getRootElement(datafile);
         if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(GameOfLifeModel.MODEL_NAME))
             return GameOfLifeXMLParser.getModelSimulator(root);
-//        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SegregationModel.MODEL_NAME))
-//            return SegregationXMLParser.getModelSimulator(root);
+        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SegregationModel.MODEL_NAME))
+            return SegregationXMLParser.getModelSimulator(root);
 //        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
 //            return SpreadingFireXMLParser.getModelSimulator(root);
 //        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(WaTorModel.MODEL_NAME))
 //            return WaTorXMLParser.getModelSimulator(root);
         else
             throw new XMLException(ERROR_MESSAGE, MODEL_ATTRIBUTE_STRING);
+    }
+
+    public static CellGraph<Integer> getIntegerCellGraph(Element root, String valTag) {
+        CellGraph<Integer> graph;
+        String shapeString = getTextValue(root, SHAPE_TAG).replaceAll("\\s","");
+        if (shapeString.equals(RECTANGLE_STRING)) {
+            graph = new CellGraph<Integer>(parseRectangle(root));
+        } else if (shapeString.equals(CIRCLE_STRING)) {
+            graph = new CellGraph<Integer>(parseCircle(root));
+        } else {
+            graph = null;
+        }
+        int numCells = root.getElementsByTagName("cell").getLength();
+        Map<Integer, Cell<Integer>> IDToCellMap = new HashMap<Integer, Cell<Integer>>();
+        for (int c = 0; c<numCells; c++) {
+            int uniqueID = getIntValueAtIndex(root, CELL_UNIQUE_ID_TAG, c);
+            int val = getIntValueAtIndex(root, valTag, c);
+            double xPos = getDoubleValueAtIndex(root, CELL_XPOS_TAG, c);
+            double yPos = getDoubleValueAtIndex(root, CELL_YPOS_TAG, c);
+            IDToCellMap.put(uniqueID, new Cell<Integer>(val, xPos, yPos));
+        }
+        for (int c = 0; c<numCells; c++) {
+            int uniqueID = getIntValueAtIndex(root, CELL_UNIQUE_ID_TAG, c);
+            ArrayList<Integer> neighborIDs = parseNeighbors(root, c);
+            List<Cell<Integer>> neighborList = new ArrayList<>();
+            for (int n : neighborIDs)
+                neighborList.add(IDToCellMap.get(n));
+            graph.put(IDToCellMap.get(uniqueID), neighborList);
+        }
+        return graph;
     }
 
     public static Rectangle parseRectangle(Element root) {
