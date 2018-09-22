@@ -8,6 +8,11 @@ import simulation.models.wator.Fish;
 import java.io.File;
 import java.util.List;
 
+/**
+ *
+ * @author Inchan Hwang
+ */
+
 public class WaTorWriter extends XMLWriter<Fish> {
     private WaTorModel wator;
     public WaTorWriter(WaTorModel sim_, CellGraph<Fish> graph_, File outFile_) {

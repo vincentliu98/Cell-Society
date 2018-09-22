@@ -3,6 +3,7 @@ package simulation.models;
 import javafx.scene.paint.Color;
 import simulation.Cell;
 import simulation.CellGraph;
+import xml.writer.SpreadingFireWriter;
 import xml.writer.XMLWriter;
 
 import java.io.File;
@@ -56,6 +57,6 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
 
     @Override
     public XMLWriter<Integer> getXMLWriter(CellGraph<Integer> graph, File outFile) {
-        return null; // TODO: IMPLEMENT!!!
+        return new SpreadingFireWriter(this,graph,outFile); // TODO: IMPLEMENT!!!
     }
 }

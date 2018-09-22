@@ -19,6 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ *
+ * @param <T>
+ *
+ * @author Inchan Hwang
+ */
 public abstract class XMLWriter<T> {
     public static final String DELIMITER = ",";
     public static final int SHAPE_RECTANGLE = 0;

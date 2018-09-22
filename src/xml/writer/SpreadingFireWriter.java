@@ -9,19 +9,19 @@ import java.util.List;
 
 /**
  *
- * @author Inchan Hwang
+ * @author Vincent Liu
  */
 
-public class GameOfLifeWriter extends XMLWriter<Integer> {
-    public GameOfLifeWriter(SimulationModel<Integer> sim_, CellGraph<Integer> graph_, File outFile_) {
+public class SpreadingFireWriter extends XMLWriter<Integer> {
+    public SpreadingFireWriter(SimulationModel<Integer> sim_, CellGraph<Integer> graph_, File outFile_) {
         super(sim_, graph_, outFile_);
     }
 
     @Override
     protected List<Element> encodeCellValue(Integer value) {
-        var isAlive = doc.createElement("isAlive");
-        isAlive.appendChild(doc.createTextNode(value.toString()));
-        return List.of(isAlive);
+        var liveState = doc.createElement("liveState");
+        liveState.appendChild(doc.createTextNode(value.toString()));
+        return List.of(liveState);
     }
 
     @Override
