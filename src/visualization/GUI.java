@@ -2,7 +2,6 @@ package visualization;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -37,6 +36,7 @@ import java.io.File;
  * the simulation, or change the rate of simulation
  *
  * @author Vincent Liu
+ * @author Inchan Hwang
  */
 public class GUI {
     public static final int SCREEN_WIDTH = 700;
@@ -63,6 +63,7 @@ public class GUI {
 
     public GUI () {
         root = new GridPane();
+        root.getStyleClass().add("root");
 
         var column1 = new ColumnConstraints();
         column1.setPercentWidth(20);
@@ -75,14 +76,14 @@ public class GUI {
         row2.setPercentHeight(15);
         root.getRowConstraints().addAll(row1, row2);
 
-        root.setPadding(new Insets(15,15,15,15));
-        root.setVgap(10);
-        root.setHgap(10);
-
         modelPanel = new GameOfLifePanel();
+        modelPanel.getStyleClass().add("modelPanel");
+
         simControlPanel = new SimulationControlPanel(simulator, e -> handleFileLoad(), e-> handleFileSave());
+        simControlPanel.getStyleClass().add("simControlPanel");
 
         simPanel = new VBox();
+        simPanel.getStyleClass().add("simPanel");
 
         // add the three major layouts
         root.add(modelPanel, 0, 0);
