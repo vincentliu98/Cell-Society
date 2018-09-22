@@ -18,6 +18,9 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
     public static final String MODEL_NAME = "Game Of Life";
 
     @Override
+    public int getPriority(Integer myVal) { return 0; }
+
+    @Override
     public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) {
         long nLives = neighbors.stream().filter(c -> c.value() == ALIVE).count();
         me.setNext( me.value() == ALIVE ?

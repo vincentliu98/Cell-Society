@@ -26,6 +26,9 @@ public class SegregationModel implements SimulationModel<Integer> {
     public SegregationModel(double threshold) { satisfactionThreshold = threshold; }
 
     @Override
+    public int getPriority(Integer myVal) { return 0; }
+
+    @Override
     public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) { }
 
     @Override

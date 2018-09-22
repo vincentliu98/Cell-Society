@@ -28,6 +28,9 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     }
 
     @Override
+    public int getPriority(Integer myVal) { return 0; }
+
+    @Override
     public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) {
         if (me.value() == TREE && (neighbors.stream().anyMatch(a -> a.value() == BURNING))){
             me.setNext(Math.random() < probCatch ? BURNING : TREE);

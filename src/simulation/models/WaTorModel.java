@@ -39,6 +39,12 @@ public class WaTorModel implements SimulationModel<Fish> {
     }
 
     @Override
+    public int getPriority(Fish myVal) {
+        return myVal == null ? 2 :
+                myVal.kind() == SHARK ? 0 : 1;
+    }
+
+    @Override
     public void localUpdate(Cell<Fish> me, List<Cell<Fish>> neighbors) {
         if (me.value() == null) return;
 
@@ -52,12 +58,12 @@ public class WaTorModel implements SimulationModel<Fish> {
     }
 
     private void handleFish(Cell<Fish> me, List<Cell<Fish>> neighbors, int actionCode) {
-        if(me.next() != null && me.next().kind() == SHARK) return;
+        if(me.next() != null && me.next().kind() == SHARK) return; // eaten by shark
         var emptyCell = pickEmpty(neighbors);
         if(emptyCell == null) return;
         emptyCell.setNext(me.value());
 
-        if(actionCode == CODE_BREED) {
+        if(actionCode == CODE_BREED && me.next() == null) {
             me.value().breed();
             me.setNext(new Fish());
         }
@@ -76,15 +82,15 @@ public class WaTorModel implements SimulationModel<Fish> {
 
         moveTo.setNext(me.value());
 
-        if(actionCode == CODE_BREED) {
+        if(actionCode == CODE_BREED && me.next() == null) {
             me.value().breed();
-            me.setNext(new Shark());
+            me.setNext(new Fish());
         }
     }
 
     private Cell<Fish> pickFish(List<Cell<Fish>> neighbors) {
         var t = neighbors.stream().filter(c ->
-                (c.next() != null) && c.next().kind() == FISH).collect(Collectors.toList());
+                (c.value() != null) && c.value().kind() == FISH).collect(Collectors.toList());
         return t.size() == 0 ? null : t.get(new Random().nextInt(t.size()));
     }
 
