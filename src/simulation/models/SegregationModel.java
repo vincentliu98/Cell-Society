@@ -3,7 +3,7 @@ package simulation.models;
 import javafx.scene.paint.Color;
 import simulation.Cell;
 import simulation.CellGraph;
-import utility.IntegerPair;
+import xml.writer.SegregationWriter;
 import xml.writer.XMLWriter;
 
 import java.io.File;
@@ -12,62 +12,68 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *  SegregationModel implements Segregation Model.
- *  The integer pair represents (STAY/LEAVE, RED/BLUE)
+ *  SegregationModel implements the Segregation Model.
  * @author Inchan Hwang
  */
-public class SegregationModel implements SimulationModel<IntegerPair> {
-    public static final int STAY = 0;
-    public static final int LEAVE = 1;
+public class SegregationModel implements SimulationModel<Integer> {
     public static final int EMPTY = 0;
     public static final int BLUE = 1;
     public static final int RED = 2;
 
     public static final String MODEL_NAME = "Segregation";
 
-    private double tolerance;
-    public SegregationModel(double tolerance_) { tolerance = tolerance_; }
+    private double satisfactionThreshold;
+    public SegregationModel(double threshold) { satisfactionThreshold = threshold; }
 
     @Override
-    public void localUpdate(Cell<IntegerPair> me, List<Cell<IntegerPair>> neighbors) {
-        long nDiff = neighbors.stream().filter(c ->
-                c.value().getValue() > 0 && (!c.value().getValue().equals(me.value().getValue()))).count();
-        me.setNext(new IntegerPair(
-                (me.value().getValue() == EMPTY || (nDiff/((double) neighbors.size()) > tolerance)) ? LEAVE : STAY,
-                me.value().getValue()));
-    }
+    public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) { }
 
     @Override
-    public void globalUpdate(CellGraph<IntegerPair> graph) {
-        var leavers = graph.getCells(c -> c.next().getKey() == LEAVE);
+    public void globalUpdate(CellGraph<Integer> graph) {
+        var leave = new ArrayList<Cell<Integer>>();
+
+        for(var cell : graph.getCells()) {
+            if(isLeaving(cell, graph.getNeighbors(cell))) leave.add(cell);
+            else cell.setNext(cell.value());
+        }
+
         ArrayList<Integer> colors = new ArrayList<>();
-        for(var leaver: leavers) colors.add(leaver.next().getValue());
+        for(var leaver: leave) colors.add(leaver.value());
         Collections.shuffle(colors);
 
         int idx = 0;
-        for(var leaver: leavers) {
-            leaver.setNext(new IntegerPair(leaver.next().getKey(), colors.get(idx++)));
+        for(var leaver: leave) leaver.setNext(colors.get(idx++));
+    }
+
+    private boolean isLeaving(Cell<Integer> cell, List<Cell<Integer>> neighbors) {
+        int sameCnt = 0, neighborCnt = 0;
+        for(var neighbor: neighbors) {
+            if(neighbor.value().equals(cell.value())) sameCnt ++;
+            if(neighbor.value() != EMPTY) neighborCnt ++;
         }
+
+        return cell.value() == EMPTY || (sameCnt/((double) neighborCnt) < satisfactionThreshold);
     }
 
     @Override
-    public IntegerPair nextValue(IntegerPair myVal) {
-        return new IntegerPair(myVal.getKey(),
-                myVal.getValue() == EMPTY ? BLUE :
-                 myVal.getValue() == BLUE ? RED : EMPTY);
+    public Integer nextValue(Integer myVal) {
+        return myVal == EMPTY ? BLUE :
+                 myVal == BLUE ? RED : EMPTY;
     }
 
     @Override
-    public Color chooseColor(IntegerPair myVal) {
-        return myVal.getValue() == RED ? Color.RED:
-                myVal.getValue() == BLUE ? Color.BLUE : Color.WHITE;
+    public Color chooseColor(Integer myVal) {
+        return myVal == RED ? Color.RED:
+                myVal == BLUE ? Color.BLUE : Color.WHITE;
     }
 
     @Override
     public String modelName() { return MODEL_NAME; }
 
     @Override
-    public XMLWriter<IntegerPair> getXMLWriter(CellGraph<IntegerPair> graph, File outFile) {
-        return null; // TODO: Implement!!
+    public XMLWriter<Integer> getXMLWriter(CellGraph<Integer> graph, File outFile) {
+        return new SegregationWriter(this, graph, outFile);
     }
+
+    public double getSatisfactionThreshold() { return satisfactionThreshold; }
 }

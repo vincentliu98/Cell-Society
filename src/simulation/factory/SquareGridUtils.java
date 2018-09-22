@@ -1,10 +1,10 @@
 package simulation.factory;
 
 import javafx.scene.shape.Rectangle;
+import javafx.util.Pair;
 import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
-import utility.IntegerPair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  *  @author Inchan Hwang
  */
 public class SquareGridUtils<T> {
-    private IntegerPair lineToGrid(int x, int c) { return new IntegerPair(x%c, x/c); }
+    private Pair<Integer, Integer> lineToGrid(int x, int c) { return new Pair<>(x%c, x/c); }
     private int gridToLine(int x, int y, int c) { return y * c + x; }
 
     public CellGraph<T> graphWith8Neighbors(List<Cell<T>> cells, int r, int c) {
