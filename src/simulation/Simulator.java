@@ -2,9 +2,7 @@ package simulation;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
-import simulation.models.GameOfLifeModel;
 import simulation.models.SimulationModel;
-import xml.writer.GameOfLifeWriter;
 import xml.writer.XMLWriter;
 
 import java.io.File;

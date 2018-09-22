@@ -30,7 +30,7 @@ public class CellGraph<T> extends HashMap<Cell<T>, List<Cell<T>>> {
         return keySet()
                 .stream()
                 .sorted(Comparator.comparingInt(c -> model.getPriority(c.value())))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // TODO: Should cache this or something by setting dirty bit on put().
     }
     public Set<Node> getViews() { return getCells().stream().map(Cell::view).collect(Collectors.toSet()); }
     public List<Cell<T>> getNeighbors(Cell<T> cell) { return get(cell); }

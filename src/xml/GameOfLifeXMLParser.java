@@ -49,20 +49,20 @@ public class GameOfLifeXMLParser extends ParentXMLParser {
         CellGraph<Integer> graph;
         String shapeString = getTextValue(root, SHAPE_TAG).replaceAll("\\s","");
         if (shapeString.equals(RECTANGLE_STRING)) {
-            graph = new CellGraph<Integer>(parseRectangle(root));
+            graph = new CellGraph<>(parseRectangle(root));
         } else if (shapeString.equals(CIRCLE_STRING)) {
-            graph = new CellGraph<Integer>(parseCircle(root));
+            graph = new CellGraph<>(parseCircle(root));
         } else {
             graph = null;
         }
         int numCells = root.getElementsByTagName("cell").getLength();
-        Map<Integer, Cell<Integer>> IDToCellMap = new HashMap<Integer, Cell<Integer>>();
+        Map<Integer, Cell<Integer>> IDToCellMap = new HashMap<>();
         for (int c = 0; c<numCells; c++) {
             int uniqueID = getIntValueAtIndex(root, CELL_UNIQUE_ID_TAG, c);
             int val = getIntValueAtIndex(root, IS_ALIVE_TAG, c);
             double xPos = getDoubleValueAtIndex(root, CELL_XPOS_TAG, c);
             double yPos = getDoubleValueAtIndex(root, CELL_YPOS_TAG, c);
-            IDToCellMap.put(uniqueID, new Cell<Integer>(val, xPos, yPos));
+            IDToCellMap.put(uniqueID, new Cell<>(val, xPos, yPos));
         }
         for (int c = 0; c<numCells; c++) {
             int uniqueID = getIntValueAtIndex(root, CELL_UNIQUE_ID_TAG, c);
@@ -72,7 +72,7 @@ public class GameOfLifeXMLParser extends ParentXMLParser {
                 neighborList.add(IDToCellMap.get(n));
             graph.put(IDToCellMap.get(uniqueID), neighborList);
         }
-        return new Simulator(graph, model);
+        return new Simulator<>(graph, model);
     }
 
 //    private static GameOfLifeXML getGameOfLifeXML(Node node) {
