@@ -22,6 +22,7 @@ import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 import visualization.model_panels.GameOfLifePanel;
 import visualization.model_panels.ModelPanel;
+import xml.ParentXMLParser;
 
 import java.io.File;
 
@@ -143,10 +144,10 @@ public class GUI {
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(window);
         if(file == null) return;
-        //var parser = new ParentXMLParser();
-        // var newSimulator = generatedSimulatorOr Something like that ()
-        //simControlPanel.setChosenModel(newSimulator.modelName());
-        //root.initializeSimulation(newSimulator);
+        var parser = new ParentXMLParser();
+        Simulator newSimulator = parser.getSimulator(file);
+        simControlPanel.setChosenModel(newSimulator.modelName());
+        initializeSimulation(newSimulator);
     }
 
     private void handleFileSave() {
