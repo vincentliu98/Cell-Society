@@ -42,6 +42,7 @@ import java.io.File;
 public class GUI {
     public static final int SCREEN_WIDTH = 700;
     public static final int SCREEN_HEIGHT = 550;
+    public static final int DEFAULT_CELL_NUM = 10;
 
     public static final int FRAMES_PER_SECOND = 10;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
@@ -59,6 +60,7 @@ public class GUI {
     private SimulationControlPanel simControlPanel;
     private ModelPanel modelPanel;
     private VBox simPanel;
+    private String modelName;
 
     private Simulator<?> simulator;
 
@@ -80,8 +82,7 @@ public class GUI {
         modelPanel = new GameOfLifePanel();
         modelPanel.getStyleClass().add("modelPanel");
 
-        simControlPanel = new SimulationControlPanel();
-        simControlPanel.getStyleClass().add("simControlPanel");
+        simControlPanel = new SimulationControlPanel(simulator, e -> handleFileLoad(), e-> handleFileSave());
 
         simPanel = new VBox();
         simPanel.getStyleClass().add("simPanel");
@@ -91,7 +92,7 @@ public class GUI {
         root.add(simPanel, 1, 0);
         root.add(simControlPanel, 0, 1, 2, 1);
 
-        initializeSimulation(GameOfLife.generate(100));
+        initializeSimulation(GameOfLife.generate(DEFAULT_CELL_NUM));
     }
 
     protected void initializeSimulation(Simulator<?> sim) {
@@ -122,20 +123,32 @@ public class GUI {
         simControlPanel.setNumTick(simulator.tickCount());
         simControlPanel.updateStepRate();
         handleModelChange(); // by choose model
+        handleCellNumChange();
     }
 
     public void handleModelChange() {
-        var modelName = simControlPanel.getChosenModel();
+        modelName = simControlPanel.getChosenModel();
         if(simulator.modelName().equals(modelName)) return;
+        generateModelByName(DEFAULT_CELL_NUM);
+    }
 
+    public void handleCellNumChange() {
+        if (modelPanel.getChangeCellNum()) {
+            var cellNum = modelPanel.getCellNum();
+            generateModelByName(cellNum);
+        }
+        modelPanel.setChangeCellNum(false);
+    }
+
+    public void generateModelByName(int cellNum) {
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
-            initializeSimulation(GameOfLife.generate(5));
+            initializeSimulation(GameOfLife.generate(cellNum));
         } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
-            initializeSimulation(Segregation.generate(5));
+            initializeSimulation(Segregation.generate(cellNum));
         } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
-            initializeSimulation(SpreadingFire.generate(5));
+            initializeSimulation(SpreadingFire.generate(cellNum));
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
-            initializeSimulation(WaTor.generate(100));
+            initializeSimulation(WaTor.generate(cellNum));
         }
     }
 
