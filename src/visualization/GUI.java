@@ -82,7 +82,9 @@ public class GUI {
         modelPanel = new GameOfLifePanel();
         modelPanel.getStyleClass().add("modelPanel");
 
-        simControlPanel = new SimulationControlPanel(simulator, e -> handleFileLoad(), e-> handleFileSave());
+        simControlPanel = new SimulationControlPanel();
+//        simControlPanel = new SimulationControlPanel();
+//        simControlPanel.getStyleClass().add("simControlPanel");
 
         simPanel = new VBox();
         simPanel.getStyleClass().add("simPanel");
