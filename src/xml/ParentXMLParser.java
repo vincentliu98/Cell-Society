@@ -70,8 +70,8 @@ public class ParentXMLParser {
             return GameOfLifeXMLParser.getModelSimulator(root);
         else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SegregationModel.MODEL_NAME))
             return SegregationXMLParser.getModelSimulator(root);
-//        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
-//            return SpreadingFireXMLParser.getModelSimulator(root);
+        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
+            return SpreadingFireXMLParser.getModelSimulator(root);
 //        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(WaTorModel.MODEL_NAME))
 //            return WaTorXMLParser.getModelSimulator(root);
         else
