@@ -29,8 +29,7 @@ public class Main extends Application {
         var dataFile = myChooser.showOpenDialog(primaryStage);
         while (dataFile != null) {
             try {
-//                var m = new ParentXMLParser("media").getGame(dataFile);
-                var m = new GameOfLifeXMLParser().getGameOfLife(dataFile);
+                var m = new ParentXMLParser().getSimulator(dataFile);
                 new Alert(AlertType.INFORMATION, m.toString()).showAndWait();
             }
             catch (XMLException e) {
