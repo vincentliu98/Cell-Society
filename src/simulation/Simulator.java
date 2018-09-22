@@ -2,9 +2,7 @@ package simulation;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
-import simulation.models.GameOfLifeModel;
 import simulation.models.SimulationModel;
-import xml.writer.GameOfLifeWriter;
 import xml.writer.XMLWriter;
 
 import java.io.File;
@@ -47,7 +45,9 @@ public class Simulator<T> {
     public String modelName() { return model.modelName(); }
     public XMLWriter<T> getWriter(File outFile) { return model.getXMLWriter(graph, outFile); }
 
-    private void localUpdate() { for(var c: graph.getCells()) model.localUpdate(c, graph.getNeighbors(c)); }
+    private void localUpdate() {
+        graph.getOrderedCells(model).forEach(c -> model.localUpdate(c, graph.getNeighbors(c)));
+    }
     private void globalUpdate() { model.globalUpdate(graph); }
     private void commitAll() { for(var c: graph.getCells()) c.commit(); }
     private void updateView() { graph.getCells().forEach(c -> c.updateView(model)); }

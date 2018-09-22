@@ -15,6 +15,7 @@ import java.util.List;
  * @author Inchan Hwang
  */
 public interface SimulationModel<T> {
+    int getPriority(T myVal);
     void localUpdate(Cell<T> me, List<Cell<T>> neighbors);
     void globalUpdate(CellGraph<T> graph);
 
