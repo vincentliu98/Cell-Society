@@ -1,3 +1,7 @@
+/**
+ *
+ * @author Vincent Liu
+ */
 
 .button {
     -fx-text-fill:white;
@@ -8,6 +12,24 @@
     -fx-background-radius: 8.0;
 }
 
-
 .root{
-    -fx-background-color: lightgrey;}
+    -fx-background-color: lightgrey;
+    -fx-padding: 15;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    -fx-background-radius: 5.0;
+}
+
+.simControlPanel{
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+}
+
+.modelPanel{
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+}
+
+.simPanel{
+    -fx-border-color: black;
+}
