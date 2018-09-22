@@ -3,7 +3,6 @@ package simulation.models.wator;
 import simulation.models.WaTorModel;
 
 public class Shark extends Fish {
-    private int starveCounter;
     public Shark() { this(0, 0); }
     public Shark(int breedingCounter, int starveCounter_) {
         super(breedingCounter);
