@@ -40,8 +40,8 @@ public class ParentXMLParser {
     );
 
     public static final String SHAPE_WIDTH_TAG = "shapeWidth";
-    public static final String SHAPE_HEIGHT_TAG = "shapeWidth";
-    public static final String SHAPE_RADIUS_TAG = "shapeWidth";
+    public static final String SHAPE_HEIGHT_TAG = "shapeHeight";
+    public static final String SHAPE_RADIUS_TAG = "shapeRadius";
     public static final String SHAPE_TAG = "shape";
     public static final String RECTANGLE_STRING= "rectangle";
     public static final String CIRCLE_STRING = "circle";
