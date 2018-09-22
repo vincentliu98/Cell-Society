@@ -77,25 +77,22 @@ public class ParentXMLParser {
     }
 
     public static Rectangle parseRectangle(Element root) {
-        double shapeWidth = Double.parseDouble(
-                getTextValueAtIndex(root, SHAPE_WIDTH_TAG, 0).replaceAll("\\s",""));
-        double shapeHeight = Double.parseDouble(
-                getTextValueAtIndex(root, SHAPE_HEIGHT_TAG, 0).replaceAll("\\s",""));
+        double shapeWidth = getDoubleValue(root, SHAPE_WIDTH_TAG);
+        double shapeHeight = getDoubleValue(root, SHAPE_HEIGHT_TAG);
         return new Rectangle(shapeWidth, shapeHeight);
     }
 
     public static Circle parseCircle(Element root) {
-        double shapeRadius = Double.parseDouble(
-                getTextValueAtIndex(root, SHAPE_RADIUS_TAG, 0).replaceAll("\\s",""));
+        double shapeRadius = getDoubleValue(root, SHAPE_RADIUS_TAG);
         return new Circle(shapeRadius);
     }
 
-    public static Map<String, NodeList> parseTagToEltListMap(Element root, List<String> tagList) {
-        Map<String, NodeList> tagsToEltLists = new HashMap<String, NodeList>();
-        for (String tag : tagList)
-            tagsToEltLists.put(tag, root.getElementsByTagName(tag));
-        return tagsToEltLists;
-    }
+//    public static Map<String, NodeList> parseTagToEltListMap(Element root, List<String> tagList) {
+//        Map<String, NodeList> tagsToEltLists = new HashMap<String, NodeList>();
+//        for (String tag : tagList)
+//            tagsToEltLists.put(tag, root.getElementsByTagName(tag));
+//        return tagsToEltLists;
+//    }
 
     public static ArrayList<Integer> parseNeighbors(Element root, int cellIndex) {
         String neighborStr = getTextValueAtIndex(root, CELL_NEIGHBORS_TAG, cellIndex);
