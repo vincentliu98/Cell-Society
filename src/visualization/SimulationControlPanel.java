@@ -18,14 +18,19 @@ public class SimulationControlPanel extends HBox {
     private ComboBox<String> chooseModel;
     private Simulator<?> simulator;
 
-    public SimulationControlPanel(
+    public SimulationControlPanel() { super(25); }
+
+    public void setupPanel(
             Simulator<?> sim,
             EventHandler<? super MouseEvent> onLoad,
             EventHandler<? super MouseEvent> onSave
     ) {
-        super(25);
+        getChildren().clear();
+
         isPlaying = false;
         simulator = sim;
+        elapsedTime = 0;
+        simPeriod = 1;
 
         var grid = new GridPane();
         grid.getStyleClass().add("simControlPanel");
@@ -64,7 +69,7 @@ public class SimulationControlPanel extends HBox {
 
         chooseModel = new ComboBox<>();
         chooseModel.getItems().addAll(SIMULATION_MODELS);
-        chooseModel.setValue(SIMULATION_MODELS[0]);
+        chooseModel.setValue(sim.modelName());
 
         grid.add(save, 0, 0);
         grid.add(load, 0, 1);
@@ -94,10 +99,5 @@ public class SimulationControlPanel extends HBox {
         stepRate.setText("Step Rate: " + ((double) Math.round(1/simPeriod * 100) / 100) + "/s");
     }
     public String getChosenModel() { return chooseModel.getValue(); }
-    public void setChosenModel(String s) { chooseModel.setValue(s); }
     public void setNumTick(int ticks) { numTick.setText("# of ticks: "+ticks); }
-    public void reset(Simulator<?> sim) {
-        isPlaying = false; elapsedTime = 0; simPeriod = 1;
-        simulator = sim;
-    }
 }

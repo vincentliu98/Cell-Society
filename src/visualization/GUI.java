@@ -22,6 +22,7 @@ import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 import visualization.model_panels.GameOfLifePanel;
 import visualization.model_panels.ModelPanel;
+import xml.ParentXMLParser;
 
 import java.io.File;
 
@@ -81,7 +82,9 @@ public class GUI {
         modelPanel = new GameOfLifePanel();
         modelPanel.getStyleClass().add("modelPanel");
 
-        simControlPanel = new SimulationControlPanel(simulator, e -> handleFileLoad(), e-> handleFileSave());
+        simControlPanel = new SimulationControlPanel();
+//        simControlPanel = new SimulationControlPanel();
+//        simControlPanel.getStyleClass().add("simControlPanel");
 
         simPanel = new VBox();
         simPanel.getStyleClass().add("simPanel");
@@ -96,7 +99,7 @@ public class GUI {
 
     protected void initializeSimulation(Simulator<?> sim) {
         simulator = sim;
-        simControlPanel.reset(simulator);
+        simControlPanel.setupPanel(simulator, e -> handleFileLoad(), e -> handleFileSave());
         simPanel.getChildren().clear();
         simPanel.getChildren().add(simulator.view());
     }
@@ -155,11 +158,8 @@ public class GUI {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(window);
-        if(file == null) return;
-        //var parser = new XMLParser();
-        // var newSimulator = generatedSimulatorOr Something like that ()
-        //simControlPanel.setChosenModel(newSimulator.modelName());
-        //root.initializeSimulation(newSimulator);
+        if(!file.exists()) return;
+        initializeSimulation(new ParentXMLParser().getSimulator(file));
     }
 
     private void handleFileSave() {
