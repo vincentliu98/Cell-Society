@@ -84,7 +84,7 @@ public class WaTorModel implements SimulationModel<Fish> {
 
         if(actionCode == CODE_BREED && me.next() == null) {
             me.value().breed();
-            me.setNext(new Fish());
+            me.setNext(new Shark());
         }
     }
 

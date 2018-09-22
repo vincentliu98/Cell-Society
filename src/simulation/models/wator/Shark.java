@@ -17,7 +17,7 @@ public class Shark extends Fish {
     }
 
     @Override
-    public void eat() { System.out.println("eat"); starveCounter = 0; }
+    public void eat() { starveCounter = 0; }
 
     @Override
     public int kind() { return WaTorModel.SHARK; }

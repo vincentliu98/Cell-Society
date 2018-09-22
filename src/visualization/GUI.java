@@ -133,7 +133,7 @@ public class GUI {
         } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
             initializeSimulation(SpreadingFire.generate(5));
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
-            initializeSimulation(WaTor.generate(5));
+            initializeSimulation(WaTor.generate(100));
         }
     }
 
