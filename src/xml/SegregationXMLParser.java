@@ -20,7 +20,7 @@
 // * @author Rhondu Smithwick
 // * @author Robert C. Duvall
 // */
-//public class SegregationXMLParser extends XMLParser {
+//public class SegregationXMLParser extends ParentXMLParser {
 //    public static final String ERROR_MESSAGE = "XML file does not represent %s";
 //    // name of root attribute that notes the type of file expecting to parse
 ////    private final String TYPE_ATTRIBUTE
