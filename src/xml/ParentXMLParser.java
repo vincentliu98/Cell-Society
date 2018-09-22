@@ -1,6 +1,9 @@
 package xml;
 
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import simulation.Simulator;
 import simulation.factory.Segregation;
@@ -12,7 +15,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -23,33 +28,28 @@ import java.util.List;
  */
 public class ParentXMLParser {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
+    // keep only one documentBuilder because it is expensive to make and can reset it before parsing
+    private final DocumentBuilder DOCUMENT_BUILDER;
     // name of root attribute that notes the type of file expecting to parse
-    private final String MODEL_ATTRIBUTE_STRING = "sim";
+    public static final String MODEL_ATTRIBUTE_STRING = "modelName";
     public static final List<String> VALID_MODEL_NAMES = List.of(
             GameOfLifeModel.MODEL_NAME,
             SegregationModel.MODEL_NAME,
             SpreadingFireModel.MODEL_NAME,
             WaTorModel.MODEL_NAME
     );
-    // keep only one documentBuilder because it is expensive to make and can reset it before parsing
-    private final DocumentBuilder DOCUMENT_BUILDER;
 
-    public static final List<String> SIMULATION_FIELDS = List.of(
-            "shapeWidth",
-            "shapeHeight",
-            "modelName",
-            "shape"
-    );
+    public static final String SHAPE_WIDTH_TAG = "shapeWidth";
+    public static final String SHAPE_HEIGHT_TAG = "shapeWidth";
+    public static final String SHAPE_RADIUS_TAG = "shapeWidth";
+    public static final String SHAPE_TAG = "shape";
+    public static final String RECTANGLE_STRING= "rectangle";
+    public static final String CIRCLE_STRING = "circle";
 
-    public static final List<String> STANDARD_CELL_FIELDS = List.of(
-            "uniqueID",
-            "neighbors",
-            "cx",
-            "cy"
-    );
-
-
-
+    public static final String CELL_UNIQUE_ID_TAG = "uniqueID";
+    public static final String CELL_NEIGHBORS_TAG = "neighbors";
+    public static final String CELL_XPOS_TAG = "cx";
+    public static final String CELL_YPOS_TAG = "cy";
 
     /**
      * Create a parser for XML files of given type.
@@ -64,20 +64,41 @@ public class ParentXMLParser {
 
     public Simulator getSimulator(File datafile) {
         Element root = getRootElement(datafile);
-        if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(GameOfLifeModel.MODEL_NAME))
+        if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(GameOfLifeModel.MODEL_NAME))
             return GameOfLifeXMLParser.getModelSimulator(root);
-        else if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(SegregationModel.MODEL_NAME))
-            return GameOfLifeXMLParser.getModelSimulator(root);
-        else if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
-            return GameOfLifeXMLParser.getModelSimulator(root);
-        else if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
-            return GameOfLifeXMLParser.getModelSimulator(root);
+//        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SegregationModel.MODEL_NAME))
+//            return SegregationXMLParser.getModelSimulator(root);
+//        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
+//            return SpreadingFireXMLParser.getModelSimulator(root);
+//        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(WaTorModel.MODEL_NAME))
+//            return WaTorXMLParser.getModelSimulator(root);
         else
             throw new XMLException(ERROR_MESSAGE, MODEL_ATTRIBUTE_STRING);
     }
 
-    public ArrayList<Integer> parseNeighbors(Element root, int cellIndex) {
-        String neighborStr = getTextValueAtIndex(root, SimulationData.CELL_SUBFIELDS.get(1), cellIndex);
+    public static Rectangle parseRectangle(Element root) {
+        double shapeWidth = Double.parseDouble(
+                getTextValueAtIndex(root, SHAPE_WIDTH_TAG, 0).replaceAll("\\s",""));
+        double shapeHeight = Double.parseDouble(
+                getTextValueAtIndex(root, SHAPE_HEIGHT_TAG, 0).replaceAll("\\s",""));
+        return new Rectangle(shapeWidth, shapeHeight);
+    }
+
+    public static Circle parseCircle(Element root) {
+        double shapeRadius = Double.parseDouble(
+                getTextValueAtIndex(root, SHAPE_RADIUS_TAG, 0).replaceAll("\\s",""));
+        return new Circle(shapeRadius);
+    }
+
+    public static Map<String, NodeList> parseTagToEltListMap(Element root, List<String> tagList) {
+        Map<String, NodeList> tagsToEltLists = new HashMap<String, NodeList>();
+        for (String tag : tagList)
+            tagsToEltLists.put(tag, root.getElementsByTagName(tag));
+        return tagsToEltLists;
+    }
+
+    public static ArrayList<Integer> parseNeighbors(Element root, int cellIndex) {
+        String neighborStr = getTextValueAtIndex(root, CELL_NEIGHBORS_TAG, cellIndex);
         ArrayList<Integer> neighborArrayList = new ArrayList<Integer>();
         String[] neighborStrArray = neighborStr.replace("\\s", "").split(",");
         for (String s : neighborStrArray)
@@ -85,13 +106,50 @@ public class ParentXMLParser {
         return neighborArrayList;
     }
 
-    public ArrayList<Integer> getValuesArrayList(Element root, int cellIndex) {
-        ArrayList<Integer> valuesArrayList = new ArrayList<Integer>();
-        for (String sub : SimulationData.VALUE_SUBFIELDS) {
-            String attrStr = getTextValueAtIndex(root, sub, cellIndex);
-            valuesArrayList.add(Integer.parseInt(attrStr.replaceAll("\\s", "")));
+    // Get value of Element's attribute
+    public static String getAttribute(Element e, String attributeName) {
+        return e.getAttribute(attributeName);
+    }
+
+    // Get value of Element's text
+    public static String getTextValue(Element e, String tagName) {
+        var nodeList = e.getElementsByTagName(tagName);
+        if (nodeList != null && nodeList.getLength() > 0) {
+            return nodeList.item(0).getTextContent();
+        } else {
+            // FIXME: empty string or null, is it an error to not find the text value?
+            return "";
         }
-        return valuesArrayList;
+    }
+
+    public static String getTextValueAtIndex(Element e, String tagName, int i) {
+        var nodeList = e.getElementsByTagName(tagName);
+        if (nodeList != null && nodeList.getLength() > 0) {
+            return nodeList.item(i).getTextContent();
+        } else {
+            // FIXME: empty string or null, is it an error to not find the text value?
+            return "";
+        }
+    }
+
+    public static int getIntValue(Element e, String tagName) {
+        String str = getTextValue(e, tagName).replaceAll("\\s","");
+        return Integer.parseInt(str);
+    }
+
+    public static int getIntValueAtIndex(Element e, String tagName, int i) {
+        String str = getTextValueAtIndex(e, tagName, i).replaceAll("\\s","");
+        return Integer.parseInt(str);
+    }
+
+    public static double getDoubleValue(Element e, String tagName) {
+        String str = getTextValue(e, tagName).replaceAll("\\s","");
+        return Double.parseDouble(str);
+    }
+
+    public static double getDoubleValueAtIndex(Element e, String tagName, int i) {
+        String str = getTextValueAtIndex(e, tagName, i).replaceAll("\\s","");
+        return Double.parseDouble(str);
     }
 
     // Get root element of an XML file
@@ -106,37 +164,11 @@ public class ParentXMLParser {
     }
 
     // Returns if this is a valid XML file for the specified object type
-    public boolean isValidFile (Element root) {
+    public static boolean isValidFile (Element root) {
         for (String typeAttr : VALID_MODEL_NAMES)
-             if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(typeAttr))
-                 return true;
+            if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(typeAttr))
+                return true;
         return false;
-    }
-
-    // Get value of Element's attribute
-    public String getAttribute(Element e, String attributeName) {
-        return e.getAttribute(attributeName);
-    }
-
-    // Get value of Element's text
-    public String getTextValue(Element e, String tagName) {
-        var nodeList = e.getElementsByTagName(tagName);
-        if (nodeList != null && nodeList.getLength() > 0) {
-            return nodeList.item(0).getTextContent();
-        } else {
-            // FIXME: empty string or null, is it an error to not find the text value?
-            return "";
-        }
-    }
-
-    public String getTextValueAtIndex(Element e, String tagName, int i) {
-        var nodeList = e.getElementsByTagName(tagName);
-        if (nodeList != null && nodeList.getLength() > 0) {
-            return nodeList.item(i).getTextContent();
-        } else {
-            // FIXME: empty string or null, is it an error to not find the text value?
-            return "";
-        }
     }
 
     // Boilerplate code needed to make a documentBuilder
