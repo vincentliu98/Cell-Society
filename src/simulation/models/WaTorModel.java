@@ -5,6 +5,7 @@ import simulation.Cell;
 import simulation.CellGraph;
 import simulation.models.wator.Fish;
 import simulation.models.wator.Shark;
+import xml.writer.WaTorWriter;
 import xml.writer.XMLWriter;
 
 import java.io.File;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class WaTorModel implements SimulationModel<Fish> {
     public static final int FISH = 0;
     public static final int SHARK = 1;
+    public static final int EMPTY = 2;
 
     public static final int CODE_NOTHING = 0;
     public static final int CODE_BREED = 1;
@@ -111,6 +113,10 @@ public class WaTorModel implements SimulationModel<Fish> {
 
     @Override
     public XMLWriter<Fish> getXMLWriter(CellGraph<Fish> graph, File outFile) {
-        return null; // TODO: IMPLEMENT!!!!!!!
+        return new WaTorWriter(this, graph, outFile);
     }
+
+    public int getFishBreedPeriod() { return fishBreedPeriod; }
+    public int getSharkBreedPeriod() { return sharkBreedPeriod; }
+    public int getSharkStarvePeriod() { return sharkBreedPeriod; }
 }
