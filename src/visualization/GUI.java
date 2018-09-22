@@ -143,7 +143,7 @@ public class GUI {
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(window);
         if(file == null) return;
-        //var parser = new XMLParser();
+        //var parser = new ParentXMLParser();
         // var newSimulator = generatedSimulatorOr Something like that ()
         //simControlPanel.setChosenModel(newSimulator.modelName());
         //root.initializeSimulation(newSimulator);

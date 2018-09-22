@@ -2,8 +2,8 @@ package xml;
 
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
-import simulation.CellGraph;
 import simulation.Simulator;
+import simulation.factory.Segregation;
 import simulation.models.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -12,7 +12,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -22,11 +21,11 @@ import java.util.List;
  * @author Rhondu Smithwick
  * @author Robert C. Duvall
  */
-public abstract class XMLParser {
+public class ParentXMLParser {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
     // name of root attribute that notes the type of file expecting to parse
-//    private final String TYPE_ATTRIBUTE
-    public static final List<String> VALID_TYPE_ATTRIBUTES = List.of(
+    private final String MODEL_ATTRIBUTE_STRING = "sim";
+    public static final List<String> VALID_MODEL_NAMES = List.of(
             GameOfLifeModel.MODEL_NAME,
             SegregationModel.MODEL_NAME,
             SpreadingFireModel.MODEL_NAME,
@@ -35,11 +34,27 @@ public abstract class XMLParser {
     // keep only one documentBuilder because it is expensive to make and can reset it before parsing
     private final DocumentBuilder DOCUMENT_BUILDER;
 
+    public static final List<String> SIMULATION_FIELDS = List.of(
+            "shapeWidth",
+            "shapeHeight",
+            "modelName",
+            "shape"
+    );
+
+    public static final List<String> STANDARD_CELL_FIELDS = List.of(
+            "uniqueID",
+            "neighbors",
+            "cx",
+            "cy"
+    );
+
+
+
 
     /**
      * Create a parser for XML files of given type.
      */
-    public XMLParser() {
+    public ParentXMLParser() {
         DOCUMENT_BUILDER = getDocumentBuilder();
     }
 
@@ -47,8 +62,19 @@ public abstract class XMLParser {
      * Get the data contained in this XML file as an object
      */
 
-    public abstract Simulator getSimulator(File dataFile);
-
+    public Simulator getSimulator(File datafile) {
+        Element root = getRootElement(datafile);
+        if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(GameOfLifeModel.MODEL_NAME))
+            return GameOfLifeXMLParser.getModelSimulator(root);
+        else if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(SegregationModel.MODEL_NAME))
+            return GameOfLifeXMLParser.getModelSimulator(root);
+        else if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
+            return GameOfLifeXMLParser.getModelSimulator(root);
+        else if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
+            return GameOfLifeXMLParser.getModelSimulator(root);
+        else
+            throw new XMLException(ERROR_MESSAGE, MODEL_ATTRIBUTE_STRING);
+    }
 
     public ArrayList<Integer> parseNeighbors(Element root, int cellIndex) {
         String neighborStr = getTextValueAtIndex(root, SimulationData.CELL_SUBFIELDS.get(1), cellIndex);
@@ -80,9 +106,12 @@ public abstract class XMLParser {
     }
 
     // Returns if this is a valid XML file for the specified object type
-//    private boolean isValidFile (Element root, String type) {
-//        return getAttribute(root, TYPE_ATTRIBUTE).equals(type);
-//    }
+    public boolean isValidFile (Element root) {
+        for (String typeAttr : VALID_MODEL_NAMES)
+             if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(typeAttr))
+                 return true;
+        return false;
+    }
 
     // Get value of Element's attribute
     public String getAttribute(Element e, String attributeName) {
