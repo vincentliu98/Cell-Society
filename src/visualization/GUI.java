@@ -20,8 +20,7 @@ import simulation.models.GameOfLifeModel;
 import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
-import visualization.model_panels.GameOfLifePanel;
-import visualization.model_panels.ModelPanel;
+import visualization.model_panels.*;
 import xml.parser.ParentXMLParser;
 
 import java.io.File;
@@ -59,8 +58,16 @@ public class GUI {
     private GridPane root;
     private SimulationControlPanel simControlPanel;
     private ModelPanel modelPanel;
+    private GameOfLifePanel gameOfLifePanel;
+    private SegregationPanel segregationPanel;
+    private SpreadingFirePanel spreadingFirePanel;
+    private WaTorPanel waTorPanel;
     private VBox simPanel;
     private String modelName;
+    private boolean paramChanged;
+    private int cellNum;
+
+    private double segregationThreshold;
 
     private Simulator<?> simulator;
 
@@ -83,8 +90,6 @@ public class GUI {
         modelPanel.getStyleClass().add("modelPanel");
 
         simControlPanel = new SimulationControlPanel();
-//        simControlPanel = new SimulationControlPanel();
-//        simControlPanel.getStyleClass().add("simControlPanel");
 
         simPanel = new VBox();
         simPanel.getStyleClass().add("simPanel");
@@ -98,10 +103,12 @@ public class GUI {
     }
 
     protected void initializeSimulation(Simulator<?> sim) {
+        System.out.println("trying to create new model");
         simulator = sim;
         simControlPanel.setupPanel(simulator, e -> handleFileLoad(), e -> handleFileSave());
         simPanel.getChildren().clear();
         simPanel.getChildren().add(simulator.view());
+        System.out.println("new model should be added");
     }
 
     public void runGUI (Stage primaryStage) {
@@ -124,34 +131,47 @@ public class GUI {
         if(simControlPanel.canTick(duration)) simulator.tick();
         simControlPanel.setNumTick(simulator.tickCount());
         simControlPanel.updateStepRate();
-        handleModelChange(); // by choose model
+        handleModelPanelChange();
+        handleModelChange();
+        handleModelPanelParametersChange();
         handleCellNumChange();
     }
 
-    public void handleModelChange() {
+    public void handleModelPanelChange() {
         modelName = simControlPanel.getChosenModel();
-        if(simulator.modelName().equals(modelName)) return;
+        if (modelName.equals(simulator.modelName())) return;
+        generateModelPanelByName();
+        paramChanged=!paramChanged;
+    }
+
+    public void handleModelPanelParametersChange() {
+        if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
+
+        } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
+            segregationThreshold = segregationPanel.getThresholdVal();
+            if (segregationPanel.getChangeThreshold()) {
+                initializeSimulation(Segregation.generate(cellNum, segregationThreshold));
+                System.out.println("New model created");
+                segregationPanel.setChangeThreshold(false);
+            }
+        } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
+
+        } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
+
+        }
+    }
+
+    public void handleModelChange() {
+        if (simulator.modelName().equals(modelName)) return;
         generateModelByName(DEFAULT_CELL_NUM);
     }
 
     public void handleCellNumChange() {
+        cellNum = modelPanel.getCellNum();
         if (modelPanel.getChangeCellNum()) {
-            var cellNum = modelPanel.getCellNum();
             generateModelByName(cellNum);
         }
         modelPanel.setChangeCellNum(false);
-    }
-
-    public void generateModelByName(int cellNum) {
-        if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
-            initializeSimulation(GameOfLife.generate(cellNum));
-        } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
-            initializeSimulation(Segregation.generate(cellNum));
-        } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
-            initializeSimulation(SpreadingFire.generate(cellNum));
-        } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
-            initializeSimulation(WaTor.generate(cellNum));
-        }
     }
 
     private void handleFileLoad() {
@@ -168,5 +188,41 @@ public class GUI {
         File file = fileChooser.showSaveDialog(window);
         if(file == null) return; // display "OH NO!" DIALOG
         simulator.getWriter(file).generate();
+    }
+
+    public void generateModelByName(int cellNum) {
+        if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
+            initializeSimulation(GameOfLife.generate(cellNum));
+        } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
+            initializeSimulation(Segregation.generate(cellNum, segregationThreshold));
+        } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
+            initializeSimulation(SpreadingFire.generate(cellNum));
+        } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
+            initializeSimulation(WaTor.generate(cellNum));
+        }
+    }
+
+    public void generateModelPanelByName() {
+        if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
+            gameOfLifePanel = new GameOfLifePanel();
+            gameOfLifePanel.getStyleClass().add("modelPanel");
+            modelPanel.getChildren().clear();
+            modelPanel.getChildren().add(gameOfLifePanel);
+        } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
+            segregationPanel = new SegregationPanel();
+            segregationPanel.getStyleClass().add("modelPanel");
+            modelPanel.getChildren().clear();
+            modelPanel.getChildren().add(segregationPanel);
+        } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
+            spreadingFirePanel = new SpreadingFirePanel();
+            spreadingFirePanel.getStyleClass().add("modelPanel");
+            modelPanel.getChildren().clear();
+            modelPanel.getChildren().add(spreadingFirePanel);
+        } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
+            waTorPanel = new WaTorPanel();
+            waTorPanel.getStyleClass().add("modelPanel");
+            modelPanel.getChildren().clear();
+            modelPanel.getChildren().add(waTorPanel);
+        }
     }
 }

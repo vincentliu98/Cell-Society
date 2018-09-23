@@ -29,7 +29,7 @@ public class Segregation {
         return new Simulator<>(graph, model);
     }
 
-    public static Simulator<Integer> generate(int n) {
+    public static Simulator<Integer> generate(int n, double threshold) {
         var rng = new Random();
         int tmp[][] = new int[n][n];
         for(int i = 0 ; i < n ; i ++) {
@@ -39,6 +39,6 @@ public class Segregation {
                             x < 0.7 ? 1 : 2;
             }
         }
-        return generate(n, n, tmp, 0.5);
+        return generate(n, n, tmp, threshold);
     }
 }

@@ -10,8 +10,8 @@ import javafx.scene.layout.VBox;
  *   abstract so that it would never actually be initialized.
  *
  * @author Vincent Liu
- * @author Inchan Hwang
  */
+
 public abstract class ModelPanel extends VBox {
     public static final int DEFAULT_CELL_NUM = 10;
     private Slider numberBar = new Slider(0, 100, DEFAULT_CELL_NUM);
@@ -29,7 +29,6 @@ public abstract class ModelPanel extends VBox {
         numberBar.setMajorTickUnit(20);
         numberBar.setSnapToTicks(true);
         numberBar.setBlockIncrement(4);
-        numberBar.setShowTickMarks(true);
 
         numberBar.valueProperty().addListener((ov, old_val, new_val) -> {
             changeCellNum = true;
