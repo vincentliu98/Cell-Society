@@ -31,6 +31,7 @@ import java.util.Map;
  *
  * @author Rhondu Smithwick
  * @author Robert C. Duvall
+ * @author jgp17 
  * @author Inchan Hwang
  */
 public class ParentXMLParser {
@@ -138,7 +139,7 @@ public class ParentXMLParser {
     public static ArrayList<Integer> parseNeighbors(Element root, int cellIndex) {
         String neighborStr = getTextValueAtIndex(root, CELL_NEIGHBORS_TAG, cellIndex);
         ArrayList<Integer> neighborArrayList = new ArrayList<Integer>();
-        String[] neighborStrArray = neighborStr.replace("\\s", "").split(",");
+        String[] neighborStrArray = neighborStr.replaceAll("\\s", "").split(",");
         for (String s : neighborStrArray)
             neighborArrayList.add(Integer.parseInt(s));
         return neighborArrayList;

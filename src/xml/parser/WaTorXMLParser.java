@@ -1,5 +1,10 @@
 package xml.parser;
 
+/**
+ * Returns a Simulator for a WaTor simulation based on the file being loaded
+ * @author jgp17
+ */
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import simulation.Cell;

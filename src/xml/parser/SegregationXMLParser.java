@@ -1,5 +1,8 @@
 package xml.parser;
-
+/**
+ * Returns a Simulator for a Segregation simulation based on the file being loaded
+ * @author jgp17
+ */
 import org.w3c.dom.Element;
 import simulation.CellGraph;
 import simulation.Simulator;
