@@ -22,7 +22,7 @@ import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 import visualization.model_panels.GameOfLifePanel;
 import visualization.model_panels.ModelPanel;
-import xml.ParentXMLParser;
+import xml.parser.ParentXMLParser;
 
 import java.io.File;
 

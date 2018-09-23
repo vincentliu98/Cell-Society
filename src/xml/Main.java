@@ -8,12 +8,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+import xml.parser.ParentXMLParser;
 
 
 /**
  * Manage and parse XML files
  *
- * @author Vincent Liu
  * @author Rhondu Smithwick
  * @author Robert C. Duvall
  */

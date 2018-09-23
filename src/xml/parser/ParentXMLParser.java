@@ -1,6 +1,5 @@
-package xml;
+package xml.parser;
 
-import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import org.w3c.dom.Element;
@@ -9,8 +8,12 @@ import org.xml.sax.SAXException;
 import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
-import simulation.factory.Segregation;
 import simulation.models.*;
+import xml.XMLException;
+import xml.parser.GameOfLifeXMLParser;
+import xml.parser.SegregationXMLParser;
+import xml.parser.SpreadingFireXMLParser;
+import xml.parser.WaTorXMLParser;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,6 +31,7 @@ import java.util.Map;
  *
  * @author Rhondu Smithwick
  * @author Robert C. Duvall
+ * @author Inchan Hwang
  */
 public class ParentXMLParser {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
