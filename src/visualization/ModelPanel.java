@@ -1,18 +1,15 @@
-package visualization.model_panels;
+package visualization;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 
 /**
- *   For various model-specific panels that defines
- *   uniform theme across different panels. It is purposefully made
- *   abstract so that it would never actually be initialized.
+ *  ModelPanel.
  *
  * @author Vincent Liu
  */
-
-public abstract class ModelPanel extends VBox {
+public class ModelPanel extends VBox {
     public static final int DEFAULT_CELL_NUM = 10;
     private Slider numberBar = new Slider(0, 100, DEFAULT_CELL_NUM);
     private int cellNum;
@@ -24,6 +21,9 @@ public abstract class ModelPanel extends VBox {
 
     public ModelPanel() {
         super(25);
+        getStyleClass().add("modelPanel");
+
+        cellNum = DEFAULT_CELL_NUM;
         numberBar.setShowTickMarks(true);
         numberBar.setShowTickLabels(true);
         numberBar.setMajorTickUnit(20);
@@ -49,6 +49,4 @@ public abstract class ModelPanel extends VBox {
     public boolean getChangeCellNum() {
         return changeCellNum;
     }
-
-
 }

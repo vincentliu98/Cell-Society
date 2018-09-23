@@ -1,13 +1,14 @@
 package xml.parser;
-/**
- * Returns a Simulator for a Segregation simulation based on the file being loaded
- * @author jgp17
- */
+
 import org.w3c.dom.Element;
 import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.models.SegregationModel;
 
+/**
+ * Returns a Simulator for a Segregation simulation based on the file being loaded
+ * @author jgp17
+ */
 public class SegregationXMLParser extends ParentXMLParser {
     public static final String THRESHOLD_TAG = "satisfactionThreshold";
     public static final String TYPE_VALUE_TAG = "type";

@@ -1,14 +1,14 @@
 package xml.parser;
 
-/**
- * Returns a Simulator for a Spreading Of Fire simulation based on the file being loaded
- * @author jgp17
- */
-
 import org.w3c.dom.Element;
 import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.models.SpreadingFireModel;
+
+/**
+ * Returns a Simulator for a Spreading Of Fire simulation based on the file being loaded
+ * @author jgp17
+ */
 
 public class SpreadingFireXMLParser extends ParentXMLParser {
     public static final String PROB_CATCH_TAG = "probCatch";

@@ -1,9 +1,5 @@
 package xml.parser;
 
-/**
- * Returns a Simulator for a WaTor simulation based on the file being loaded
- * @author jgp17
- */
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -19,6 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Returns a Simulator for a WaTor simulation based on the file being loaded
+ * @author jgp17
+ */
 public class WaTorXMLParser extends ParentXMLParser {
     public static final String FISH_BREED_PERIOD_TAG = "fishBreedPeriod";
     public static final String SHARK_BREED_PERIOD_TAG = "sharkBreedPeriod";

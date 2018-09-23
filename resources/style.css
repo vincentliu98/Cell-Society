@@ -8,12 +8,16 @@
     -fx-font-family:"Arial";
     -fx-font-size: 14px;
     -fx-font-weight:bold;
+    -fx-pref-width: 100px;
     -fx-background-color:linear-gradient(#61a2b1,#2A5058);
-    -fx-background-radius: 8.0;
+}
+
+.button:hover {
+    -fx-background-color:linear-gradient(#5192a1,#1A4048);
 }
 
 .root{
-    -fx-background-color: lightgrey;
+    -fx-background-color: white;
     -fx-padding: 15;
     -fx-hgap: 10;
     -fx-vgap: 10;
@@ -22,16 +26,23 @@
 
 .simControlPanel{
     -fx-border-color: black;
-    -fx-border-width: 2px;
     -fx-hgap: 35;
     -fx-vgap: 15;
     -fx-padding: 5 30 5 30;
 }
 
+.simControlPanelWrapper {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-alignment: center;
+}
+
 .modelPanel{
+    -fx-border-color: black;
     -fx-border-width: 2px;
 }
 
-.simPanel{
+.simPanel {
     -fx-border-color: black;
+    -fx-border-width: 2px;
 }

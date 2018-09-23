@@ -2,6 +2,7 @@ package visualization.model_panels;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import visualization.ModelPanel;
 
 /**
  * @author Vincent Liu

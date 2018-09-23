@@ -1,5 +1,7 @@
 package visualization.model_panels;
 
+import visualization.ModelPanel;
+
 /**
  * @author Vincent Liu
  */

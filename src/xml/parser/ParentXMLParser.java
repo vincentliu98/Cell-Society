@@ -8,12 +8,11 @@ import org.xml.sax.SAXException;
 import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
-import simulation.models.*;
+import simulation.models.GameOfLifeModel;
+import simulation.models.SegregationModel;
+import simulation.models.SpreadingFireModel;
+import simulation.models.WaTorModel;
 import xml.XMLException;
-import xml.parser.GameOfLifeXMLParser;
-import xml.parser.SegregationXMLParser;
-import xml.parser.SpreadingFireXMLParser;
-import xml.parser.WaTorXMLParser;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
