@@ -5,10 +5,6 @@ import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.models.GameOfLifeModel;
 
-import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class GameOfLifeXMLParser extends ParentXMLParser {
     public static final String IS_ALIVE_TAG = "isAlive";
 
