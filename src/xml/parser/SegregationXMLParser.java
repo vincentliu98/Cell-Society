@@ -1,9 +1,10 @@
-package xml;
+package xml.parser;
 
 import org.w3c.dom.Element;
 import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.models.SegregationModel;
+import xml.parser.ParentXMLParser;
 
 public class SegregationXMLParser extends ParentXMLParser {
     public static final String THRESHOLD_TAG = "satisfactionThreshold";

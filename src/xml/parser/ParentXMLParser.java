@@ -1,6 +1,5 @@
-package xml;
+package xml.parser;
 
-import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import org.w3c.dom.Element;
@@ -9,8 +8,8 @@ import org.xml.sax.SAXException;
 import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
-import simulation.factory.Segregation;
 import simulation.models.*;
+import xml.XMLException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

@@ -1,4 +1,4 @@
-package xml;
+package xml.parser;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -8,6 +8,7 @@ import simulation.Simulator;
 import simulation.models.WaTorModel;
 import simulation.models.wator.Fish;
 import simulation.models.wator.Shark;
+import xml.parser.ParentXMLParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;

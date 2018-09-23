@@ -1,9 +1,10 @@
-package xml;
+package xml.parser;
 
 import org.w3c.dom.Element;
 import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.models.SpreadingFireModel;
+import xml.parser.ParentXMLParser;
 
 public class SpreadingFireXMLParser extends ParentXMLParser {
     public static final String PROB_CATCH_TAG = "probCatch";

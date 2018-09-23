@@ -3,10 +3,7 @@ package visualization;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -20,9 +17,7 @@ import simulation.models.GameOfLifeModel;
 import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
-import visualization.model_panels.GameOfLifePanel;
-import visualization.model_panels.ModelPanel;
-import xml.ParentXMLParser;
+import xml.parser.ParentXMLParser;
 
 import java.io.File;
 
@@ -48,13 +43,6 @@ public class GUI {
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = MILLISECOND_DELAY / 1000.;
 
-    public static final String[] SIMULATION_MODELS = new String[] {
-            GameOfLifeModel.MODEL_NAME,
-            SegregationModel.MODEL_NAME,
-            WaTorModel.MODEL_NAME,
-            SpreadingFireModel.MODEL_NAME
-    };
-
     private Window window;
     private GridPane root;
     private SimulationControlPanel simControlPanel;
@@ -79,13 +67,8 @@ public class GUI {
         row2.setPercentHeight(15);
         root.getRowConstraints().addAll(row1, row2);
 
-        modelPanel = new GameOfLifePanel();
-        modelPanel.getStyleClass().add("modelPanel");
-
+        modelPanel = new ModelPanel();
         simControlPanel = new SimulationControlPanel();
-//        simControlPanel = new SimulationControlPanel();
-//        simControlPanel.getStyleClass().add("simControlPanel");
-
         simPanel = new VBox();
         simPanel.getStyleClass().add("simPanel");
 
@@ -131,7 +114,7 @@ public class GUI {
     public void handleModelChange() {
         modelName = simControlPanel.getChosenModel();
         if(simulator.modelName().equals(modelName)) return;
-        generateModelByName(DEFAULT_CELL_NUM);
+        generateModelByName(modelPanel.getCellNum());
     }
 
     public void handleCellNumChange() {

@@ -8,17 +8,29 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import simulation.Simulator;
-
-import static visualization.GUI.SIMULATION_MODELS;
+import simulation.models.GameOfLifeModel;
+import simulation.models.SegregationModel;
+import simulation.models.SpreadingFireModel;
+import simulation.models.WaTorModel;
 
 public class SimulationControlPanel extends HBox {
+    public static final String[] SIMULATION_MODELS = new String[] {
+            GameOfLifeModel.MODEL_NAME,
+            SegregationModel.MODEL_NAME,
+            WaTorModel.MODEL_NAME,
+            SpreadingFireModel.MODEL_NAME
+    };
+
     private boolean isPlaying;
     private Text numTick, stepRate;
     private double simPeriod, elapsedTime;
     private ComboBox<String> chooseModel;
     private Simulator<?> simulator;
 
-    public SimulationControlPanel() { super(25); }
+    public SimulationControlPanel() {
+        super(25);
+        getStyleClass().add("simControlPanelWrapper");
+    }
 
     public void setupPanel(
             Simulator<?> sim,
@@ -41,9 +53,9 @@ public class SimulationControlPanel extends HBox {
 
         var save = new Button("Save");
         save.setOnMouseClicked(onSave);
-
         var load = new Button("Load");
         load.setOnMouseClicked(onLoad);
+
 
         var playStop = new Button("Play");
         playStop.setOnMouseClicked(e -> {
@@ -51,7 +63,6 @@ public class SimulationControlPanel extends HBox {
             playStop.setText(isPlaying ? "Stop" : "Play");
             elapsedTime = 0;
         });
-
         var tick = new Button("Tick");
         tick.setOnMouseClicked(e -> simulator.tick());
 
@@ -60,7 +71,6 @@ public class SimulationControlPanel extends HBox {
             simPeriod = Math.max(0.05, simPeriod-0.05);
             updateStepRate();
         });
-
         var decrease = new Button("Down");
         decrease.setOnMouseClicked(e -> {
             simPeriod = Math.min(5, simPeriod+0.05);
