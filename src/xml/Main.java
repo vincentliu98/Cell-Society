@@ -12,7 +12,7 @@ import xml.parser.ParentXMLParser;
 
 
 /**
- * Manage and parse XML files
+ * Manage and parse XML files, for testing loading of files outside of full UI
  *
  * @author Rhondu Smithwick
  * @author Robert C. Duvall
