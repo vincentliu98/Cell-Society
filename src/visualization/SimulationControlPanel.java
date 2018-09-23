@@ -60,13 +60,13 @@ public class SimulationControlPanel extends HBox {
 
         var increase = new Button("Up");
         increase.setOnMouseClicked(e -> {
-            simPeriod = Math.max(0.1, simPeriod-0.1);
+            simPeriod = Math.max(0.05, simPeriod-0.05);
             updateStepRate();
         });
 
         var decrease = new Button("Down");
         decrease.setOnMouseClicked(e -> {
-            simPeriod = Math.min(5, simPeriod+0.1);
+            simPeriod = Math.min(5, simPeriod+0.05);
             updateStepRate();
         });
 
