@@ -16,7 +16,6 @@ public class Simulator<T> {
     public static final double SIMULATION_SX = 529.5;
     public static final double SIMULATION_SY = 432.5;
 
-
     private CellGraph<T> graph;
     protected SimulationModel<T> model;
 

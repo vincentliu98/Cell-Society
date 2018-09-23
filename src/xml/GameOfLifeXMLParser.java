@@ -1,26 +1,10 @@
 package xml;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.models.GameOfLifeModel;
-import simulation.models.SimulationModel;
 
-import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
-
-
-/**
- * This class handles parsing XML files and returning a completed object.
- *
- * @author Vincent Liu
- * @author Rhondu Smithwick
- * @author Robert C. Duvall
- */
 public class GameOfLifeXMLParser extends ParentXMLParser {
     public static final String IS_ALIVE_TAG = "isAlive";
 
@@ -46,33 +30,8 @@ public class GameOfLifeXMLParser extends ParentXMLParser {
 
     public static Simulator getModelSimulator(Element root) {
         GameOfLifeModel model = new GameOfLifeModel();
-        CellGraph<Integer> graph;
-        String shapeString = getTextValue(root, SHAPE_TAG).replaceAll("\\s","");
-        if (shapeString.equals(RECTANGLE_STRING)) {
-            graph = new CellGraph<>(parseRectangle(root));
-        } else if (shapeString.equals(CIRCLE_STRING)) {
-            graph = new CellGraph<>(parseCircle(root));
-        } else {
-            graph = null;
-        }
-        int numCells = root.getElementsByTagName("cell").getLength();
-        Map<Integer, Cell<Integer>> IDToCellMap = new HashMap<>();
-        for (int c = 0; c<numCells; c++) {
-            int uniqueID = getIntValueAtIndex(root, CELL_UNIQUE_ID_TAG, c);
-            int val = getIntValueAtIndex(root, IS_ALIVE_TAG, c);
-            double xPos = getDoubleValueAtIndex(root, CELL_XPOS_TAG, c);
-            double yPos = getDoubleValueAtIndex(root, CELL_YPOS_TAG, c);
-            IDToCellMap.put(uniqueID, new Cell<>(val, xPos, yPos));
-        }
-        for (int c = 0; c<numCells; c++) {
-            int uniqueID = getIntValueAtIndex(root, CELL_UNIQUE_ID_TAG, c);
-            ArrayList<Integer> neighborIDs = parseNeighbors(root, c);
-            List<Cell<Integer>> neighborList = new ArrayList<>();
-            for (int n : neighborIDs)
-                neighborList.add(IDToCellMap.get(n));
-            graph.put(IDToCellMap.get(uniqueID), neighborList);
-        }
-        return new Simulator<>(graph, model);
+        CellGraph<Integer> graph = getIntegerCellGraph(root, IS_ALIVE_TAG);
+        return new Simulator(graph, model);
     }
 
 //    private static GameOfLifeXML getGameOfLifeXML(Node node) {

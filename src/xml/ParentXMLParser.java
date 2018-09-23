@@ -1,10 +1,13 @@
 package xml;
 
+import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import simulation.Cell;
+import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.factory.Segregation;
 import simulation.models.*;
@@ -39,13 +42,15 @@ public class ParentXMLParser {
             WaTorModel.MODEL_NAME
     );
 
+    public static final String WHITESPACE = "\\s";
     public static final String SHAPE_WIDTH_TAG = "shapeWidth";
     public static final String SHAPE_HEIGHT_TAG = "shapeHeight";
     public static final String SHAPE_RADIUS_TAG = "shapeRadius";
     public static final String SHAPE_TAG = "shape";
-    public static final String RECTANGLE_STRING= "rectangle";
+    public static final String RECTANGLE_STRING = "rectangle";
     public static final String CIRCLE_STRING = "circle";
 
+    public static final String CELL_TAG = "cell";
     public static final String CELL_UNIQUE_ID_TAG = "uniqueID";
     public static final String CELL_NEIGHBORS_TAG = "neighbors";
     public static final String CELL_XPOS_TAG = "cx";
@@ -66,14 +71,46 @@ public class ParentXMLParser {
         Element root = getRootElement(datafile);
         if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(GameOfLifeModel.MODEL_NAME))
             return GameOfLifeXMLParser.getModelSimulator(root);
-//        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SegregationModel.MODEL_NAME))
-//            return SegregationXMLParser.getModelSimulator(root);
-//        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
-//            return SpreadingFireXMLParser.getModelSimulator(root);
-//        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(WaTorModel.MODEL_NAME))
-//            return WaTorXMLParser.getModelSimulator(root);
+        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SegregationModel.MODEL_NAME))
+            return SegregationXMLParser.getModelSimulator(root);
+        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
+            return SpreadingFireXMLParser.getModelSimulator(root);
+        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(WaTorModel.MODEL_NAME))
+            return WaTorXMLParser.getModelSimulator(root);
         else
             throw new XMLException(ERROR_MESSAGE, MODEL_ATTRIBUTE_STRING);
+    }
+
+    public static CellGraph<Integer> getIntegerCellGraph(Element root, String valTag) {
+        CellGraph<Integer> graph;
+        String shapeString = getTextValue(root, SHAPE_TAG).replaceAll("\\s","");
+        if (shapeString.equals(RECTANGLE_STRING)) {
+            graph = new CellGraph<Integer>(parseRectangle(root));
+        } else if (shapeString.equals(CIRCLE_STRING)) {
+            graph = new CellGraph<Integer>(parseCircle(root));
+        } else {
+            graph = null;
+        }
+        NodeList cells = root.getElementsByTagName(CELL_TAG);
+        Map<Integer, Cell<Integer>> IDToCellMap = new HashMap<Integer, Cell<Integer>>();
+        for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
+            Element curCell = (Element) cells.item(cIndex);
+            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
+            int val = getIntValue(curCell, valTag);
+            double xPos = getDoubleValue(curCell, CELL_XPOS_TAG);
+            double yPos = getDoubleValue(curCell, CELL_YPOS_TAG);
+            IDToCellMap.put(uniqueID, new Cell<Integer>(val, xPos, yPos));
+        }
+        for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
+            Element curCell = (Element) cells.item(cIndex);
+            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
+            ArrayList<Integer> neighborIDs = parseNeighbors(curCell, 0);
+            List<Cell<Integer>> neighborList = new ArrayList<>();
+            for (int n : neighborIDs)
+                neighborList.add(IDToCellMap.get(n));
+            graph.put(IDToCellMap.get(uniqueID), neighborList);
+        }
+        return graph;
     }
 
     public static Rectangle parseRectangle(Element root) {
