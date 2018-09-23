@@ -1,23 +1,15 @@
 package simulation;
 
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeType;
 import simulation.models.SimulationModel;
 import utility.ColorUtils;
 import xml.writer.XMLWriter;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import static javafx.scene.shape.StrokeType.INSIDE;
-import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 /**
  * Simulator
@@ -47,11 +39,13 @@ public class Simulator<T> {
                 v.setStroke(model.chooseColor(c.value()));
                 v.setStrokeDashOffset(5);
                 v.getStrokeDashArray().addAll(10d);
+                v.setOpacity(0.7);
             });
 
             v.setOnMouseExited(e -> {
                 v.setFill(model.chooseColor(c.value()));
                 v.setStroke(new Color(0,0,0,0));
+                v.setOpacity(1);
             });
             v.setOnMouseClicked(e -> {
                 c.handleClick(model);
