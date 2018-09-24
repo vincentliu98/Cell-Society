@@ -42,7 +42,7 @@ Extra credit:
 ### Impressions
 
 ### Folder Structure
-
+<pre>
 cellsociety_team10                                                  #
 ├── cellsociety_team10.iml                                    #
 ├── doc                                                       #
@@ -169,4 +169,4 @@ cellsociety_team10                                                  #
         │   ├── WaTorWriter.java                            #
         │   └── XMLWriter.java                              #
         └── XMLException.java                                 #
-
+</pre>
