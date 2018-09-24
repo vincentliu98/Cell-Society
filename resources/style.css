@@ -40,6 +40,7 @@
 .modelPanel{
     -fx-border-color: black;
     -fx-border-width: 2px;
+    -fx-padding: 3px;
 }
 
 .simPanel {
