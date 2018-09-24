@@ -23,8 +23,6 @@ public class WaTorPanel extends ModelPanel {
     private Slider sharkBreedBar = new Slider(0, 20, DEFAULT_SHARKBREED);
     private Slider sharkStarveBar = new Slider(0, 20, DEFAULT_SHARKSTARVE);
 
-    private int fishBreed, sharkBreed, sharkStarve;
-
     public static final Label fishBreedCaption = new Label("Fish Breeding Period:");
     public static final Label sharkBreedCaption = new Label("Shark Breeding Period:");
     public static final Label sharkStarveCaption = new Label("Shark Starve Period:");
@@ -47,24 +45,21 @@ public class WaTorPanel extends ModelPanel {
         fishBreedBar.setShowTickLabels(true);
         fishBreedBar.setOnMouseReleased(e -> {
             paramChanged = true;
-            fishBreed = (int) fishBreedBar.getValue();
-            fishBreedValue.setText(String.valueOf(fishBreed));
+            fishBreedValue.setText(String.valueOf((int) fishBreedBar.getValue()));
         });
 
         sharkBreedBar.setShowTickMarks(true);
         sharkBreedBar.setShowTickLabels(true);
         sharkBreedBar.setOnMouseReleased(e -> {
             paramChanged = true;
-            sharkBreed = (int) sharkBreedBar.getValue();
-            sharkBreedValue.setText(String.valueOf(sharkBreed));
+            sharkBreedValue.setText(String.valueOf((int) sharkBreedBar.getValue()));
         });
 
         sharkStarveBar.setShowTickMarks(true);
         sharkStarveBar.setShowTickLabels(true);
         sharkStarveBar.setOnMouseReleased(e -> {
             paramChanged = true;
-            sharkStarve = (int) sharkStarveBar.getValue();
-            sharkStarveValue.setText(String.valueOf(sharkStarve));
+            sharkStarveValue.setText(String.valueOf((int) sharkStarveBar.getValue()));
         });
 
 		wrapper.getChildren().addAll(fishBreedCaption, fishBreedValue, fishBreedBar,
@@ -78,9 +73,9 @@ public class WaTorPanel extends ModelPanel {
     @Override
     public Map<String, String> getParams() {
         var ret = new HashMap<String, String>();
-        ret.put(WaTorModel.PARAM_FISHBREED, Integer.toString(fishBreed));
-        ret.put(WaTorModel.PARAM_SHARKBREED, Integer.toString(sharkBreed));
-        ret.put(WaTorModel.PARAM_SHARKSTARVE, Integer.toString(sharkStarve));
+        ret.put(WaTorModel.PARAM_FISHBREED, Integer.toString((int) fishBreedBar.getValue()));
+        ret.put(WaTorModel.PARAM_SHARKBREED, Integer.toString((int) sharkBreedBar.getValue()));
+        ret.put(WaTorModel.PARAM_SHARKSTARVE, Integer.toString((int) sharkStarveBar.getValue()));
         return ret;
     }
 }

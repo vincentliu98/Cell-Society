@@ -49,8 +49,6 @@ public class GUI {
     private SimulationControlPanel simControlPanel;
     private ModelPanel modelPanel;
     private VBox simPanel;
-    private double threshold;
-    private double probCatch;
 
     private Simulator<?> simulator;
 

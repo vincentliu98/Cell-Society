@@ -138,5 +138,5 @@ public class WaTorModel implements SimulationModel<Fish> {
 
     public int getFishBreedPeriod() { return fishBreedPeriod; }
     public int getSharkBreedPeriod() { return sharkBreedPeriod; }
-    public int getSharkStarvePeriod() { return sharkBreedPeriod; }
+    public int getSharkStarvePeriod() { return sharkStarvePeriod; }
 }
