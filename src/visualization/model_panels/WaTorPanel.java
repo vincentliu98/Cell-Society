@@ -69,9 +69,10 @@ public class WaTorPanel extends ModelPanel {
             sharkStarveValue.setText(String.valueOf(sharkStarve));
         });
 
-        wrapper.getChildren().addAll(fishBreedCaption, fishBreedBar, fishBreedValue,
-                sharkBreedCaption, sharkBreedBar, sharkBreedValue,
-                sharkStarveCaption, sharkStarveBar, sharkStarveValue);
+		wrapper.getChildren().addAll(fishBreedCaption, fishBreedValue, fishBreedBar,
+        sharkBreedCaption, sharkBreedValue, sharkBreedBar,
+        sharkStarveCaption, sharkStarveValue, sharkStarveBar);
+        
         scrollPane.setContent(wrapper);
         getChildren().add(scrollPane);
     }

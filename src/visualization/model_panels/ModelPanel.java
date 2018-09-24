@@ -7,10 +7,14 @@ import javafx.scene.layout.VBox;
 import java.util.Map;
 
 /**
- *  ModelPanel.
+ *  For various model-specific panels that defines
+ *  uniform theme across different panels. It is purposefully made
+ *  abstract so that it would never actually be initialized.
  *
  * @author Vincent Liu
+ * @author Inchan Hwang
  */
+ 
 public abstract class ModelPanel extends VBox {
     public static final int DEFAULT_CELL_NUM = 10;
 
