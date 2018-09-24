@@ -22,6 +22,7 @@ public class SegregationModel implements SimulationModel<Integer> {
     public static final int RED = 2;
 
     public static final String MODEL_NAME = "Segregation";
+    public static final String PARAM_SATISFACTION = "satisfactionThreshold";
 
     private double satisfactionThreshold;
     public SegregationModel(double threshold) { satisfactionThreshold = threshold; }
@@ -81,7 +82,7 @@ public class SegregationModel implements SimulationModel<Integer> {
 
     @Override
     public void updateParams(Map<String, String> params) {
-        satisfactionThreshold = Double.parseDouble(params.get("satisfactionThreshold"));
+        satisfactionThreshold = Double.parseDouble(params.get(PARAM_SATISFACTION));
     }
 
     public double getSatisfactionThreshold() { return satisfactionThreshold; }

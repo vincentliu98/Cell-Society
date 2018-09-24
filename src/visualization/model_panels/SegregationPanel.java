@@ -2,6 +2,7 @@ package visualization.model_panels;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import simulation.models.SegregationModel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,6 @@ public class SegregationPanel extends ModelPanel {
     public static final double DEFAULT_THRESHOLD = 0.3;
     private Slider thresholdBar = new Slider(0, 1, DEFAULT_THRESHOLD);
     private double thresholdVal = DEFAULT_THRESHOLD;
-    private boolean changeThreshold;
 
     public static final Label thresholdCaption = new Label("Threshold:");
     private Label thresholdValue = new Label(
@@ -25,7 +25,7 @@ public class SegregationPanel extends ModelPanel {
         thresholdBar.setShowTickMarks(true);
         thresholdBar.setShowTickLabels(true);
         thresholdBar.setOnMouseReleased(e -> {
-            changeThreshold = true;
+            paramChanged = true;
             thresholdVal = thresholdBar.getValue();
             thresholdValue.setText(String.format("%.2f", thresholdVal));
         });
@@ -35,11 +35,7 @@ public class SegregationPanel extends ModelPanel {
     @Override
     public Map<String, String> getParams() {
         var ret = new HashMap<String, String>();
-        ret.put("satisfactionThreshold", Double.toString(thresholdVal));
+        ret.put(SegregationModel.PARAM_SATISFACTION, Double.toString(thresholdVal));
         return ret;
     }
-
-    @Override
-    public boolean paramsChanged() { return changeThreshold; }
-
 }

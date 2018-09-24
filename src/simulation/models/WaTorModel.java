@@ -30,6 +30,9 @@ public class WaTorModel implements SimulationModel<Fish> {
     public static final int CODE_STARVE = 2;
 
     public static final String MODEL_NAME = "Wa-Tor";
+    public static final String PARAM_FISHBREED = "fishBreedPeriod";
+    public static final String PARAM_SHARKBREED = "sharkBreedPeriod";
+    public static final String PARAM_SHARKSTARVE = "sharkStarvePeriod";
 
     private int fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod;
 
@@ -125,9 +128,9 @@ public class WaTorModel implements SimulationModel<Fish> {
 
     @Override
     public void updateParams(Map<String, String> params) {
-        fishBreedPeriod = Integer.parseInt(params.get("fishBreedPeriod"));
-        sharkBreedPeriod = Integer.parseInt(params.get("sharkBreedPeriod"));
-        sharkStarvePeriod = Integer.parseInt(params.get("sharkStarvePeriod"));
+        fishBreedPeriod = Integer.parseInt(params.get(PARAM_FISHBREED));
+        sharkBreedPeriod = Integer.parseInt(params.get(PARAM_SHARKBREED));
+        sharkStarvePeriod = Integer.parseInt(params.get(PARAM_SHARKSTARVE));
     }
 
     public int getFishBreedPeriod() { return fishBreedPeriod; }

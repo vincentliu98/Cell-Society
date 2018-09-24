@@ -3,7 +3,6 @@ package visualization.model_panels;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
-import simulation.models.SimulationModel;
 
 import java.util.Map;
 
@@ -14,9 +13,11 @@ import java.util.Map;
  */
 public abstract class ModelPanel extends VBox {
     public static final int DEFAULT_CELL_NUM = 10;
+
+    protected boolean numCellChanged, paramChanged;
+
     private Slider numberBar = new Slider(0, 100, DEFAULT_CELL_NUM);
     private int cellNum;
-    private boolean changeCellNum;
 
     public static final Label cellNumCaption = new Label("Cell Number / Side:");
     private Label cellNumValue = new Label(
@@ -34,27 +35,20 @@ public abstract class ModelPanel extends VBox {
         numberBar.setBlockIncrement(4);
 
         numberBar.setOnMouseReleased(e -> {
-            changeCellNum = true;
+            numCellChanged = true;
             cellNum = (int) numberBar.getValue();
             cellNumValue.setText(Integer.toString(cellNum));
         });
 
+
         getChildren().addAll(cellNumCaption, cellNumValue, numberBar);
     }
 
-    public int getCellNum() {
-        return cellNum;
-    }
-
-    public void setChangeCellNum(boolean changeCellNum) {
-        this.changeCellNum = changeCellNum;
-    }
-
-    public boolean getChangeCellNum() {
-        return changeCellNum;
-    }
+    public int getCellNum() { return cellNum; }
+    public boolean isNumCellChanged() { return numCellChanged; }
+    public boolean isParamChanged() { return paramChanged; }
+    public void cleanNumCellChanged() { numCellChanged = false; }
+    public void cleanParamChanged() { paramChanged = false; }
 
     public abstract Map<String, String> getParams();
-
-    public abstract boolean paramsChanged();
 }

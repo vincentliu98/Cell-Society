@@ -1,5 +1,6 @@
 package visualization.model_panels;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -7,17 +8,8 @@ import java.util.Map;
  */
 
 public class GameOfLifePanel extends ModelPanel {
-    public GameOfLifePanel() {
-        super();
-    }
+    public GameOfLifePanel() { super(); }
 
     @Override
-    public Map<String, String> getParams() {
-        return null;
-    }
-
-    @Override
-    public boolean paramsChanged() {
-        return false;
-    }
+    public Map<String, String> getParams() { return new HashMap<>(); }
 }
