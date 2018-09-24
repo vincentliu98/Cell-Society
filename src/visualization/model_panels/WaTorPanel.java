@@ -1,10 +1,11 @@
 package visualization.model_panels;
 
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import simulation.models.WaTorModel;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,8 @@ public class WaTorPanel extends ModelPanel {
             Double.toString(sharkBreedBar.getValue()));
     private Label sharkStarveValue = new Label(
             Double.toString(sharkStarveBar.getValue()));
+
+    private boolean paramChanged;
 
     public WaTorPanel() {
         super();
@@ -67,8 +70,8 @@ public class WaTorPanel extends ModelPanel {
         });
 
         wrapper.getChildren().addAll(fishBreedCaption, fishBreedBar, fishBreedValue,
-                            sharkBreedCaption, sharkBreedBar, sharkBreedValue,
-                            sharkStarveCaption, sharkStarveBar, sharkStarveValue);
+                sharkBreedCaption, sharkBreedBar, sharkBreedValue,
+                sharkStarveCaption, sharkStarveBar, sharkStarveValue);
         scrollPane.setContent(wrapper);
         getChildren().add(scrollPane);
     }
@@ -81,4 +84,10 @@ public class WaTorPanel extends ModelPanel {
         ret.put(WaTorModel.PARAM_SHARKSTARVE, Integer.toString(sharkStarve));
         return ret;
     }
+
+    @Override
+    public boolean paramsChanged() {
+        return paramChanged;
+    }
+
 }

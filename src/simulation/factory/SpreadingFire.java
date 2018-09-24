@@ -15,8 +15,10 @@ import java.util.Random;
  */
 
 public class SpreadingFire {
-    public static Simulator<Integer> generate(int row, int column, int[][] initial) {
-        SimulationModel<Integer> model = new SpreadingFireModel(0.7);
+    public static final double DEFAULT_PROBCATCH = 0.7;
+
+    public static Simulator<Integer> generate(int row, int column, int[][] initial, double probCatch) {
+        SimulationModel<Integer> model = new SpreadingFireModel(probCatch);
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / column;
         double height = Simulator.SIMULATION_SY / row;
@@ -43,6 +45,6 @@ public class SpreadingFire {
                              x < 0.75 ? SpreadingFireModel.BURNING : SpreadingFireModel.EMPTY;
             }
         }
-        return SpreadingFire.generate(n, n, tmp);
+        return SpreadingFire.generate(n, n, tmp, DEFAULT_PROBCATCH);
     }
 }

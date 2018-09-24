@@ -18,8 +18,8 @@ import static javafx.scene.shape.StrokeType.INSIDE;
  * @author Inchan Hwang
  */
 public class Simulator<T> {
-    public static final double SIMULATION_SX = 525;
-    public static final double SIMULATION_SY = 430;
+    public static final double SIMULATION_SX = 636;
+    public static final double SIMULATION_SY = 579;
 
     private CellGraph<T> graph;
     protected SimulationModel<T> model;

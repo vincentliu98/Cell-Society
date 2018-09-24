@@ -12,6 +12,8 @@ import java.util.Random;
  *  @author Inchan Hwang
  */
 public class Segregation {
+    public static final double DEFAULT_THRESHOLD = 0.3;
+
     public static Simulator<Integer> generate(int row, int column, int[][] initial, double threshold) {
         var model = new SegregationModel(threshold);
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
@@ -39,6 +41,6 @@ public class Segregation {
                             x < 0.7 ? 1 : 2;
             }
         }
-        return generate(n, n, tmp, 0.8);
+        return generate(n, n, tmp, DEFAULT_THRESHOLD);
     }
 }

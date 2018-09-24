@@ -34,6 +34,9 @@ public class WaTorModel implements SimulationModel<Fish> {
     public static final String PARAM_SHARKBREED = "sharkBreedPeriod";
     public static final String PARAM_SHARKSTARVE = "sharkStarvePeriod";
 
+
+
+
     private int fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod;
 
     public WaTorModel(int fishBreedPeriod_, int sharkBreedPeriod_, int sharkStarvePeriod_) {

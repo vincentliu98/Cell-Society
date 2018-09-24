@@ -12,12 +12,17 @@ import java.util.Random;
 /**
  *  Convenience class to generate "Wa-Tor" Simulator
  *
- * @author Vincent Liu
+ * @author Inchan Hwang
  */
 
 public class WaTor {
-    public static Simulator<Fish> generate(int row, int column, int[][] initial) {
-        var model = new WaTorModel(4, 5, 5);
+    public static final int DEFAULT_FISHBREEDPERIOD = 4;
+    public static final int DEFAULT_SHARKBREEDPERIOD = 5;
+    public static final int DEFAULT_SHARKSTARVEPERIOD = 5;
+
+    public static Simulator<Fish> generate(int row, int column, int[][] initial, int fishBreedPeriod,
+                                           int sharkBreedPeriod, int sharkStarvePeriod) {
+        var model = new WaTorModel(fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod);
         ArrayList<Cell<Fish>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / column;
         double height = Simulator.SIMULATION_SY / row;
@@ -45,6 +50,7 @@ public class WaTor {
                         x < 0.55 ? WaTorModel.SHARK : 2;
             }
         }
-        return WaTor.generate(n, n, tmp);
+        return WaTor.generate(n, n, tmp,
+                DEFAULT_FISHBREEDPERIOD, DEFAULT_SHARKBREEDPERIOD,DEFAULT_SHARKSTARVEPERIOD);
     }
 }

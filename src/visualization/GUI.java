@@ -36,8 +36,8 @@ import java.io.File;
  * @author Inchan Hwang
  */
 public class GUI {
-    public static final int SCREEN_WIDTH = 700;
-    public static final int SCREEN_HEIGHT = 550;
+    public static final int SCREEN_WIDTH = 840;
+    public static final int SCREEN_HEIGHT = 726;
     public static final int DEFAULT_CELL_NUM = 10;
 
     public static final int FRAMES_PER_SECOND = 10;
@@ -49,6 +49,8 @@ public class GUI {
     private SimulationControlPanel simControlPanel;
     private ModelPanel modelPanel;
     private VBox simPanel;
+    private double threshold;
+    private double probCatch;
 
     private Simulator<?> simulator;
 

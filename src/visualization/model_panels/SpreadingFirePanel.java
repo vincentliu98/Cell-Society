@@ -12,24 +12,27 @@ import java.util.Map;
  */
 
 public class SpreadingFirePanel extends ModelPanel {
-    public static final double DEFAULT_PROBABILITY = 0.8;
-    private Slider probCatchBar = new Slider(0, 1, DEFAULT_PROBABILITY);
-    private double probCatchVal = DEFAULT_PROBABILITY;
+    public static final double DEFAULT_PROBCATCH = 0.7;
+    private Slider probCatchBar = new Slider(0, 1, DEFAULT_PROBCATCH);
+    private double probCatchVal;
+    private boolean changeProbCatch;
 
-    public static final Label probCatchCaption = new Label("ProbCatch:");
-    private Label thresholdValue = new Label(
+    public static final Label probCatchCaption = new Label("probCatch:");
+    private Label probCatchValue = new Label(
             Double.toString(probCatchBar.getValue()));
 
     public SpreadingFirePanel() {
         super();
+        probCatchVal = DEFAULT_PROBCATCH;
         probCatchBar.setShowTickMarks(true);
         probCatchBar.setShowTickLabels(true);
         probCatchBar.setOnMouseReleased(e -> {
-            paramChanged = true;
+            changeProbCatch = true;
             probCatchVal = probCatchBar.getValue();
-            thresholdValue.setText(String.format("%.2f", probCatchVal));
+            probCatchValue.setText(String.format("%.2f", probCatchVal));
         });
-        getChildren().addAll(probCatchCaption, thresholdValue, probCatchBar);
+        getChildren().addAll(probCatchCaption, probCatchValue, probCatchBar);
+
     }
 
     @Override
@@ -37,5 +40,10 @@ public class SpreadingFirePanel extends ModelPanel {
         var ret = new HashMap<String, String>();
         ret.put(SpreadingFireModel.PARAM_CATCHPROB, Double.toString(probCatchVal));
         return ret;
+    }
+
+    @Override
+    public boolean paramsChanged() {
+        return changeProbCatch;
     }
 }
