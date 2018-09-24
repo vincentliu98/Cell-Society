@@ -36,8 +36,6 @@ public class WaTorPanel extends ModelPanel {
     private Label sharkStarveValue = new Label(
             Double.toString(sharkStarveBar.getValue()));
 
-    private boolean paramChanged;
-
     public WaTorPanel() {
         super();
 
@@ -85,10 +83,4 @@ public class WaTorPanel extends ModelPanel {
         ret.put(WaTorModel.PARAM_SHARKSTARVE, Integer.toString(sharkStarve));
         return ret;
     }
-
-    @Override
-    public boolean paramsChanged() {
-        return paramChanged;
-    }
-
 }

@@ -12,7 +12,7 @@ import java.util.Map;
  */
 
 public class SegregationPanel extends ModelPanel {
-    public static final double DEFAULT_THRESHOLD = 0.3;
+    public static final double DEFAULT_THRESHOLD = 0.30;
     private Slider thresholdBar = new Slider(0, 1, DEFAULT_THRESHOLD);
     private double thresholdVal = DEFAULT_THRESHOLD;
 

@@ -12,10 +12,9 @@ import java.util.Map;
  */
 
 public class SpreadingFirePanel extends ModelPanel {
-    public static final double DEFAULT_PROBCATCH = 0.7;
+    public static final double DEFAULT_PROBCATCH = 0.70;
     private Slider probCatchBar = new Slider(0, 1, DEFAULT_PROBCATCH);
     private double probCatchVal;
-    private boolean changeProbCatch;
 
     public static final Label probCatchCaption = new Label("probCatch:");
     private Label probCatchValue = new Label(
@@ -27,7 +26,7 @@ public class SpreadingFirePanel extends ModelPanel {
         probCatchBar.setShowTickMarks(true);
         probCatchBar.setShowTickLabels(true);
         probCatchBar.setOnMouseReleased(e -> {
-            changeProbCatch = true;
+            paramChanged = true;
             probCatchVal = probCatchBar.getValue();
             probCatchValue.setText(String.format("%.2f", probCatchVal));
         });
@@ -40,10 +39,5 @@ public class SpreadingFirePanel extends ModelPanel {
         var ret = new HashMap<String, String>();
         ret.put(SpreadingFireModel.PARAM_CATCHPROB, Double.toString(probCatchVal));
         return ret;
-    }
-
-    @Override
-    public boolean paramsChanged() {
-        return changeProbCatch;
     }
 }

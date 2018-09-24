@@ -47,7 +47,7 @@ public class SimulationControlPanel extends HBox {
         var grid = new GridPane();
         grid.getStyleClass().add("simControlPanel");
 
-        var modelName = new Text("       Select Model");
+        var modelName = new Text("       Select Model:");
         numTick = new Text("# of ticks: 0");
         stepRate = new Text("Step Rate: " + 1/simPeriod + "/s");
 
