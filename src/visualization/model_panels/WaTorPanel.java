@@ -2,6 +2,10 @@ package visualization.model_panels;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
+import simulation.models.WaTorModel;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,84 +15,79 @@ import java.util.Map;
  */
 
 public class WaTorPanel extends ModelPanel {
-    public static final int DEFAULT_FISHBREEDPERIOD = 4;
-    public static final int DEFAULT_SHARKBREEDPERIOD = 5;
-    public static final int DEFAULT_SHARKSTARVEPERIOD = 5;
+    public static final double DEFAULT_FISHBREED = 2;
+    public static final double DEFAULT_SHARKBREED = 5;
+    public static final double DEFAULT_SHARKSTARVE = 5;
 
-    private Slider fbBar = new Slider(0, 10, DEFAULT_FISHBREEDPERIOD);
-    private Slider sbBar = new Slider(0, 10, DEFAULT_SHARKBREEDPERIOD);
-    private Slider ssBar = new Slider(0, 10, DEFAULT_SHARKSTARVEPERIOD);
+    private Slider fishBreedBar = new Slider(0, 20, DEFAULT_FISHBREED);
+    private Slider sharkBreedBar = new Slider(0, 20, DEFAULT_SHARKBREED);
+    private Slider sharkStarveBar = new Slider(0, 20, DEFAULT_SHARKSTARVE);
 
-    private int fb;
-    private int sb;
-    private int ss;
+    private int fishBreed, sharkBreed, sharkStarve;
 
-    private boolean changeFB;
-    private boolean changeSB;
-    private boolean changeSS;
+    public static final Label fishBreedCaption = new Label("Fish Breeding Period:");
+    public static final Label sharkBreedCaption = new Label("Shark Breeding Period:");
+    public static final Label sharkStarveCaption = new Label("Shark Starve Period:");
 
-    public static final Label fbCaption = new Label("Fish Breed Period:");
-    public static final Label sbCaption = new Label("Shark Breed Period:");
-    public static final Label ssCaption = new Label("Shark Starve Period:");
+    private Label fishBreedValue = new Label(
+            Double.toString(fishBreedBar.getValue()));
+    private Label sharkBreedValue = new Label(
+            Double.toString(sharkBreedBar.getValue()));
+    private Label sharkStarveValue = new Label(
+            Double.toString(sharkStarveBar.getValue()));
 
-    private Label fbValue = new Label(
-            Integer.toString((int) fbBar.getValue()));
-    private Label sbValue = new Label(
-            Integer.toString((int) sbBar.getValue()));
-    private Label ssValue = new Label(
-            Integer.toString((int) ssBar.getValue()));
+    private boolean paramChanged;
 
     public WaTorPanel() {
         super();
-        getStyleClass().add("modelPanel");
 
-        fb = DEFAULT_FISHBREEDPERIOD;
-        sb = DEFAULT_SHARKBREEDPERIOD;
-        ss = DEFAULT_SHARKSTARVEPERIOD;
+        var scrollPane = new ScrollPane();
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        var wrapper = new VBox(10);
 
-        fbBar.setShowTickMarks(true);
-        fbBar.setShowTickLabels(true);
-        sbBar.setShowTickMarks(true);
-        sbBar.setShowTickLabels(true);
-        ssBar.setShowTickMarks(true);
-        ssBar.setShowTickLabels(true);
-
-        fbBar.setOnMouseReleased(e -> {
-            changeFB = true;
-            fb = (int) fbBar.getValue();
-            fbValue.setText(Integer.toString(fb));
+        fishBreedBar.setShowTickMarks(true);
+        fishBreedBar.setShowTickLabels(true);
+        fishBreedBar.setOnMouseReleased(e -> {
+            paramChanged = true;
+            fishBreed = (int) fishBreedBar.getValue();
+            fishBreedValue.setText(String.valueOf(fishBreed));
         });
 
-        sbBar.setOnMouseReleased(e -> {
-            changeSB = true;
-            sb = (int) sbBar.getValue();
-            sbValue.setText(Integer.toString(sb));
+        sharkBreedBar.setShowTickMarks(true);
+        sharkBreedBar.setShowTickLabels(true);
+        sharkBreedBar.setOnMouseReleased(e -> {
+            paramChanged = true;
+            sharkBreed = (int) sharkBreedBar.getValue();
+            sharkBreedValue.setText(String.valueOf(sharkBreed));
         });
 
-        ssBar.setOnMouseReleased(e -> {
-            changeSS = true;
-            ss = (int) ssBar.getValue();
-            ssValue.setText(Integer.toString(ss));
+        sharkStarveBar.setShowTickMarks(true);
+        sharkStarveBar.setShowTickLabels(true);
+        sharkStarveBar.setOnMouseReleased(e -> {
+            paramChanged = true;
+            sharkStarve = (int) sharkStarveBar.getValue();
+            sharkStarveValue.setText(String.valueOf(sharkStarve));
         });
 
-        getChildren().addAll(fbCaption, fbValue, fbBar);
-        getChildren().addAll(sbCaption, sbValue, sbBar);
-        getChildren().addAll(ssCaption, ssValue, ssBar);
+        wrapper.getChildren().addAll(fishBreedCaption, fishBreedBar, fishBreedValue,
+                sharkBreedCaption, sharkBreedBar, sharkBreedValue,
+                sharkStarveCaption, sharkStarveBar, sharkStarveValue);
+        scrollPane.setContent(wrapper);
+        getChildren().add(scrollPane);
     }
-
-
 
     @Override
     public Map<String, String> getParams() {
         var ret = new HashMap<String, String>();
-        ret.put("fishBreedPeriod", Integer.toString(fb));
-        ret.put("sharkBreedPeriod", Integer.toString(sb));
-        ret.put("sharkStarvePeriod", Integer.toString(ss));
+        ret.put(WaTorModel.PARAM_FISHBREED, Integer.toString(fishBreed));
+        ret.put(WaTorModel.PARAM_SHARKBREED, Integer.toString(sharkBreed));
+        ret.put(WaTorModel.PARAM_SHARKSTARVE, Integer.toString(sharkStarve));
         return ret;
     }
 
     @Override
     public boolean paramsChanged() {
-        return changeFB || changeSB || changeSS;
+        return paramChanged;
     }
+
 }

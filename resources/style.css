@@ -25,10 +25,9 @@
 }
 
 .simControlPanel{
-    -fx-border-color: black;
     -fx-hgap: 35;
     -fx-vgap: 15;
-    -fx-padding: 5 30 5 30;
+    -fx-padding: 15 30 15 30;
 }
 
 .simControlPanelWrapper {
@@ -46,4 +45,8 @@
 .simPanel {
     -fx-border-color: black;
     -fx-border-width: 2px;
+}
+
+.scroll-pane {
+    -fx-background-color: white;
 }

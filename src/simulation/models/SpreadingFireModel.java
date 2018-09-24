@@ -21,6 +21,7 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     public static final int TREE = 1;
     public static final int BURNING = 2;
     public static final String MODEL_NAME = "Spreading Of Fire";
+    public static final String PARAM_CATCHPROB = "probCatch";
 
     private double probCatch;
 

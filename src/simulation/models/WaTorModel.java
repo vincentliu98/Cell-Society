@@ -30,6 +30,12 @@ public class WaTorModel implements SimulationModel<Fish> {
     public static final int CODE_STARVE = 2;
 
     public static final String MODEL_NAME = "Wa-Tor";
+    public static final String PARAM_FISHBREED = "fishBreedPeriod";
+    public static final String PARAM_SHARKBREED = "sharkBreedPeriod";
+    public static final String PARAM_SHARKSTARVE = "sharkStarvePeriod";
+
+
+
 
     private int fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod;
 
