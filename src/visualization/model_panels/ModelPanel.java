@@ -40,6 +40,9 @@ public abstract class ModelPanel extends VBox {
             cellNumValue.setText(Integer.toString(cellNum));
         });
 
+        numberBar.valueProperty().addListener((ov, old_val, new_val) -> {
+            cellNumValue.setText(String.valueOf(new_val.intValue()));
+        });
 
         getChildren().addAll(cellNumCaption, cellNumValue, numberBar);
     }

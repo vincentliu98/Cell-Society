@@ -1,7 +1,9 @@
 package visualization.model_panels;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.VBox;
 import simulation.models.WaTorModel;
 
 import java.util.HashMap;
@@ -16,9 +18,9 @@ public class WaTorPanel extends ModelPanel {
     public static final double DEFAULT_SHARKBREED = 5;
     public static final double DEFAULT_SHARKSTARVE = 5;
 
-    private Slider fishBreedBar = new Slider(0, 100, DEFAULT_FISHBREED);
-    private Slider sharkBreedBar = new Slider(0, 100, DEFAULT_SHARKBREED);
-    private Slider sharkStarveBar = new Slider(0, 100, DEFAULT_SHARKSTARVE);
+    private Slider fishBreedBar = new Slider(0, 20, DEFAULT_FISHBREED);
+    private Slider sharkBreedBar = new Slider(0, 20, DEFAULT_SHARKBREED);
+    private Slider sharkStarveBar = new Slider(0, 20, DEFAULT_SHARKSTARVE);
 
     private int fishBreed, sharkBreed, sharkStarve;
 
@@ -35,6 +37,10 @@ public class WaTorPanel extends ModelPanel {
 
     public WaTorPanel() {
         super();
+
+        var scrollPane = new ScrollPane();
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        var wrapper = new VBox(10);
 
         fishBreedBar.setShowTickMarks(true);
         fishBreedBar.setShowTickLabels(true);
@@ -60,17 +66,19 @@ public class WaTorPanel extends ModelPanel {
             sharkStarveValue.setText(String.valueOf(sharkStarve));
         });
 
-        getChildren().addAll(fishBreedCaption, fishBreedBar, fishBreedValue,
+        wrapper.getChildren().addAll(fishBreedCaption, fishBreedBar, fishBreedValue,
                             sharkBreedCaption, sharkBreedBar, sharkBreedValue,
                             sharkStarveCaption, sharkStarveBar, sharkStarveValue);
+        scrollPane.setContent(wrapper);
+        getChildren().add(scrollPane);
     }
 
     @Override
     public Map<String, String> getParams() {
         var ret = new HashMap<String, String>();
-        ret.put(WaTorModel.PARAM_FISHBREED, Double.toString(fishBreed));
-        ret.put(WaTorModel.PARAM_SHARKBREED, Double.toString(sharkBreed));
-        ret.put(WaTorModel.PARAM_SHARKSTARVE, Double.toString(sharkStarve));
+        ret.put(WaTorModel.PARAM_FISHBREED, Integer.toString(fishBreed));
+        ret.put(WaTorModel.PARAM_SHARKBREED, Integer.toString(sharkBreed));
+        ret.put(WaTorModel.PARAM_SHARKSTARVE, Integer.toString(sharkStarve));
         return ret;
     }
 }

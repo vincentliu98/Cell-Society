@@ -128,7 +128,6 @@ public class GUI {
 
     private void handleCellNumChange() {
         if (modelPanel.isNumCellChanged()) {
-            System.out.println("ha");
             generateModelByName(modelPanel.getCellNum(), simControlPanel.getChosenModel());
             modelPanel.cleanNumCellChanged();
         }
