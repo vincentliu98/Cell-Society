@@ -10,6 +10,7 @@ import utility.ShapeUtils;
  * @param <T> The type of the value that this cell holds
  * @author Inchan Hwang
  */
+
 public class Cell<T> {
     private T value, next;
     private Shape view;

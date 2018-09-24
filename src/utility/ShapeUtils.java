@@ -2,6 +2,10 @@ package utility;
 
 import javafx.scene.shape.Shape;
 
+/**
+ * @author Inchan Hwang
+ */
+
 public class ShapeUtils {
     public static void centerShape(Shape s, double cx, double cy) {
         s.setLayoutX(cx - s.getLayoutBounds().getMinX() - s.getLayoutBounds().getWidth()/2);

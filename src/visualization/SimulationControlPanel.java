@@ -13,6 +13,11 @@ import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 
+/**
+ * @author Inchan Hwang
+ * @author Vincent Liu
+ */
+
 public class SimulationControlPanel extends HBox {
     public static final String[] SIMULATION_MODELS = new String[] {
             GameOfLifeModel.MODEL_NAME,

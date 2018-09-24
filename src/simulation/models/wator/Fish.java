@@ -2,6 +2,9 @@ package simulation.models.wator;
 
 import simulation.models.WaTorModel;
 
+/**
+ * @author Inchan Hwang
+ */
 public class Fish {
     protected int starveCounter, breedCounter, actionCode;
 

@@ -2,6 +2,10 @@ package utility;
 
 import javafx.scene.paint.Color;
 
+/**
+ * @author Inchan Hwang
+ */
+
 public class ColorUtils {
     public static Color mix(Color a, Color b, double pA) {
         double red = a.getRed()*pA + b.getRed()*(1-pA);

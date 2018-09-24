@@ -5,6 +5,9 @@ import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.models.GameOfLifeModel;
 
+/**
+ * @author Inchan Hwang
+ */
 public class GameOfLifeXMLParser extends ParentXMLParser {
     public static final String IS_ALIVE_TAG = "isAlive";
 

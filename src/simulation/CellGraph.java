@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
  * CellGraph is convenience class to represent a graph of containers with a Map
  * @author Inchan Hwang
  */
+
 public class CellGraph<T> extends HashMap<Cell<T>, List<Cell<T>>> {
     private Shape shape;
     public CellGraph(Shape shape_) { shape = shape_; }

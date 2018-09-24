@@ -7,6 +7,7 @@ import javafx.stage.Stage;
  * This is the main class for the GUI to run
  *
  * @author Vincent Liu
+ * @author Inchan Hwang
  */
 public class Main extends Application {
 

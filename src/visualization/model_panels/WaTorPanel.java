@@ -12,6 +12,7 @@ import java.util.Map;
 
 /**
  * @author Vincent Liu
+ * @author Inchan Hwang
  */
 
 public class WaTorPanel extends ModelPanel {
