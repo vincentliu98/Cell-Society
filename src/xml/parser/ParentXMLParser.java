@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class ParentXMLParser {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
-    // keep only one documentBuilder because it is expensive to make and can reset it before parsing
+    // keep only one documentBuilder because it is expensive to make and can numCellChanged it before parsing
     private final DocumentBuilder DOCUMENT_BUILDER;
     // name of root attribute that notes the type of file expecting to parse
     public static final String MODEL_ATTRIBUTE_STRING = "modelName";

@@ -116,7 +116,10 @@ public class GUI {
     }
 
     private void handleModelPanelParametersChange() {
-        if(modelPanel.paramsChanged()) simulator.updateSimulationModel(modelPanel.getParams());
+        if(modelPanel.isParamChanged()) {
+            simulator.updateSimulationModel(modelPanel.getParams());
+            modelPanel.cleanParamChanged();
+        }
     }
 
     private void handleModelChange() {
@@ -126,9 +129,10 @@ public class GUI {
     }
 
     private void handleCellNumChange() {
-        if (modelPanel.getChangeCellNum()) {
+        if (modelPanel.isNumCellChanged()) {
             generateModelByName(modelPanel.getCellNum(), simControlPanel.getChosenModel());
-        } modelPanel.setChangeCellNum(false);
+            modelPanel.cleanNumCellChanged();
+        }
     }
 
     private void handleFileLoad() {

@@ -67,7 +67,7 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
 
     @Override
     public void updateParams(Map<String, String> params) {
-        probCatch = Double.parseDouble(params.get("probCatch"));
+        probCatch = Double.parseDouble(params.get(PARAM_CATCHPROB));
     }
 
     public double getProbCatch() { return probCatch; }

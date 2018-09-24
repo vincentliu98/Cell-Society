@@ -131,9 +131,9 @@ public class WaTorModel implements SimulationModel<Fish> {
 
     @Override
     public void updateParams(Map<String, String> params) {
-        fishBreedPeriod = Integer.parseInt(params.get("fishBreedPeriod"));
-        sharkBreedPeriod = Integer.parseInt(params.get("sharkBreedPeriod"));
-        sharkStarvePeriod = Integer.parseInt(params.get("sharkStarvePeriod"));
+        fishBreedPeriod = Integer.parseInt(params.get(PARAM_FISHBREED));
+        sharkBreedPeriod = Integer.parseInt(params.get(PARAM_SHARKBREED));
+        sharkStarvePeriod = Integer.parseInt(params.get(PARAM_SHARKSTARVE));
     }
 
     public int getFishBreedPeriod() { return fishBreedPeriod; }
