@@ -8,6 +8,7 @@ import utility.ColorUtils;
 import xml.writer.XMLWriter;
 
 import java.io.File;
+import java.util.Map;
 
 import static javafx.scene.shape.StrokeType.INSIDE;
 
@@ -83,5 +84,5 @@ public class Simulator<T> {
     private void globalUpdate() { model.globalUpdate(graph); }
     private void commitAll() { for(var c: graph.getCells()) c.commit(); }
     private void updateView() { graph.getCells().forEach(c -> c.updateView(model)); }
-    public void setSimulationModel(SimulationModel<T> model_) { model = model_; }
+    public void updateSimulationModel(Map<String, String> params) { model.updateParams(params); }
 }

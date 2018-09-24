@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  *  SegregationModel implements the Segregation Model.
@@ -76,6 +77,11 @@ public class SegregationModel implements SimulationModel<Integer> {
     @Override
     public XMLWriter<Integer> getXMLWriter(CellGraph<Integer> graph, File outFile) {
         return new SegregationWriter(this, graph, outFile);
+    }
+
+    @Override
+    public void updateParams(Map<String, String> params) {
+        satisfactionThreshold = Double.parseDouble(params.get("satisfactionThreshold"));
     }
 
     public double getSatisfactionThreshold() { return satisfactionThreshold; }

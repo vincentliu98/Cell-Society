@@ -8,6 +8,7 @@ import xml.writer.XMLWriter;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  *  UpdateRules for the Spreading Of Fire
@@ -61,6 +62,11 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     @Override
     public XMLWriter<Integer> getXMLWriter(CellGraph<Integer> graph, File outFile) {
         return new SpreadingFireWriter(this,graph,outFile);
+    }
+
+    @Override
+    public void updateParams(Map<String, String> params) {
+        probCatch = Double.parseDouble(params.get("probCatch"));
     }
 
     public double getProbCatch() { return probCatch; }

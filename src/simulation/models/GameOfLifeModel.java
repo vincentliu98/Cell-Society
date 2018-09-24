@@ -7,6 +7,7 @@ import xml.writer.GameOfLifeWriter;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  *  UpdateRules for the Game of Life
@@ -45,4 +46,7 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
     public GameOfLifeWriter getXMLWriter(CellGraph<Integer> graph, File outFile) {
         return new GameOfLifeWriter(graph, outFile);
     }
+
+    @Override
+    public void updateParams(Map<String, String> params) { }
 }

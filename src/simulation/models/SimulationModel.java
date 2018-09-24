@@ -7,6 +7,7 @@ import xml.writer.XMLWriter;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  *  SimulationModels
@@ -24,4 +25,6 @@ public interface SimulationModel<T> {
     String modelName();
 
     XMLWriter<T> getXMLWriter(CellGraph<T> graph, File outFile);
+
+    void updateParams(Map<String, String> params);
 }

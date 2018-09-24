@@ -10,6 +10,7 @@ import xml.writer.XMLWriter;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -120,6 +121,13 @@ public class WaTorModel implements SimulationModel<Fish> {
     @Override
     public XMLWriter<Fish> getXMLWriter(CellGraph<Fish> graph, File outFile) {
         return new WaTorWriter(this, graph, outFile);
+    }
+
+    @Override
+    public void updateParams(Map<String, String> params) {
+        fishBreedPeriod = Integer.parseInt(params.get("fishBreedPeriod"));
+        sharkBreedPeriod = Integer.parseInt(params.get("sharkBreedPeriod"));
+        sharkStarvePeriod = Integer.parseInt(params.get("sharkStarvePeriod"));
     }
 
     public int getFishBreedPeriod() { return fishBreedPeriod; }

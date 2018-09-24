@@ -2,14 +2,15 @@ package visualization.model_panels;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import visualization.ModelPanel;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Vincent Liu
  */
 
 public class SegregationPanel extends ModelPanel {
-
     public static final double DEFAULT_THRESHOLD = 0.3;
     private Slider thresholdBar = new Slider(0, 1, DEFAULT_THRESHOLD);
     private double thresholdVal = DEFAULT_THRESHOLD;
@@ -23,24 +24,22 @@ public class SegregationPanel extends ModelPanel {
         super();
         thresholdBar.setShowTickMarks(true);
         thresholdBar.setShowTickLabels(true);
-
-        thresholdBar.valueProperty().addListener((ov, old_val, new_val) -> {
+        thresholdBar.setOnMouseReleased(e -> {
             changeThreshold = true;
-            thresholdVal = new_val.doubleValue();
+            thresholdVal = thresholdBar.getValue();
             thresholdValue.setText(String.format("%.2f", thresholdVal));
         });
         getChildren().addAll(thresholdCaption, thresholdValue, thresholdBar);
     }
 
-    public double getThresholdVal() {
-        return thresholdVal;
+    @Override
+    public Map<String, String> getParams() {
+        var ret = new HashMap<String, String>();
+        ret.put("satisfactionThreshold", Double.toString(thresholdVal));
+        return ret;
     }
 
-    public void setChangeThreshold(boolean changeThreshold) {
-        this.changeThreshold = changeThreshold;
-    }
+    @Override
+    public boolean paramsChanged() { return changeThreshold; }
 
-    public boolean getChangeThreshold() {
-        return changeThreshold;
-    }
 }

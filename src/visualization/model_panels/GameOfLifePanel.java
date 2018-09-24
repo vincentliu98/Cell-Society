@@ -1,6 +1,6 @@
 package visualization.model_panels;
 
-import visualization.ModelPanel;
+import java.util.Map;
 
 /**
  * @author Vincent Liu
@@ -8,6 +8,16 @@ import visualization.ModelPanel;
 
 public class GameOfLifePanel extends ModelPanel {
     public GameOfLifePanel() {
+        super();
+    }
 
+    @Override
+    public Map<String, String> getParams() {
+        return null;
+    }
+
+    @Override
+    public boolean paramsChanged() {
+        return false;
     }
 }

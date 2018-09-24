@@ -1,15 +1,18 @@
-package visualization;
+package visualization.model_panels;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
+import simulation.models.SimulationModel;
+
+import java.util.Map;
 
 /**
  *  ModelPanel.
  *
  * @author Vincent Liu
  */
-public class ModelPanel extends VBox {
+public abstract class ModelPanel extends VBox {
     public static final int DEFAULT_CELL_NUM = 10;
     private Slider numberBar = new Slider(0, 100, DEFAULT_CELL_NUM);
     private int cellNum;
@@ -30,11 +33,12 @@ public class ModelPanel extends VBox {
         numberBar.setSnapToTicks(true);
         numberBar.setBlockIncrement(4);
 
-        numberBar.valueProperty().addListener((ov, old_val, new_val) -> {
+        numberBar.setOnMouseReleased(e -> {
             changeCellNum = true;
-            cellNum = new_val.intValue();
+            cellNum = (int) numberBar.getValue();
             cellNumValue.setText(Integer.toString(cellNum));
         });
+
         getChildren().addAll(cellNumCaption, cellNumValue, numberBar);
     }
 
@@ -49,4 +53,8 @@ public class ModelPanel extends VBox {
     public boolean getChangeCellNum() {
         return changeCellNum;
     }
+
+    public abstract Map<String, String> getParams();
+
+    public abstract boolean paramsChanged();
 }
