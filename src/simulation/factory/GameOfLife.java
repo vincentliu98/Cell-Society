@@ -14,6 +14,7 @@ import java.util.Random;
 public class GameOfLife {
     /**
      *
+     *
      * @param row
      * @param column
      * @param initial

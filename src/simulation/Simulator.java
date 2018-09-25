@@ -13,7 +13,8 @@ import java.util.Map;
 import static javafx.scene.shape.StrokeType.INSIDE;
 
 /**
- * Simulator
+ * A simulator that display and update the cells from the CellGraph
+ *
  * @param <T> Type of the Cell's value
  * @author Inchan Hwang
  */
@@ -61,7 +62,7 @@ public class Simulator<T> {
     }
 
     /**
-     *
+     * Increment the count of the tick and update the cells
      */
     public void tick() {
         tickCount ++;
@@ -73,7 +74,7 @@ public class Simulator<T> {
 
     /**
      *
-     * @return
+     * @return the graph consisting cells as a Node
      */
     public Node view() {
         graph.getCells().forEach(c -> {
@@ -84,46 +85,49 @@ public class Simulator<T> {
 
     /**
      *
-     * @return
+     * @return current count of the rounds that passed
      */
     public int tickCount() { return tickCount; }
 
     /**
+     * Get the model name
      *
-     * @return
+     * @return the name of the model
      */
     public String modelName() { return model.modelName(); }
 
     /**
+     * Call the corresponding XML writer for each model to generate XML file
      *
      * @param outFile
-     * @return
+     * @return an XML file that will be saved into user's directory
      */
     public XMLWriter<T> getWriter(File outFile) { return model.getXMLWriter(graph, outFile); }
 
     /**
-     *
+     * Update all the cells' nextVal in the simulator
      */
     private void localUpdate() {
         graph.getOrderedCells(model).forEach(c -> model.localUpdate(c, graph.getNeighbors(c)));
     }
 
     /**
-     *
+     * ??????????????????????????????????????????????????????
      */
     private void globalUpdate() { model.globalUpdate(graph); }
 
     /**
-     *
+     * Replace the current value with the value in the next round
      */
     private void commitAll() { for(var c: graph.getCells()) c.commit(); }
 
     /**
-     *
+     * Change the color of the cells on the simulator according to the new value
      */
     private void updateView() { graph.getCells().forEach(c -> c.updateView(model)); }
 
     /**
+     * Update the parameters with the new value passed from the UI's ModelPanel
      *
      * @param params
      */
