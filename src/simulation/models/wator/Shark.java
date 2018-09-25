@@ -3,6 +3,8 @@ package simulation.models.wator;
 import simulation.models.WaTorModel;
 
 /**
+ * Shark class to represent shark object.
+ *
  * @author Inchan Hwang
  */
 public class Shark extends Fish {

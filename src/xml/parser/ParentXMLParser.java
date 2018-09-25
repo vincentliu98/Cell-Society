@@ -70,7 +70,6 @@ public class ParentXMLParser {
     /**
      * Get the data contained in this XML file as an object
      */
-
     public Simulator getSimulator(File datafile) {
         Element root = getRootElement(datafile);
         if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(GameOfLifeModel.MODEL_NAME))
@@ -85,6 +84,12 @@ public class ParentXMLParser {
             throw new XMLException(ERROR_MESSAGE, MODEL_ATTRIBUTE_STRING);
     }
 
+    /**
+     *
+     * @param root
+     * @param valTag
+     * @return
+     */
     public static CellGraph<Integer> getIntegerCellGraph(Element root, String valTag) {
         CellGraph<Integer> graph;
         String shapeString = getTextValue(root, SHAPE_TAG).replaceAll("\\s","");
@@ -117,12 +122,22 @@ public class ParentXMLParser {
         return graph;
     }
 
+    /**
+     *
+     * @param root
+     * @return
+     */
     public static Rectangle parseRectangle(Element root) {
         double shapeWidth = getDoubleValue(root, SHAPE_WIDTH_TAG);
         double shapeHeight = getDoubleValue(root, SHAPE_HEIGHT_TAG);
         return new Rectangle(shapeWidth, shapeHeight);
     }
 
+    /**
+     *
+     * @param root
+     * @return
+     */
     public static Circle parseCircle(Element root) {
         double shapeRadius = getDoubleValue(root, SHAPE_RADIUS_TAG);
         return new Circle(shapeRadius);
@@ -135,6 +150,12 @@ public class ParentXMLParser {
 //        return tagsToEltLists;
 //    }
 
+    /**
+     *
+     * @param root
+     * @param cellIndex
+     * @return
+     */
     public static ArrayList<Integer> parseNeighbors(Element root, int cellIndex) {
         String neighborStr = getTextValueAtIndex(root, CELL_NEIGHBORS_TAG, cellIndex);
         ArrayList<Integer> neighborArrayList = new ArrayList<Integer>();
@@ -144,12 +165,16 @@ public class ParentXMLParser {
         return neighborArrayList;
     }
 
-    // Get value of Element's attribute
+    /**
+     * Get value of Element's attribute
+     */
     public static String getAttribute(Element e, String attributeName) {
         return e.getAttribute(attributeName);
     }
 
-    // Get value of Element's text
+    /**
+     * Get value of Element's text
+     */
     public static String getTextValue(Element e, String tagName) {
         var nodeList = e.getElementsByTagName(tagName);
         if (nodeList != null && nodeList.getLength() > 0) {
@@ -160,6 +185,13 @@ public class ParentXMLParser {
         }
     }
 
+    /**
+     *
+     * @param e
+     * @param tagName
+     * @param i
+     * @return
+     */
     public static String getTextValueAtIndex(Element e, String tagName, int i) {
         var nodeList = e.getElementsByTagName(tagName);
         if (nodeList != null && nodeList.getLength() > 0) {
@@ -170,27 +202,58 @@ public class ParentXMLParser {
         }
     }
 
+    /**
+     *
+     * @param e
+     * @param tagName
+     * @return
+     */
     public static int getIntValue(Element e, String tagName) {
         String str = getTextValue(e, tagName).replaceAll("\\s","");
         return Integer.parseInt(str);
     }
 
+    /**
+     *
+     * @param e
+     * @param tagName
+     * @param i
+     * @return
+     */
     public static int getIntValueAtIndex(Element e, String tagName, int i) {
         String str = getTextValueAtIndex(e, tagName, i).replaceAll("\\s","");
         return Integer.parseInt(str);
     }
 
+    /**
+     *
+     * @param e
+     * @param tagName
+     * @return
+     */
     public static double getDoubleValue(Element e, String tagName) {
         String str = getTextValue(e, tagName).replaceAll("\\s","");
         return Double.parseDouble(str);
     }
 
+    /**
+     *
+     * @param e
+     * @param tagName
+     * @param i
+     * @return
+     */
     public static double getDoubleValueAtIndex(Element e, String tagName, int i) {
         String str = getTextValueAtIndex(e, tagName, i).replaceAll("\\s","");
         return Double.parseDouble(str);
     }
 
-    // Get root element of an XML file
+    /**
+     * Get root element of an XML file
+     *
+     * @param xmlFile
+     * @return
+     */
     public Element getRootElement(File xmlFile) {
         try {
             DOCUMENT_BUILDER.reset();
@@ -201,7 +264,12 @@ public class ParentXMLParser {
         }
     }
 
-    // Returns if this is a valid XML file for the specified object type
+    /**
+     * Returns if this is a valid XML file for the specified object type
+     *
+     * @param root
+     * @return
+     */
     public static boolean isValidFile (Element root) {
         for (String typeAttr : VALID_MODEL_NAMES)
             if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(typeAttr))
@@ -209,7 +277,9 @@ public class ParentXMLParser {
         return false;
     }
 
-    // Boilerplate code needed to make a documentBuilder
+    /**
+     * Boilerplate code needed to make a documentBuilder
+     */
     public DocumentBuilder getDocumentBuilder() {
         try {
             return DocumentBuilderFactory.newInstance().newDocumentBuilder();

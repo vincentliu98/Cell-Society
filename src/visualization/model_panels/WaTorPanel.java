@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * WaTorPanel extends the abstract class ModelPanel.
+ * It has three extra parameters - fish's breeding period, shark's breeding period,
+ * and shark's starving period. Thus, it contains three extra Slider for each parameters.
+ *
  * @author Vincent Liu
  * @author Inchan Hwang
  */

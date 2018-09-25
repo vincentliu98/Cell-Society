@@ -14,6 +14,11 @@ public class SpreadingFireXMLParser extends ParentXMLParser {
     public static final String PROB_CATCH_TAG = "probCatch";
     public static final String LIVE_STATE_TAG = "liveState";
 
+    /**
+     *
+     * @param root
+     * @return
+     */
     public static Simulator getModelSimulator(Element root) {
         SpreadingFireModel model = new SpreadingFireModel(getDoubleValue(root, PROB_CATCH_TAG));
         CellGraph<Integer> graph = getIntegerCellGraph(root, LIVE_STATE_TAG);

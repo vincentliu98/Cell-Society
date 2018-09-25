@@ -13,6 +13,11 @@ public class SegregationXMLParser extends ParentXMLParser {
     public static final String THRESHOLD_TAG = "satisfactionThreshold";
     public static final String TYPE_VALUE_TAG = "type";
 
+    /**
+     *
+     * @param root
+     * @return
+     */
     public static Simulator getModelSimulator(Element root) {
         SegregationModel model = new SegregationModel(getDoubleValue(root, THRESHOLD_TAG));
         CellGraph<Integer> graph = getIntegerCellGraph(root, TYPE_VALUE_TAG);

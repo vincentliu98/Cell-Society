@@ -11,6 +11,10 @@ import java.util.Map;
  *  uniform theme across different panels. It is purposefully made
  *  abstract so that it would never actually be initialized.
  *
+ *  ModelPanel contains a common parameter for all models - number of cells.
+ *  It contains a Slider that dynamically change the number of cells and update the simulation
+ *  It is also able to detect any parameter change that occurs in the UI and pass the change to the model
+ *
  * @author Vincent Liu
  * @author Inchan Hwang
  */
@@ -51,11 +55,37 @@ public abstract class ModelPanel extends VBox {
         getChildren().addAll(cellNumCaption, cellNumValue, numberBar);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCellNum() { return cellNum; }
+
+    /**
+     *
+     * @return
+     */
     public boolean isNumCellChanged() { return numCellChanged; }
+
+    /**
+     *
+     * @return
+     */
     public boolean isParamChanged() { return paramChanged; }
+
+    /**
+     *
+     */
     public void cleanNumCellChanged() { numCellChanged = false; }
+
+    /**
+     *
+     */
     public void cleanParamChanged() { paramChanged = false; }
 
+    /**
+     *
+     * @return
+     */
     public abstract Map<String, String> getParams();
 }

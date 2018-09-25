@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.List;
 
 /**
+ * SpreadingOfFireWriter extends the abstract class XMLWriter
  *
  * @author Vincent Liu
  */

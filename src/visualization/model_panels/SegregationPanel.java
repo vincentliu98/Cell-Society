@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * SegregationPanel extends the abstract class ModelPanel.
+ * It contains one extra parameter - threshold for satisfaction.
+ *
  * @author Vincent Liu
  */
 

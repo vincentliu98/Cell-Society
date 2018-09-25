@@ -47,6 +47,9 @@ public abstract class XMLWriter<T> {
         for(int i = 0 ; i < orderedCells.size() ; i ++) uniqueId.put(orderedCells.get(i), i);
     }
 
+    /**
+     *
+     */
     public void generate() {
         try {
             Element rootElement = doc.createElement("data");
@@ -76,6 +79,11 @@ public abstract class XMLWriter<T> {
         }
     }
 
+    /**
+     *
+     * @param cell
+     * @return
+     */
     private Element encodeCell(Cell<T> cell) {
         var parent = doc.createElement("cell");
 
@@ -100,9 +108,22 @@ public abstract class XMLWriter<T> {
         return parent;
     }
 
+    /**
+     *
+     * @return
+     */
     protected abstract String getModelName();
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     protected abstract List<Element> encodeCellValue(T value);
 
+    /**
+     *
+     * @return
+     */
     protected abstract List<Element> parseModelParams();
 }

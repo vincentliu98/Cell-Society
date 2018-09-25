@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * GameOfLifePanel extends the abstract class ModelPanel.
+ * It has no extra parameters.
+ *
  * @author Vincent Liu
  */
 

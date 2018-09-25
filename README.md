@@ -1,6 +1,20 @@
 cell society
 ====
 
+TODO: comment for 
+* models/wator/Fish
+* models/SimulationModel
+* models/Cell
+* models/CellGraph
+* models/Simulator
+* utility
+* model_panels/ModelPanel
+* GUI
+* SimulationControlPanel
+* everything in parser folder
+* everything in writer folder
+* everything in factory folder
+
 This project implements a cellular automata simulator.
 
 Names: Inchan Hwang, Vincent Liu, Jay Pande
@@ -41,7 +55,7 @@ Extra credit:
 
 ### Impressions
 
-### src folder Structure
+### src Folder Structure
 <pre>
 src                                                      #
 ├── module-info.java                               #

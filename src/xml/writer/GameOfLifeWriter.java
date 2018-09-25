@@ -8,6 +8,8 @@ import java.io.File;
 import java.util.List;
 
 /**
+ * GameOfLifeWriter extends the abstract class XMLWriter
+ *
  * @author Inchan Hwang
  */
 

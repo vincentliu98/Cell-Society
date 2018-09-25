@@ -12,6 +12,13 @@ import java.util.Random;
  *  @author Inchan Hwang
  */
 public class GameOfLife {
+    /**
+     *
+     * @param row
+     * @param column
+     * @param initial
+     * @return
+     */
     public static Simulator<Integer> generate(int row, int column, int[][] initial) {
         var model = new GameOfLifeModel();
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
@@ -29,6 +36,11 @@ public class GameOfLife {
         return new Simulator<>(graph, model);
     }
 
+    /**
+     *
+     * @param n
+     * @return
+     */
     public static Simulator<Integer> generate(int n) {
         var rng = new Random();
         int tmp[][] = new int[n][n];

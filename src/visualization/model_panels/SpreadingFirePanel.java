@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * SpreadingFirePanel extends the abstract class ModelPanel.
+ * It contains one extra parameter - the probability of catching fire, thus having an extra Slider.
+ *
  * @author Vincent Liu
  */
 

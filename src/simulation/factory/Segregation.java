@@ -14,6 +14,14 @@ import java.util.Random;
 public class Segregation {
     public static final double DEFAULT_THRESHOLD = 0.3;
 
+    /**
+     *
+     * @param row
+     * @param column
+     * @param initial
+     * @param threshold
+     * @return
+     */
     public static Simulator<Integer> generate(int row, int column, int[][] initial, double threshold) {
         var model = new SegregationModel(threshold);
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
@@ -31,6 +39,11 @@ public class Segregation {
         return new Simulator<>(graph, model);
     }
 
+    /**
+     *
+     * @param n
+     * @return
+     */
     public static Simulator<Integer> generate(int n) {
         var rng = new Random();
         int tmp[][] = new int[n][n];

@@ -15,7 +15,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
- *  WaTor Model
+ * WaTorModel implements SimulationModel interface.
  *
  * @author Inchan Hwang
  */
@@ -33,9 +33,6 @@ public class WaTorModel implements SimulationModel<Fish> {
     public static final String PARAM_FISHBREED = "fishBreedPeriod";
     public static final String PARAM_SHARKBREED = "sharkBreedPeriod";
     public static final String PARAM_SHARKSTARVE = "sharkStarvePeriod";
-
-
-
 
     private int fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod;
 

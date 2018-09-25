@@ -17,6 +17,13 @@ public class SquareGridUtils<T> {
     private Pair<Integer, Integer> lineToGrid(int x, int c) { return new Pair<>(x%c, x/c); }
     private int gridToLine(int x, int y, int c) { return y * c + x; }
 
+    /**
+     *
+     * @param cells
+     * @param r
+     * @param c
+     * @return
+     */
     public CellGraph<T> graphWith8Neighbors(List<Cell<T>> cells, int r, int c) {
         CellGraph<T> neighbors = new CellGraph<>(
                 new Rectangle(Simulator.SIMULATION_SX/c, Simulator.SIMULATION_SY/r));
@@ -41,6 +48,13 @@ public class SquareGridUtils<T> {
         } return neighbors;
     }
 
+    /**
+     *
+     * @param cells
+     * @param r
+     * @param c
+     * @return
+     */
     public CellGraph<T> graphWith4Neighbors(List<Cell<T>> cells, int r, int c) {
         CellGraph<T> neighbors = new CellGraph<>(
                 new Rectangle(Simulator.SIMULATION_SX/c, Simulator.SIMULATION_SY/r));
@@ -60,6 +74,13 @@ public class SquareGridUtils<T> {
         } return neighbors;
     }
 
+    /**
+     *
+     * @param cells
+     * @param r
+     * @param c
+     * @return
+     */
     public CellGraph<T> graphWith8NeighborsNoBoundary(List<Cell<T>> cells, int r, int c) {
         CellGraph<T> neighbors = new CellGraph<>(
                 new Rectangle(Simulator.SIMULATION_SX/c, Simulator.SIMULATION_SY/r));

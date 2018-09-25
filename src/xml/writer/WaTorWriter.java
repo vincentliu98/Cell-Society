@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.List;
 
 /**
+ * WaTorWriter extends the abstract class XMLWriter
+ *
  * @author Inchan Hwang
  */
 

@@ -27,6 +27,11 @@ public class WaTorXMLParser extends ParentXMLParser {
     public static final String CELL_BREED_COUNTER_TAG = "breedCounter";
     public static final String CELL_STARVE_COUNTER_TAG = "starveCounter";
 
+    /**
+     *
+     * @param root
+     * @return
+     */
     public static Simulator getModelSimulator(Element root) {
         WaTorModel model = new WaTorModel(getIntValue(root, FISH_BREED_PERIOD_TAG),
                 getIntValue(root, SHARK_BREED_PERIOD_TAG), getIntValue(root, SHARK_STARVE_PERIOD_TAG));
@@ -34,6 +39,11 @@ public class WaTorXMLParser extends ParentXMLParser {
         return new Simulator(graph, model);
     }
 
+    /**
+     *
+     * @param root
+     * @return
+     */
     public static CellGraph<Fish> getWaTorCellGraph(Element root) {
         CellGraph<Fish> graph;
         String shapeString = getTextValue(root, SHAPE_TAG).replaceAll("\\s", "");

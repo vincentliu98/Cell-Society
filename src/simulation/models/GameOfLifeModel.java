@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  UpdateRules for the Game of Life
+ *  GameOfLifeModel implements SimulationModel interface.
+ *
  *  @author Inchan Hwang
  */
 public class GameOfLifeModel implements SimulationModel<Integer> {

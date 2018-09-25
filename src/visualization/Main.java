@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- * This is the main class for the GUI to run
+ * The Main class initializes the GUI and run the GUI
  *
  * @author Vincent Liu
  * @author Inchan Hwang

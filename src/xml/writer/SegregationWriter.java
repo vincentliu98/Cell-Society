@@ -8,6 +8,8 @@ import java.io.File;
 import java.util.List;
 
 /**
+ * SegregationWriter extends the abstract class XMLWriter
+ *
  * @author Inchan Hwang
  */
 public class SegregationWriter extends XMLWriter<Integer> {

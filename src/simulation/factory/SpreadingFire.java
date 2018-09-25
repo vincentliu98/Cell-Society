@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *  Convenience class to generate "Spreading of Fire" CellGraph
+ * Convenience class to generate "Spreading of Fire" CellGraph
  *
  * @author Vincent Liu
  */
@@ -17,6 +17,14 @@ import java.util.Random;
 public class SpreadingFire {
     public static final double DEFAULT_PROBCATCH = 0.7;
 
+    /**
+     *
+     * @param row
+     * @param column
+     * @param initial
+     * @param probCatch
+     * @return
+     */
     public static Simulator<Integer> generate(int row, int column, int[][] initial, double probCatch) {
         SimulationModel<Integer> model = new SpreadingFireModel(probCatch);
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
@@ -35,6 +43,11 @@ public class SpreadingFire {
         return new Simulator<>(graph, model);
     }
 
+    /**
+     *
+     * @param n
+     * @return
+     */
     public static Simulator<Integer> generate(int n) {
         var rng = new Random();
         int tmp[][] = new int[n][n];

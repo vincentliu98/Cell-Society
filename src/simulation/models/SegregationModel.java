@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  SegregationModel implements the Segregation Model.
+ * SegregationModel implements SimulationModel interface.
+ *
  * @author Inchan Hwang
  */
 public class SegregationModel implements SimulationModel<Integer> {

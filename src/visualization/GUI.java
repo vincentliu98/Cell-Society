@@ -25,12 +25,12 @@ import java.io.File;
 /**
  * This is the Graphical User Interface for displaying the simulation models.
  * It contains three components:
- *  1. modelPanel that displays model name and specific parameters
+ *  1. modelPanel that displays the model's parameters
  *  2. simPanel that displays the real-time simulation
  *  3. controlPanel that allows the user to adjust settings
  *
- * The controlPanel contains multiple buttons that will handle events, such as loading settings from XML file, start/pause
- * the simulation, or change the rate of simulation
+ * The controlPanel contains multiple buttons that will handle events, such as loading/saving settings
+ * from XML file, start/pause the simulation, change the rate of simulation, or change the model
  *
  * @author Vincent Liu
  * @author Inchan Hwang
@@ -72,7 +72,6 @@ public class GUI {
         simPanel = new VBox();
         simPanel.getStyleClass().add("simPanel");
 
-        // add the three major layouts
         root.add(modelPanel, 0, 0);
         root.add(simPanel, 1, 0);
         root.add(simControlPanel, 0, 1, 2, 1);
@@ -80,6 +79,10 @@ public class GUI {
         initializeSimulation(GameOfLife.generate(DEFAULT_CELL_NUM));
     }
 
+    /**
+     *
+     * @param sim
+     */
     protected void initializeSimulation(Simulator<?> sim) {
         simulator = sim;
         simControlPanel.setupPanel(simulator, e -> handleFileLoad(), e -> handleFileSave());
@@ -87,6 +90,10 @@ public class GUI {
         simPanel.getChildren().add(simulator.view());
     }
 
+    /**
+     *
+     * @param primaryStage
+     */
     public void runGUI (Stage primaryStage) {
         window = primaryStage;
 
@@ -103,6 +110,10 @@ public class GUI {
         animation.play();
     }
 
+    /**
+     *
+     * @param duration
+     */
     public void step(double duration) {
         if(simControlPanel.canTick(duration)) simulator.tick();
         simControlPanel.setNumTick(simulator.tickCount());
@@ -113,6 +124,9 @@ public class GUI {
         handleCellNumChange();
     }
 
+    /**
+     *
+     */
     private void handleModelPanelParametersChange() {
         if(modelPanel.isParamChanged()) {
             simulator.updateSimulationModel(modelPanel.getParams());
@@ -120,12 +134,18 @@ public class GUI {
         }
     }
 
+    /**
+     *
+     */
     private void handleModelChange() {
         if (simulator.modelName().equals(simControlPanel.getChosenModel())) return;
         generateModelByName(DEFAULT_CELL_NUM, simControlPanel.getChosenModel());
         generateModelPanelByName(simControlPanel.getChosenModel());
     }
 
+    /**
+     *
+     */
     private void handleCellNumChange() {
         if (modelPanel.isNumCellChanged()) {
             generateModelByName(modelPanel.getCellNum(), simControlPanel.getChosenModel());
@@ -133,6 +153,9 @@ public class GUI {
         }
     }
 
+    /**
+     *
+     */
     private void handleFileLoad() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -143,6 +166,9 @@ public class GUI {
         generateModelPanelByName(sim.modelName());
     }
 
+    /**
+     *
+     */
     private void handleFileSave() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -151,6 +177,11 @@ public class GUI {
         simulator.getWriter(file).generate();
     }
 
+    /**
+     *
+     * @param cellNum
+     * @param modelName
+     */
     private void generateModelByName(int cellNum, String modelName) {
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
             initializeSimulation(GameOfLife.generate(cellNum));
@@ -163,7 +194,10 @@ public class GUI {
         }
     }
 
-    // TODO: initialize modelPanel with corresponding parameters
+    /**
+     *
+     * @param modelName
+     */
     private void generateModelPanelByName(String modelName) {
         if(modelPanel != null) root.getChildren().remove(modelPanel);
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {

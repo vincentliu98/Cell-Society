@@ -20,6 +20,16 @@ public class WaTor {
     public static final int DEFAULT_SHARKBREEDPERIOD = 5;
     public static final int DEFAULT_SHARKSTARVEPERIOD = 5;
 
+    /**
+     *
+     * @param row
+     * @param column
+     * @param initial
+     * @param fishBreedPeriod
+     * @param sharkBreedPeriod
+     * @param sharkStarvePeriod
+     * @return
+     */
     public static Simulator<Fish> generate(int row, int column, int[][] initial, int fishBreedPeriod,
                                            int sharkBreedPeriod, int sharkStarvePeriod) {
         var model = new WaTorModel(fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod);
@@ -40,6 +50,11 @@ public class WaTor {
         return new Simulator<>(graph, model);
     }
 
+    /**
+     *
+     * @param n
+     * @return
+     */
     public static Simulator<Fish> generate(int n) {
         var rng = new Random();
         int tmp[][] = new int[n][n];

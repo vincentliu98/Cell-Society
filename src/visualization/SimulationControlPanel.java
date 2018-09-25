@@ -14,6 +14,10 @@ import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 
 /**
+ * SimulationControlPanel extends HBox and will be located in the bottom of UI
+ * Within it, the user will be able to loading/saving settings from XML file,
+ * start/pause the simulation, change the rate of simulation, or change the model
+ *
  * @author Inchan Hwang
  * @author Vincent Liu
  */
@@ -37,6 +41,12 @@ public class SimulationControlPanel extends HBox {
         getStyleClass().add("simControlPanelWrapper");
     }
 
+    /**
+     *
+     * @param sim
+     * @param onLoad
+     * @param onSave
+     */
     public void setupPanel(
             Simulator<?> sim,
             EventHandler<? super MouseEvent> onLoad,
@@ -100,6 +110,11 @@ public class SimulationControlPanel extends HBox {
         getChildren().add(grid);
     }
 
+    /**
+     *
+     * @param duration
+     * @return
+     */
     public boolean canTick(double duration) {
         if(isPlaying) {
             elapsedTime += duration;
@@ -110,9 +125,22 @@ public class SimulationControlPanel extends HBox {
         } return false;
     }
 
+    /**
+     *
+     */
     public void updateStepRate() {
         stepRate.setText("Step Rate: " + ((double) Math.round(1/simPeriod * 100) / 100) + "/s");
     }
+
+    /**
+     *
+     * @return
+     */
     public String getChosenModel() { return chooseModel.getValue(); }
+
+    /**
+     *
+     * @param ticks
+     */
     public void setNumTick(int ticks) { numTick.setText("# of ticks: "+ticks); }
 }
