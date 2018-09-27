@@ -30,13 +30,6 @@ import java.util.ResourceBundle;
  */
 
 public class SimulationControl extends HBox {
-    public static final String[] SIMULATION_MODELS = new String[] {
-            GameOfLifeModel.MODEL_NAME,
-            SegregationModel.MODEL_NAME,
-            WaTorModel.MODEL_NAME,
-            SpreadingFireModel.MODEL_NAME
-    };
-
     private Window window; // for load/save binding
     private ResourceBundle myResources;
     private String myLanguage;
@@ -51,6 +44,13 @@ public class SimulationControl extends HBox {
 
     private ModelControl<?> modelControl;
 
+    private String[] models = new String[] {
+            GameOfLifeModel.MODEL_NAME,
+            SegregationModel.MODEL_NAME,
+            WaTorModel.MODEL_NAME,
+            SpreadingFireModel.MODEL_NAME
+    };
+
     public SimulationControl(Window window_, ResourceBundle myResources, String myLanguage) {
         super(25);
         window = window_;
@@ -60,13 +60,13 @@ public class SimulationControl extends HBox {
         simPeriod = 1;
         this.myResources = myResources;
         this.myLanguage = myLanguage;
-        SIMULATION_MODELS[0] = myResources.getString("GameOfLifeModelName");
-        SIMULATION_MODELS[1] = myResources.getString("SegregationModelName");
-        SIMULATION_MODELS[2] = myResources.getString("WaTorModelName");
-        SIMULATION_MODELS[3] = myResources.getString("SpreadingFireName");
+        models[0] = myResources.getString("GameOfLifeModelName");
+        models[1] = myResources.getString("SegregationModelName");
+        models[2] = myResources.getString("WaTorModelName");
+        models[3] = myResources.getString("SpreadingFireName");
 
         getStyleClass().add("simControlPanelWrapper");
-        initializeModelControl(SIMULATION_MODELS[0], ShapeUtils.SHAPES[0]);
+        initializeModelControl(models[0], ShapeUtils.shapes()[0]);
         initializeStructure();
         initializeFunctionality();
     }
@@ -89,11 +89,11 @@ public class SimulationControl extends HBox {
         inc = new Button(myResources.getString("RateUpButton"));
         dec = new Button(myResources.getString("RateDownButton"));
         chooseModel = new ComboBox<>();
-        chooseModel.getItems().addAll(SIMULATION_MODELS);
-        chooseModel.setValue(SIMULATION_MODELS[0]);
+        chooseModel.getItems().addAll(models[0]);
+        chooseModel.setValue(models[0]);
         chooseShape = new ComboBox<>();
-        chooseShape.getItems().addAll(ShapeUtils.SHAPES);
-        chooseShape.setValue(ShapeUtils.SHAPES[0]);
+        chooseShape.getItems().addAll(ShapeUtils.shapes()[0]);
+        chooseShape.setValue(ShapeUtils.shapes()[0]);
         var modelName = new Text(myResources.getString("SelectModel"));
         var shapeName = new Text(myResources.getString("SelectShape"));
         var comboBox = new GridPane();
@@ -261,4 +261,6 @@ public class SimulationControl extends HBox {
         statusCode = StatusCode.NO_UPDATE;
         return ret;
     }
+
+    public String[] models() { return models; }
 }
