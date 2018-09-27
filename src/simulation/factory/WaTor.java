@@ -34,7 +34,7 @@ public class WaTor {
                 var value = initial[i][j] == WaTorModel.FISH ? new Fish() :
                         initial[i][j] == WaTorModel.SHARK ? new Shark() : null;
                 var cell = new Cell<>(value, (i+j)%2==0 ? ShapeUtils.TRIANGLE : ShapeUtils.TRIANGLE_FLIP,
-                        (0.5*j)*width, (i+0.5)*height,
+                        (MARGIN*j)*width, (i+MARGIN)*height,
                         width, height
                 );
                 cells.add(cell);
@@ -66,7 +66,7 @@ public class WaTor {
                 var value = initial[i][j] == WaTorModel.FISH ? new Fish() :
                          initial[i][j] == WaTorModel.SHARK ? new Shark() : null;
                 var cell = new Cell<>(value, ShapeUtils.RECTANGLE,
-                        (j+0.5)*width, (i+0.5)*height,
+                        (j+MARGIN)*width, (i+MARGIN)*height,
                         width, height
                 );
                 cells.add(cell);
