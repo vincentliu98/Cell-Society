@@ -13,7 +13,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        GUI myGUI = new GUI();
+        GUI myGUI = new GUI("English");
         primaryStage.setResizable(false);
         myGUI.runGUI(primaryStage);
     }

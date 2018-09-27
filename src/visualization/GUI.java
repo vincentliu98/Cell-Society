@@ -3,6 +3,8 @@ package visualization;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -18,6 +20,7 @@ import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 import visualization.model_panels.*;
+import xml.XMLException;
 import xml.parser.ParentXMLParser;
 
 import java.io.File;
@@ -49,10 +52,12 @@ public class GUI {
     private SimulationControlPanel simControlPanel;
     private ModelPanel modelPanel;
     private VBox simPanel;
+    private String myLanguage;
 
     private Simulator<?> simulator;
 
-    public GUI () {
+    public GUI (String language) {
+        myLanguage = language;
         root = new GridPane();
         root.getStyleClass().add("root");
 
@@ -157,13 +162,21 @@ public class GUI {
      *
      */
     private void handleFileLoad() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog(window);
-        if(!file.exists()) return;
-        var sim = new ParentXMLParser().getSimulator(file);
-        initializeSimulation(sim);
-        generateModelPanelByName(sim.modelName());
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            File file = fileChooser.showOpenDialog(window);
+            if (!file.exists()) return;
+            var sim = new ParentXMLParser(myLanguage).getSimulator(file);
+            initializeSimulation(sim);
+            generateModelPanelByName(sim.modelName());
+        }
+        catch (XMLException e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText(e.getMessage());
+            errorAlert.setContentText(e.getMessage());
+            errorAlert.showAndWait();
+        }
     }
 
     /**
@@ -171,7 +184,7 @@ public class GUI {
      */
     private void handleFileSave() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
+        fileChooser.setTitle("Save Resource File");
         File file = fileChooser.showSaveDialog(window);
         if(file == null) return; // display "OH NO!" DIALOG
         simulator.getWriter(file).generate();

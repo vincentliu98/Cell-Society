@@ -5,6 +5,7 @@ import javafx.scene.shape.Rectangle;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
@@ -19,10 +20,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -34,8 +32,10 @@ import java.util.Map;
  * @author Inchan Hwang
  */
 public class ParentXMLParser {
-    public static final String ERROR_MESSAGE = "XML file does not represent %s";
-    // keep only one documentBuilder because it is expensive to make and can numCellChanged it before parsing
+    public static final String DEFAULT_RESOURCES = "Errors";
+    private static final String LOAD_AGAIN_KEY = "LoadAgainMsg";
+    private static ResourceBundle myResources;
+    // keep only one documentBuilder because it is expensive to make and can reset it before parsing
     private final DocumentBuilder DOCUMENT_BUILDER;
     // name of root attribute that notes the type of file expecting to parse
     public static final String MODEL_ATTRIBUTE_STRING = "modelName";
@@ -63,8 +63,10 @@ public class ParentXMLParser {
     /**
      * Create a parser for XML files of given type.
      */
-    public ParentXMLParser() {
+    public ParentXMLParser(String language) {
         DOCUMENT_BUILDER = getDocumentBuilder();
+        // use resources for labels
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCES + language);
     }
 
     /**
@@ -72,16 +74,19 @@ public class ParentXMLParser {
      */
     public Simulator getSimulator(File datafile) {
         Element root = getRootElement(datafile);
-        if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(GameOfLifeModel.MODEL_NAME))
-            return GameOfLifeXMLParser.getModelSimulator(root);
-        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SegregationModel.MODEL_NAME))
-            return SegregationXMLParser.getModelSimulator(root);
-        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
-            return SpreadingFireXMLParser.getModelSimulator(root);
-        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(WaTorModel.MODEL_NAME))
-            return WaTorXMLParser.getModelSimulator(root);
-        else
-            throw new XMLException(ERROR_MESSAGE, MODEL_ATTRIBUTE_STRING);
+        String fileModelName = getTextValue(root, MODEL_ATTRIBUTE_STRING);
+        switch (fileModelName) {
+            case GameOfLifeModel.MODEL_NAME:
+                return GameOfLifeXMLParser.getModelSimulator(root);
+            case SegregationModel.MODEL_NAME:
+                return SegregationXMLParser.getModelSimulator(root);
+            case SpreadingFireModel.MODEL_NAME:
+                return SpreadingFireXMLParser.getModelSimulator(root);
+            case WaTorModel.MODEL_NAME:
+                return WaTorXMLParser.getModelSimulator(root);
+            default:
+                throw new XMLException(myResources.getString("ModelNameErrorMsg"), fileModelName);
+        }
     }
 
     /**
@@ -98,7 +103,7 @@ public class ParentXMLParser {
         } else if (shapeString.equals(CIRCLE_STRING)) {
             graph = new CellGraph<Integer>(parseCircle(root));
         } else {
-            graph = null;
+            throw new XMLException(myResources.getString("ShapeErrorMsg")+ myResources.getString(LOAD_AGAIN_KEY), shapeString);
         }
         NodeList cells = root.getElementsByTagName(CELL_TAG);
         Map<Integer, Cell<Integer>> IDToCellMap = new HashMap<Integer, Cell<Integer>>();
@@ -113,7 +118,7 @@ public class ParentXMLParser {
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
             int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
-            ArrayList<Integer> neighborIDs = parseNeighbors(curCell, 0);
+            ArrayList<Integer> neighborIDs = parseNeighbors(curCell);
             List<Cell<Integer>> neighborList = new ArrayList<>();
             for (int n : neighborIDs)
                 neighborList.add(IDToCellMap.get(n));
@@ -153,11 +158,10 @@ public class ParentXMLParser {
     /**
      *
      * @param root
-     * @param cellIndex
      * @return
      */
-    public static ArrayList<Integer> parseNeighbors(Element root, int cellIndex) {
-        String neighborStr = getTextValueAtIndex(root, CELL_NEIGHBORS_TAG, cellIndex);
+    public static ArrayList<Integer> parseNeighbors(Element root) {
+        String neighborStr = getTextValue(root, CELL_NEIGHBORS_TAG);
         ArrayList<Integer> neighborArrayList = new ArrayList<Integer>();
         String[] neighborStrArray = neighborStr.replaceAll("\\s", "").split(",");
         for (String s : neighborStrArray)
@@ -180,8 +184,7 @@ public class ParentXMLParser {
         if (nodeList != null && nodeList.getLength() > 0) {
             return nodeList.item(0).getTextContent();
         } else {
-            // FIXME: empty string or null, is it an error to not find the text value?
-            return "";
+            throw new XMLException(myResources.getString("MissingTagMsg")+ myResources.getString(LOAD_AGAIN_KEY), tagName);
         }
     }
 
@@ -197,8 +200,7 @@ public class ParentXMLParser {
         if (nodeList != null && nodeList.getLength() > 0) {
             return nodeList.item(i).getTextContent();
         } else {
-            // FIXME: empty string or null, is it an error to not find the text value?
-            return "";
+            throw new XMLException(myResources.getString("MissingTagMsg")+ myResources.getString(LOAD_AGAIN_KEY), tagName);
         }
     }
 
