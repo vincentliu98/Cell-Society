@@ -6,6 +6,7 @@ import simulation.CellGraph;
 import xml.writer.GameOfLifeWriter;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,20 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
 
     @Override
     public String modelName() { return MODEL_NAME; }
+
+    @Override
+    public Map<String, Integer> getStatisitcs(List<Integer> values) {
+        HashMap<String, Integer> myMap = new HashMap<>();
+        int deadNum = 0;
+        int aliveNum = 0;
+        for (Integer a : values) {
+            if (a == DEAD) deadNum++;
+            else aliveNum++;
+        }
+        myMap.put("Dead", deadNum);
+        myMap.put("Alive", aliveNum);
+        return myMap;
+    }
 
     @Override
     public GameOfLifeWriter getXMLWriter(CellGraph<Integer> graph, File outFile) {

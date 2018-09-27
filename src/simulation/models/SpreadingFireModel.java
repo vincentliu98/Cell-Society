@@ -9,6 +9,7 @@ import xml.writer.XMLWriter;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * SpreadingFireModel implements SimulationModel interface.
@@ -61,6 +62,11 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
 
     @Override
     public String modelName() { return MODEL_NAME; }
+
+    @Override
+    public Map<String, Integer> getStatisitcs(List<Integer> values) {
+        return null;
+    }
 
     @Override
     public XMLWriter<Integer> getXMLWriter(CellGraph<Integer> graph, File outFile) {

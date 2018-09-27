@@ -1,5 +1,6 @@
 package visualization;
 
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -14,10 +15,12 @@ import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 import utility.ShapeUtils;
 import visualization.model_controls.*;
+import visualization.statistics.ModelChart;
 import xml.XMLException;
 import xml.parser.*;
 
 import java.io.File;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -38,9 +41,10 @@ public class SimulationControl extends HBox {
     private boolean isPlaying;
     private Text numTick, stepRate, modelName, shapeName;
     private Button save, load, tick, playStop, inc, dec;
-    private double simPeriod, elapsedTime;
+    private double simPeriod, elapsedTime, durationCounter;
     private ComboBox<String> chooseModel;
     private ComboBox<String> chooseShape;
+    private Map<String, Integer> newStatistics;
 
     private ModelControl<?> modelControl;
 
@@ -150,14 +154,18 @@ public class SimulationControl extends HBox {
      *  It keeps a internal timer to tick once in simPeriod.
      * @param duration
      */
-    public void tick(double duration) {
+    public void tick(double duration, ModelChart modelChart) {
         if(modelControl.consumeIsDirty()) {
             stop();
             statusCode = StatusCode.UPDATE;
         }
 
+        /** TO DO: AFTER changing model configurations, re-render the line chart */
         if(isPlaying) {
             elapsedTime += duration;
+            durationCounter++;
+            newStatistics = modelControl.simulator().getStatistics();
+            modelChart.Alive.getData().add(new XYChart.Data<>(durationCounter, newStatistics.get("Alive")));
             if (elapsedTime >= simPeriod) {
                 elapsedTime = 0;
                 modelControl.simulator().tick();

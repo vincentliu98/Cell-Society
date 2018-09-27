@@ -20,7 +20,9 @@ import java.util.*;
 public class ModelChart{
     private LineChart<Number, Number> lineChart;
     private ObservableList<Integer> number;
-    private NumberAxis xAxis = new NumberAxis();
+    public XYChart.Series Alive;
+    private XYChart.Series Dead;
+    private final NumberAxis xAxis = new NumberAxis();
     private NumberAxis yAxis = new NumberAxis();
 
     public ModelChart() {
@@ -33,14 +35,26 @@ public class ModelChart{
         lineChart = new LineChart<>(xAxis, yAxis);
         lineChart.setAnimated(true);
         lineChart.autosize();
+        lineChart.setCreateSymbols(false);
         lineChart.getStyleClass().add("line-chart");
+
+        Alive = new XYChart.Series();
+        Alive.setName("Alive");
+        Dead = new XYChart.Series();
+        Dead.setName("Dead");
+
+        lineChart.getData().addAll(Alive, Dead);
     }
 
-    public Pane getLineChart() {
+    public Pane getChartBox() {
         HBox layout = new HBox();
         layout.getChildren().add(lineChart);
         layout.getStyleClass().add("chartBox");
         layout.setAlignment(Pos.CENTER);
         return layout;
+    }
+
+    public LineChart<Number, Number> getLineChart() {
+        return lineChart;
     }
 }

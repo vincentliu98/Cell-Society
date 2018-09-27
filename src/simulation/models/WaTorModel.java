@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -122,6 +123,11 @@ public class WaTorModel implements SimulationModel<Fish> {
 
     @Override
     public String modelName() { return MODEL_NAME; }
+
+    @Override
+    public Map<String, Integer> getStatisitcs(List<Fish> values) {
+        return null;
+    }
 
     @Override
     public XMLWriter<Fish> getXMLWriter(CellGraph<Fish> graph, File outFile) {
