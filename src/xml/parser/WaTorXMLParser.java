@@ -6,6 +6,8 @@ import org.w3c.dom.NodeList;
 import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
+import simulation.factory.WaTor;
+import simulation.models.GameOfLifeModel;
 import simulation.models.WaTorModel;
 import simulation.models.wator.Fish;
 import simulation.models.wator.Shark;
@@ -39,58 +41,31 @@ public class WaTorXMLParser extends ParentXMLParser {
 
     /**
      *
-     * @param root
+     * @param datafile
      * @return
      */
-    private static Simulator<Fish> getModelSimulator(Element root) {
-        WaTorModel model = new WaTorModel(getIntValue(root, FISH_BREED_PERIOD_TAG),
-                getIntValue(root, SHARK_BREED_PERIOD_TAG), getIntValue(root, SHARK_STARVE_PERIOD_TAG));
-        CellGraph<Fish> graph = getWaTorCellGraph(root);
+    public Simulator<Fish> getSimulator(File datafile) {
+        Element root = getRootElement(datafile);
+        int fishBreedPeriod = getIntValue(root, FISH_BREED_PERIOD_TAG);
+        int sharkBreedPeriod = getIntValue(root, SHARK_BREED_PERIOD_TAG);
+        int sharkStarvePeriod = getIntValue(root, SHARK_STARVE_PERIOD_TAG);
+        WaTorModel model = new WaTorModel(fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod);
+        CellGraph<Fish> graph = getCellGraph(root);
         return new Simulator<>(graph, model);
     }
 
-    /**
-     *
-     * @param root
-     * @return
-     */
-    private static CellGraph<Fish> getWaTorCellGraph(Element root) {
-        CellGraph<Fish> graph = new CellGraph<>();
-        NodeList cells = root.getElementsByTagName(CELL_TAG);
-        Map<Integer, Cell<Fish>> IDToCellMap = new HashMap<Integer, Cell<Fish>>();
-        for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
-            Element curCell = (Element) cells.item(cIndex);
-            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
-            int kind = getIntValue(curCell, CELL_KIND_TAG);
-            Fish val = null;
-            if (kind == WaTorModel.FISH || kind == WaTorModel.SHARK) {
-                int breedCounter = getIntValue(curCell, CELL_BREED_COUNTER_TAG);
-                int starveCounter = getIntValue(curCell, CELL_STARVE_COUNTER_TAG);
-                if (kind == WaTorModel.FISH)
-                    val = new Fish(breedCounter);
-                else
-                    val = new Shark(breedCounter, starveCounter);
-            }
-            int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG);
-            double xPos = getDoubleValue(curCell, CELL_XPOS_TAG);
-            double yPos = getDoubleValue(curCell, CELL_YPOS_TAG);
-            double width = getDoubleValue(curCell, SHAPE_WIDTH_TAG);
-            double height = getDoubleValue(curCell, SHAPE_HEIGHT_TAG);
-            IDToCellMap.put(uniqueID, new Cell<>(val, shapeCode, xPos, yPos, width, height));
+    @Override
+    public Fish getCellValue(Element e) {
+        int kind = getIntValue(e, CELL_KIND_TAG);
+        Fish val = null;
+        if (kind == WaTorModel.FISH || kind == WaTorModel.SHARK) {
+            int breedCounter = getIntValue(e, CELL_BREED_COUNTER_TAG);
+            int starveCounter = getIntValue(e, CELL_STARVE_COUNTER_TAG);
+            if (kind == WaTorModel.FISH)
+                val = new Fish(breedCounter);
+            else
+                val = new Shark(breedCounter, starveCounter);
         }
-        for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
-            Element curCell = (Element) cells.item(cIndex);
-            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
-            ArrayList<Integer> neighborIDs = parseNeighbors(curCell);
-            List<Cell<Fish>> neighborList = new ArrayList<>();
-            for (int n : neighborIDs)
-                neighborList.add(IDToCellMap.get(n));
-            graph.put(IDToCellMap.get(uniqueID), neighborList);
-        }
-        return graph;
-    }
-
-    public Simulator<Fish> getSimulator(File datafile) {
-        return WaTorXMLParser.getModelSimulator(getRootElement(datafile));
+        return val;
     }
 }

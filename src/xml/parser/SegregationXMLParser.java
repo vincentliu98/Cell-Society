@@ -26,16 +26,19 @@ public class SegregationXMLParser extends ParentXMLParser {
 
     /**
      *
-     * @param root
+     * @param datafile
      * @return
      */
-    private static Simulator<Integer> getModelSimulator(Element root) {
+
+    public Simulator<Integer> getSimulator(File datafile) {
+        Element root = getRootElement(datafile);
         SegregationModel model = new SegregationModel(getDoubleValue(root, THRESHOLD_TAG));
-        CellGraph<Integer> graph = getIntegerCellGraph(root, TYPE_VALUE_TAG);
+        CellGraph<Integer> graph = getCellGraph(root);
         return new Simulator<>(graph, model);
     }
 
-    public Simulator<Integer> getSimulator(File datafile) {
-        return SegregationXMLParser.getModelSimulator(getRootElement(datafile));
+    @Override
+    public Integer getCellValue(Element e) {
+        return getIntValue(e, TYPE_VALUE_TAG);
     }
 }
