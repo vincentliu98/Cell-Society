@@ -5,7 +5,6 @@ import javafx.scene.shape.Rectangle;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
@@ -21,7 +20,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-
 
 /**
  * This class handles parsing XML files and returning a completed object.
@@ -148,13 +146,6 @@ public class ParentXMLParser {
         return new Circle(shapeRadius);
     }
 
-//    public static Map<String, NodeList> parseTagToEltListMap(Element root, List<String> tagList) {
-//        Map<String, NodeList> tagsToEltLists = new HashMap<String, NodeList>();
-//        for (String tag : tagList)
-//            tagsToEltLists.put(tag, root.getElementsByTagName(tag));
-//        return tagsToEltLists;
-//    }
-
     /**
      *
      * @param root
@@ -184,23 +175,8 @@ public class ParentXMLParser {
         if (nodeList != null && nodeList.getLength() > 0) {
             return nodeList.item(0).getTextContent();
         } else {
-            throw new XMLException(myResources.getString("MissingTagMsg")+ myResources.getString(LOAD_AGAIN_KEY), tagName);
-        }
-    }
-
-    /**
-     *
-     * @param e
-     * @param tagName
-     * @param i
-     * @return
-     */
-    public static String getTextValueAtIndex(Element e, String tagName, int i) {
-        var nodeList = e.getElementsByTagName(tagName);
-        if (nodeList != null && nodeList.getLength() > 0) {
-            return nodeList.item(i).getTextContent();
-        } else {
-            throw new XMLException(myResources.getString("MissingTagMsg")+ myResources.getString(LOAD_AGAIN_KEY), tagName);
+            throw new XMLException(myResources.getString("MissingTagMsg")+ myResources.getString(LOAD_AGAIN_KEY),
+                    e.toString(), tagName);
         }
     }
 
@@ -211,20 +187,15 @@ public class ParentXMLParser {
      * @return
      */
     public static int getIntValue(Element e, String tagName) {
-        String str = getTextValue(e, tagName).replaceAll("\\s","");
-        return Integer.parseInt(str);
-    }
+        String str = getTextValue(e, tagName).replaceAll("\\s", "");
+        try {
 
-    /**
-     *
-     * @param e
-     * @param tagName
-     * @param i
-     * @return
-     */
-    public static int getIntValueAtIndex(Element e, String tagName, int i) {
-        String str = getTextValueAtIndex(e, tagName, i).replaceAll("\\s","");
-        return Integer.parseInt(str);
+            return Integer.parseInt(str);
+        }
+        catch (NumberFormatException ex){
+            throw new XMLException(myResources.getString("ValueNotIntMsg") + myResources.getString(LOAD_AGAIN_KEY),
+                    tagName, str);
+        }
     }
 
     /**
@@ -234,20 +205,13 @@ public class ParentXMLParser {
      * @return
      */
     public static double getDoubleValue(Element e, String tagName) {
-        String str = getTextValue(e, tagName).replaceAll("\\s","");
-        return Double.parseDouble(str);
-    }
-
-    /**
-     *
-     * @param e
-     * @param tagName
-     * @param i
-     * @return
-     */
-    public static double getDoubleValueAtIndex(Element e, String tagName, int i) {
-        String str = getTextValueAtIndex(e, tagName, i).replaceAll("\\s","");
-        return Double.parseDouble(str);
+        String str = getTextValue(e, tagName).replaceAll("\\s", "");
+        try {
+            return Double.parseDouble(str);
+        } catch (NumberFormatException ex){
+            throw new XMLException(myResources.getString("ValueNotDoubleMsg") + myResources.getString(LOAD_AGAIN_KEY),
+                    tagName, str);
+        }
     }
 
     /**
