@@ -6,7 +6,11 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 import simulation.Simulator;
 import simulation.factory.WaTor;
+import simulation.models.WaTorModel;
 import simulation.models.wator.Fish;
+import visualization.SimulationPanel;
+
+import java.util.HashMap;
 
 /**
  * WaTorControl extends the abstract class ModelControl.
@@ -22,9 +26,9 @@ public class WaTorControl extends ModelControl<Fish> {
     public static final double DEFAULT_SHARKBREED = 5;
     public static final double DEFAULT_SHARKSTARVE = 5;
 
-    private Slider fishBreedBar = new Slider(0, 20, DEFAULT_FISHBREED);
-    private Slider sharkBreedBar = new Slider(0, 20, DEFAULT_SHARKBREED);
-    private Slider sharkStarveBar = new Slider(0, 20, DEFAULT_SHARKSTARVE);
+    private Slider fishBreedBar = new Slider(1, 20, DEFAULT_FISHBREED);
+    private Slider sharkBreedBar = new Slider(1, 20, DEFAULT_SHARKBREED);
+    private Slider sharkStarveBar = new Slider(1, 20, DEFAULT_SHARKSTARVE);
 
     public static final Label fishBreedCaption = new Label("Fish Breeding Period:");
     public static final Label sharkBreedCaption = new Label("Shark Breeding Period:");
@@ -37,14 +41,10 @@ public class WaTorControl extends ModelControl<Fish> {
     private Label sharkStarveValue = new Label(
             Double.toString(sharkStarveBar.getValue()));
 
-    private Simulator<Fish> simulator;
-
-    public WaTorControl(String shape) {
-        simulator = WaTor.generate(DEFAULT_CELL_NUM, shape);
-    }
+    public WaTorControl(String shape) { this(WaTor.generate(DEFAULT_CELL_NUM, shape)); }
 
     public WaTorControl(Simulator<Fish> sim) {
-        simulator = sim;
+        super(sim);
 
         var scrollPane = new ScrollPane();
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -54,18 +54,21 @@ public class WaTorControl extends ModelControl<Fish> {
         fishBreedBar.setShowTickLabels(true);
         fishBreedBar.setOnMouseReleased(e -> {
             fishBreedValue.setText(String.valueOf((int) fishBreedBar.getValue()));
+            handleParamChange();
         });
 
         sharkBreedBar.setShowTickMarks(true);
         sharkBreedBar.setShowTickLabels(true);
         sharkBreedBar.setOnMouseReleased(e -> {
             sharkBreedValue.setText(String.valueOf((int) sharkBreedBar.getValue()));
+            handleParamChange();
         });
 
         sharkStarveBar.setShowTickMarks(true);
         sharkStarveBar.setShowTickLabels(true);
         sharkStarveBar.setOnMouseReleased(e -> {
             sharkStarveValue.setText(String.valueOf((int) sharkStarveBar.getValue()));
+            handleParamChange();
         });
 
 		wrapper.getChildren().addAll(fishBreedCaption, fishBreedValue, fishBreedBar,
@@ -77,5 +80,17 @@ public class WaTorControl extends ModelControl<Fish> {
     }
 
     @Override
-    public Simulator<Fish> simulator() { return simulator; }
+    public void handleNumCellChange(int numCell) {
+        isDirty = true;
+        simPanel = new SimulationPanel<>(WaTor.generate(numCell, simPanel.simulator().peekShape()));
+    }
+
+    @Override
+    public void handleParamChange() {
+        var pack = new HashMap<String, String>();
+        pack.put(WaTorModel.PARAM_FISHBREED, Integer.toString((int) fishBreedBar.getValue()));
+        pack.put(WaTorModel.PARAM_SHARKBREED, Integer.toString((int) sharkBreedBar.getValue()));
+        pack.put(WaTorModel.PARAM_SHARKSTARVE, Integer.toString((int) sharkStarveBar.getValue()));
+        simPanel.simulator().updateSimulationModel(pack);
+    }
 }

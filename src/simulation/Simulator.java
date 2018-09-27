@@ -84,9 +84,6 @@ public class Simulator<T> {
      * @return the graph consisting cells as a Node
      */
     public Node view() {
-        graph.getCells().forEach(c -> {
-
-        });
         return view;
     }
 
@@ -139,4 +136,11 @@ public class Simulator<T> {
      * @param params
      */
     public void updateSimulationModel(Map<String, String> params) { model.updateParams(params); }
+
+    public String peekShape() {
+        var code = graph.getCells().iterator().next().shapeCode();
+        if(code == ShapeUtils.RECTANGLE) return ShapeUtils.RECTANGULAR;
+        else if(code == ShapeUtils.TRIANGLE || code == ShapeUtils.TRIANGLE_FLIP) return ShapeUtils.TRIANGULAR;
+        else return ""; // shouldn't happen for now
+    }
 }

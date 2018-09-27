@@ -3,12 +3,12 @@ package visualization;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
-import simulation.Simulator;
-import visualization.model_panels.*;
 
 /**
  * This is the Graphical User Interface for displaying the simulation models.
@@ -33,9 +33,7 @@ public class GUI {
 
     private Window window;
     private GridPane root;
-    private SimulationControlPanel simControlPanel;
-
-    private Simulator<?> simulator;
+    private SimulationControl simControl;
 
     public GUI () {
         root = new GridPane();
@@ -52,32 +50,13 @@ public class GUI {
         row2.setPercentHeight(15);
         root.getRowConstraints().addAll(row1, row2);
 
-        modelPanel = new GameOfLifeControl();
-        simControlPanel = new SimulationControlPanel(
-                simulator,
-                e -> handleFileLoad(), e -> handleFileSave(),
-                (a, b, c) -> handleModelChange(c),
-                (a, b, c) -> handleShapeChange(c)
-        );
-        simPanel = new VBox();
-        simPanel.getStyleClass().add("simPanel");
+        simControl = new SimulationControl(window);
 
-        root.add(modelPanel, 0, 0);
-        root.add(simPanel, 1, 0);
-        root.add(simControlPanel, 0, 1, 2, 1);
-
-        initializeSimulation();
+        root.add(simControl.getModelControl(), 0, 0);
+        root.add(simControl.getSimPanel(), 1, 0);
+        root.add(simControl, 0, 1, 2, 1);
     }
 
-    /**
-     *
-     * @param sim
-     */
-
-    /**
-     *
-     * @param primaryStage
-     */
     public void runGUI (Stage primaryStage) {
         window = primaryStage;
 
@@ -94,28 +73,13 @@ public class GUI {
         animation.play();
     }
 
-    /**
-     *
-     * @param duration
-     */
     public void step(double duration) {
-        simControlPanel
-    }
-
-    private void handleModelPanelParametersChange() {
-        if(modelPanel.isParamChanged()) {
-            simulator.updateSimulationModel(modelPanel.getParams());
-            modelPanel.cleanParamChanged();
+        if(simControl.consumeStatusCode() == StatusCode.UPDATE) {
+            root.getChildren().clear();
+            root.add(simControl.getModelControl(), 0, 0);
+            root.add(simControl.getSimPanel(), 1, 0);
+            root.add(simControl, 0, 1, 2, 1);
         }
-    }
-    private void handleCellNumChange() {
-        if (modelPanel.isNumCellChanged()) {
-            generateModelByName(
-                    modelPanel.getCellNum(),
-                    simControlPanel.getChosenModel(),
-                    simControlPanel.getChosenShape()
-            );
-            modelPanel.cleanNumCellChanged();
-        }
+        simControl.tick(duration);
     }
 }

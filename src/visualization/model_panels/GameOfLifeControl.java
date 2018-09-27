@@ -2,6 +2,7 @@ package visualization.model_panels;
 
 import simulation.Simulator;
 import simulation.factory.GameOfLife;
+import visualization.SimulationPanel;
 
 /**
  * GameOfLifeControl extends the abstract class ModelControl.
@@ -11,16 +12,15 @@ import simulation.factory.GameOfLife;
  */
 
 public class GameOfLifeControl extends ModelControl<Integer> {
-    private Simulator<Integer> simulator;
+    public GameOfLifeControl(Simulator<Integer> sim) { super(sim); }
+    public GameOfLifeControl(String shape) { this(GameOfLife.generate(DEFAULT_CELL_NUM, shape)); }
 
-    public GameOfLifeControl(Simulator<Integer> sim) {
-        simulator = sim;
-    }
-
-    public GameOfLifeControl(String shape) {
-        simulator = GameOfLife.generate(DEFAULT_CELL_NUM, shape);
+    @Override
+    public void handleNumCellChange(int numCell) {
+        isDirty = true;
+        simPanel = new SimulationPanel<>(GameOfLife.generate(numCell, simPanel.simulator().peekShape()));
     }
 
     @Override
-    public Simulator<Integer> simulator() { return simulator; }
+    public void handleParamChange() {}
 }

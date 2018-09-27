@@ -4,6 +4,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import simulation.Simulator;
 import simulation.factory.Segregation;
+import simulation.models.SegregationModel;
+import visualization.SimulationPanel;
+
+import java.util.HashMap;
 
 import static simulation.factory.Segregation.DEFAULT_THRESHOLD;
 
@@ -20,23 +24,31 @@ public class SegregationControl extends ModelControl<Integer> {
     private Label thresholdValue = new Label(
             Double.toString(thresholdBar.getValue()));
 
-    private Simulator<Integer> simulator;
-
     public SegregationControl(String shape) {
-        simulator = Segregation.generate(DEFAULT_CELL_NUM, shape);
+        this(Segregation.generate(DEFAULT_CELL_NUM, shape));
     }
 
     public SegregationControl(Simulator<Integer> sim) {
-        simulator = sim;
-
+        super(sim);
         thresholdBar.setShowTickMarks(true);
         thresholdBar.setShowTickLabels(true);
         thresholdBar.setOnMouseReleased(e -> {
             thresholdValue.setText(String.format("%.2f", thresholdBar.getValue()));
+            handleParamChange();
         });
         getChildren().addAll(thresholdCaption, thresholdValue, thresholdBar);
     }
 
     @Override
-    public Simulator<Integer> simulator() { return simulator; }
+    public void handleNumCellChange(int numCell) {
+        isDirty = true;
+        simPanel = new SimulationPanel<>(Segregation.generate(numCell, simPanel.simulator().peekShape()));
+    }
+
+    @Override
+    public void handleParamChange() {
+        var pack = new HashMap<String, String>();
+        pack.put(SegregationModel.PARAM_SATISFACTION, Double.toString(thresholdBar.getValue()));
+        simPanel.simulator().updateSimulationModel(pack);
+    }
 }

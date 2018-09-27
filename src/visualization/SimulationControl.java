@@ -4,7 +4,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -37,6 +36,7 @@ public class SimulationControl extends HBox {
 
     private Window window; // for load/save binding
 
+    private StatusCode statusCode;
     private boolean isPlaying;
     private Text numTick, stepRate;
     private Button save, load, tick, playStop, inc, dec;
@@ -45,16 +45,14 @@ public class SimulationControl extends HBox {
     private ComboBox<String> chooseShape;
 
     private ModelControl<?> modelControl;
-    private VBox simPanel;
 
     public SimulationControl(Window window_) {
         super(25);
         window = window_;
+        statusCode = StatusCode.NO_UPDATE;
         isPlaying = false;
         elapsedTime = 0;
         simPeriod = 1;
-        simPanel = new VBox();
-        simPanel.getStyleClass().add("simPanel");
         initializeModelControl(SIMULATION_MODELS[0], ShapeUtils.SHAPES[0]);
         initializeStructure();
         initializeFunctionality();
@@ -98,11 +96,13 @@ public class SimulationControl extends HBox {
         tick.setOnMouseClicked(e -> modelControl.simulator().tick());
         inc.setOnMouseClicked(e -> handleSpeedChange(-0.05));
         dec.setOnMouseClicked(e -> handleSpeedChange(0.05));
-        chooseModel.valueProperty().addListener((a, b, c) -> handleShapeChange(c));
-        chooseShape.valueProperty().addListener((a, b, c) -> handleModelChange(c));
+        chooseModel.valueProperty().addListener((a, b, c) -> handleModelChange(c));
+        chooseShape.valueProperty().addListener((a, b, c) -> handleShapeChange(c));
     }
 
     public void tick(double duration) {
+        if(modelControl.consumeIsDirty()) statusCode = StatusCode.UPDATE;
+
         if(isPlaying) {
             elapsedTime += duration;
             if (elapsedTime >= simPeriod) {
@@ -120,12 +120,13 @@ public class SimulationControl extends HBox {
     }
 
     private void handleSpeedChange(double by) {
-        simPeriod = Math.min(Math.min(5, simPeriod+by), 20);
+        simPeriod = Math.min(Math.max(0.1, simPeriod+by), 20);
         stepRate.setText("Step Rate: " + ((double) Math.round(1/simPeriod * 100) / 100) + "/s");
     }
 
     private void handleModelChange(String newModel) {
         initializeModelControl(newModel, chooseShape.getValue());
+        System.out.println(newModel);
     }
 
     private void handleShapeChange(String newShape) {
@@ -150,7 +151,6 @@ public class SimulationControl extends HBox {
     }
 
     // There are two ways of initializing a simulation - from file or from factory
-
     private void initializeModelControl(String modelName, File file) {
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
             modelControl = new GameOfLifeControl(new GameOfLifeXMLParser().getSimulator(file));
@@ -161,6 +161,8 @@ public class SimulationControl extends HBox {
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
             modelControl = new WaTorControl(new WaTorXMLParser().getSimulator(file));
         }
+
+        statusCode = StatusCode.UPDATE;
     }
 
     private void initializeModelControl(String modelName, String shape) {
@@ -173,8 +175,16 @@ public class SimulationControl extends HBox {
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
             modelControl = new WaTorControl(shape);
         }
+
+        statusCode = StatusCode.UPDATE;
     }
 
-    public VBox getSimPanel() { return simPanel; }
-    public ModelControl<?> getModelControl() { return modelControl; }
+    SimulationPanel getSimPanel() { return modelControl.simPanel(); }
+    ModelControl<?> getModelControl() { return modelControl; }
+
+    public StatusCode consumeStatusCode() {
+        var ret = statusCode;
+        statusCode = StatusCode.NO_UPDATE;
+        return ret;
+    }
 }
