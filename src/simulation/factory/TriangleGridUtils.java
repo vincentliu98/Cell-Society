@@ -37,4 +37,24 @@ public class TriangleGridUtils<T> {
             neighbors.put(cur, neighbor);
         } return neighbors;
     }
+
+    public CellGraph<T> graphWith3NeighborsWithNoBoundary(List<Cell<T>> cells, int r, int c) {
+        CellGraph<T> neighbors = new CellGraph<>();
+
+        for(int i = 0 ; i < cells.size() ; i ++) {
+            var cur = cells.get(i);
+            var neighbor = new ArrayList<Cell<T>>();
+
+            var offset = (cur.shapeCode() == ShapeUtils.TRIANGLE ? c : -c);
+
+            if(0 < i%c) neighbor.add(cells.get(i-1));
+            else neighbor.add(cells.get(i-1+c));
+            if(i%c+1 < c) neighbor.add(cells.get(i+1));
+            else neighbor.add(cells.get(i+1-c));
+            if(0 <= i+offset && i+offset < cells.size()) neighbor.add(cells.get(i+offset));
+            else neighbor.add(cells.get(i+offset < 0 ? i+offset+cells.size() : i+offset-cells.size()));
+
+            neighbors.put(cur, neighbor);
+        } return neighbors;
+    }
 }

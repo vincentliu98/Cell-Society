@@ -40,7 +40,7 @@ public class WaTor {
             }
         }
 
-        var graph = new TriangleGridUtils<Fish>().graphWith3Neighbors(cells, row, column);
+        var graph = new TriangleGridUtils<Fish>().graphWith3NeighborsWithNoBoundary(cells, row, column);
         return new Simulator<>(graph, model);
     }
     /**
