@@ -4,12 +4,13 @@ import simulation.Cell;
 import simulation.Simulator;
 import simulation.models.SimulationModel;
 import simulation.models.SpreadingFireModel;
+import utility.ShapeUtils;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Convenience class to generate "Spreading of Fire" CellGraph
+ * Convenience class to generateRect "Spreading of Fire" CellGraph
  *
  * @author Vincent Liu
  */
@@ -25,7 +26,7 @@ public class SpreadingFire {
      * @param probCatch
      * @return
      */
-    public static Simulator<Integer> generate(int row, int column, int[][] initial, double probCatch) {
+    public static Simulator<Integer> generateRect(int row, int column, int[][] initial, double probCatch) {
         SimulationModel<Integer> model = new SpreadingFireModel(probCatch);
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / column;
@@ -33,8 +34,10 @@ public class SpreadingFire {
 
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
-                var value = initial[i][j];
-                var cell = new Cell<>(value, (j+0.5)*width, (i+0.5)*height);
+                var cell = new Cell<>(initial[i][j], ShapeUtils.RECTANGLE,
+                        (j+0.5)*width, (i+0.5)*height,
+                        width, height
+                );
                 cells.add(cell);
             }
         }
@@ -48,7 +51,7 @@ public class SpreadingFire {
      * @param n
      * @return
      */
-    public static Simulator<Integer> generate(int n) {
+    public static Simulator<Integer> generateRect(int n) {
         var rng = new Random();
         int tmp[][] = new int[n][n];
         for(int i = 0 ; i < n ; i ++) {
@@ -58,6 +61,6 @@ public class SpreadingFire {
                              x < 0.75 ? SpreadingFireModel.BURNING : SpreadingFireModel.EMPTY;
             }
         }
-        return SpreadingFire.generate(n, n, tmp, DEFAULT_PROBCATCH);
+        return SpreadingFire.generateRect(n, n, tmp, DEFAULT_PROBCATCH);
     }
 }

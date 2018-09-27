@@ -1,7 +1,5 @@
 package xml.parser;
 
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -50,9 +48,7 @@ public class ParentXMLParser {
     public static final String SHAPE_WIDTH_TAG = "shapeWidth";
     public static final String SHAPE_HEIGHT_TAG = "shapeHeight";
     public static final String SHAPE_RADIUS_TAG = "shapeRadius";
-    public static final String SHAPE_TAG = "shape";
-    public static final String RECTANGLE_STRING = "rectangle";
-    public static final String CIRCLE_STRING = "circle";
+    public static final String SHAPE_CODE_TAG = "shapeCode";
 
     public static final String CELL_TAG = "cell";
     public static final String CELL_UNIQUE_ID_TAG = "uniqueID";
@@ -91,24 +87,19 @@ public class ParentXMLParser {
      * @return
      */
     public static CellGraph<Integer> getIntegerCellGraph(Element root, String valTag) {
-        CellGraph<Integer> graph;
-        String shapeString = getTextValue(root, SHAPE_TAG).replaceAll("\\s","");
-        if (shapeString.equals(RECTANGLE_STRING)) {
-            graph = new CellGraph<Integer>(parseRectangle(root));
-        } else if (shapeString.equals(CIRCLE_STRING)) {
-            graph = new CellGraph<Integer>(parseCircle(root));
-        } else {
-            graph = null;
-        }
+        CellGraph<Integer> graph = new CellGraph<>();
         NodeList cells = root.getElementsByTagName(CELL_TAG);
         Map<Integer, Cell<Integer>> IDToCellMap = new HashMap<Integer, Cell<Integer>>();
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
             int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
             int val = getIntValue(curCell, valTag);
+            int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG);
+            double shapeWidth = getDoubleValue(curCell, SHAPE_WIDTH_TAG);
+            double shapeHeight = getDoubleValue(curCell, SHAPE_HEIGHT_TAG);
             double xPos = getDoubleValue(curCell, CELL_XPOS_TAG);
             double yPos = getDoubleValue(curCell, CELL_YPOS_TAG);
-            IDToCellMap.put(uniqueID, new Cell<Integer>(val, xPos, yPos));
+            IDToCellMap.put(uniqueID, new Cell<>(val, shapeCode, xPos, yPos, shapeWidth, shapeHeight));
         }
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
@@ -120,27 +111,6 @@ public class ParentXMLParser {
             graph.put(IDToCellMap.get(uniqueID), neighborList);
         }
         return graph;
-    }
-
-    /**
-     *
-     * @param root
-     * @return
-     */
-    public static Rectangle parseRectangle(Element root) {
-        double shapeWidth = getDoubleValue(root, SHAPE_WIDTH_TAG);
-        double shapeHeight = getDoubleValue(root, SHAPE_HEIGHT_TAG);
-        return new Rectangle(shapeWidth, shapeHeight);
-    }
-
-    /**
-     *
-     * @param root
-     * @return
-     */
-    public static Circle parseCircle(Element root) {
-        double shapeRadius = getDoubleValue(root, SHAPE_RADIUS_TAG);
-        return new Circle(shapeRadius);
     }
 
 //    public static Map<String, NodeList> parseTagToEltListMap(Element root, List<String> tagList) {

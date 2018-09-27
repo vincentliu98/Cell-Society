@@ -5,12 +5,13 @@ import simulation.Simulator;
 import simulation.models.WaTorModel;
 import simulation.models.wator.Fish;
 import simulation.models.wator.Shark;
+import utility.ShapeUtils;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *  Convenience class to generate "Wa-Tor" Simulator
+ *  Convenience class to generateRect "Wa-Tor" Simulator
  *
  * @author Inchan Hwang
  */
@@ -30,8 +31,8 @@ public class WaTor {
      * @param sharkStarvePeriod
      * @return
      */
-    public static Simulator<Fish> generate(int row, int column, int[][] initial, int fishBreedPeriod,
-                                           int sharkBreedPeriod, int sharkStarvePeriod) {
+    public static Simulator<Fish> generateRect(int row, int column, int[][] initial, int fishBreedPeriod,
+                                               int sharkBreedPeriod, int sharkStarvePeriod) {
         var model = new WaTorModel(fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod);
         ArrayList<Cell<Fish>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / column;
@@ -41,7 +42,10 @@ public class WaTor {
             for(int j = 0 ; j < column ; j ++) {
                 var value = initial[i][j] == WaTorModel.FISH ? new Fish() :
                          initial[i][j] == WaTorModel.SHARK ? new Shark() : null;
-                var cell = new Cell<>(value, (j+0.5)*width, (i+0.5)*height);
+                var cell = new Cell<>(value, ShapeUtils.RECTANGLE,
+                        (j+0.5)*width, (i+0.5)*height,
+                        width, height
+                );
                 cells.add(cell);
             }
         }
@@ -55,7 +59,7 @@ public class WaTor {
      * @param n
      * @return
      */
-    public static Simulator<Fish> generate(int n) {
+    public static Simulator<Fish> generateRect(int n) {
         var rng = new Random();
         int tmp[][] = new int[n][n];
         for(int i = 0 ; i < n ; i ++) {
@@ -65,7 +69,7 @@ public class WaTor {
                         x < 0.55 ? WaTorModel.SHARK : 2;
             }
         }
-        return WaTor.generate(n, n, tmp,
+        return WaTor.generateRect(n, n, tmp,
                 DEFAULT_FISHBREEDPERIOD, DEFAULT_SHARKBREEDPERIOD,DEFAULT_SHARKSTARVEPERIOD);
     }
 }

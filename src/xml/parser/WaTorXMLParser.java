@@ -45,15 +45,7 @@ public class WaTorXMLParser extends ParentXMLParser {
      * @return
      */
     public static CellGraph<Fish> getWaTorCellGraph(Element root) {
-        CellGraph<Fish> graph;
-        String shapeString = getTextValue(root, SHAPE_TAG).replaceAll("\\s", "");
-        if (shapeString.equals(RECTANGLE_STRING)) {
-            graph = new CellGraph<Fish>(parseRectangle(root));
-        } else if (shapeString.equals(CIRCLE_STRING)) {
-            graph = new CellGraph<Fish>(parseCircle(root));
-        } else {
-            graph = null;
-        }
+        CellGraph<Fish> graph = new CellGraph<>();
         NodeList cells = root.getElementsByTagName(CELL_TAG);
         Map<Integer, Cell<Fish>> IDToCellMap = new HashMap<Integer, Cell<Fish>>();
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
@@ -69,9 +61,12 @@ public class WaTorXMLParser extends ParentXMLParser {
                 else
                     val = new Shark(breedCounter, starveCounter);
             }
+            int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG);
             double xPos = getDoubleValue(curCell, CELL_XPOS_TAG);
             double yPos = getDoubleValue(curCell, CELL_YPOS_TAG);
-            IDToCellMap.put(uniqueID, new Cell<Fish>(val, xPos, yPos));
+            double width = getDoubleValue(curCell, SHAPE_WIDTH_TAG);
+            double height = getDoubleValue(curCell, SHAPE_HEIGHT_TAG);
+            IDToCellMap.put(uniqueID, new Cell<>(val, shapeCode, xPos, yPos, width, height));
         }
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);

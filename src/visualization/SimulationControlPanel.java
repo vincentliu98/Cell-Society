@@ -1,5 +1,7 @@
 package visualization;
 
+import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -12,6 +14,7 @@ import simulation.models.GameOfLifeModel;
 import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
+import utility.ShapeUtils;
 
 /**
  * SimulationControlPanel extends HBox and will be located in the bottom of UI
@@ -30,27 +33,46 @@ public class SimulationControlPanel extends HBox {
             SpreadingFireModel.MODEL_NAME
     };
 
+
     private boolean isPlaying;
     private Text numTick, stepRate;
     private double simPeriod, elapsedTime;
     private ComboBox<String> chooseModel;
+    private ComboBox<String> chooseShape;
     private Simulator<?> simulator;
 
-    public SimulationControlPanel() {
+    public SimulationControlPanel(
+            EventHandler<? super MouseEvent> onLoad,
+            EventHandler<? super MouseEvent> onSave,
+            ChangeListener<String> onModelChange,
+            ChangeListener<String> onShapeChange
+    ) {
         super(25);
         getStyleClass().add("simControlPanelWrapper");
+
+        var save = new Button("Save");
+        save.setOnMouseClicked(onSave);
+        var load = new Button("Load");
+        load.setOnMouseClicked(onLoad);
+
+        chooseModel = new ComboBox<>();
+        chooseModel.getItems().addAll(SIMULATION_MODELS);
+        chooseModel.setValue(SIMULATION_MODELS[0]);
+        chooseShape.valueProperty().addListener(onShapeChange);
+
+        chooseShape = new ComboBox<>();
+        chooseShape.getItems().addAll(ShapeUtils.SHAPES);
+        chooseShape.setValue(ShapeUtils.SHAPES[0]);
+
+        chooseModel.valueProperty().addListener(onModelChange);
     }
 
     /**
      *
      * @param sim
-     * @param onLoad
-     * @param onSave
      */
     public void setupPanel(
             Simulator<?> sim,
-            EventHandler<? super MouseEvent> onLoad,
-            EventHandler<? super MouseEvent> onSave
     ) {
         getChildren().clear();
 
@@ -62,14 +84,9 @@ public class SimulationControlPanel extends HBox {
         var grid = new GridPane();
         grid.getStyleClass().add("simControlPanel");
 
-        var modelName = new Text("       Select Model:");
         numTick = new Text("# of ticks: 0");
         stepRate = new Text("Step Rate: " + 1/simPeriod + "/s");
 
-        var save = new Button("Save");
-        save.setOnMouseClicked(onSave);
-        var load = new Button("Load");
-        load.setOnMouseClicked(onLoad);
 
 
         var playStop = new Button("Play");
@@ -92,9 +109,6 @@ public class SimulationControlPanel extends HBox {
             updateStepRate();
         });
 
-        chooseModel = new ComboBox<>();
-        chooseModel.getItems().addAll(SIMULATION_MODELS);
-        chooseModel.setValue(sim.modelName());
 
         grid.add(save, 0, 0);
         grid.add(load, 0, 1);
@@ -104,14 +118,13 @@ public class SimulationControlPanel extends HBox {
         grid.add(decrease, 2, 1);
         grid.add(numTick, 3, 0);
         grid.add(stepRate, 3, 1);
-        grid.add(modelName, 4, 0);
-        grid.add(chooseModel, 4, 1);
+        grid.add(chooseModel, 4, 0);
+        grid.add(chooseShape, 4, 1);
 
         getChildren().add(grid);
     }
 
     /**
-     *
      * @param duration
      * @return
      */
@@ -126,21 +139,16 @@ public class SimulationControlPanel extends HBox {
     }
 
     /**
-     *
      */
     public void updateStepRate() {
         stepRate.setText("Step Rate: " + ((double) Math.round(1/simPeriod * 100) / 100) + "/s");
     }
 
     /**
-     *
-     * @return
-     */
-    public String getChosenModel() { return chooseModel.getValue(); }
-
-    /**
-     *
      * @param ticks
      */
     public void setNumTick(int ticks) { numTick.setText("# of ticks: "+ticks); }
+
+    public String getChosenModel() { return chooseModel.getValue(); }
+    public String getChosenShape() { return chooseShape.getValue(); }
 }

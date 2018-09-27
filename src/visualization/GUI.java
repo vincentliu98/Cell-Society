@@ -17,6 +17,7 @@ import simulation.models.GameOfLifeModel;
 import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
+import utility.ShapeUtils;
 import visualization.model_panels.*;
 import xml.parser.ParentXMLParser;
 
@@ -76,7 +77,7 @@ public class GUI {
         root.add(simPanel, 1, 0);
         root.add(simControlPanel, 0, 1, 2, 1);
 
-        initializeSimulation(GameOfLife.generate(DEFAULT_CELL_NUM));
+        initializeSimulation(GameOfLife.generate(DEFAULT_CELL_NUM, ShapeUtils.RECTANGULAR));
     }
 
     /**
@@ -85,7 +86,11 @@ public class GUI {
      */
     protected void initializeSimulation(Simulator<?> sim) {
         simulator = sim;
-        simControlPanel.setupPanel(simulator, e -> handleFileLoad(), e -> handleFileSave());
+        simControlPanel.setupPanel(simulator,
+                e -> handleFileLoad(), e -> handleFileSave(),
+                (a, b, c) -> handleModelChange(c),
+                (a, b, c) -> handleShapeChange(c)
+        );
         simPanel.getChildren().clear();
         simPanel.getChildren().add(simulator.view());
     }
@@ -119,7 +124,6 @@ public class GUI {
         simControlPanel.setNumTick(simulator.tickCount());
         simControlPanel.updateStepRate();
 
-        handleModelChange();
         handleModelPanelParametersChange();
         handleCellNumChange();
     }
@@ -137,9 +141,21 @@ public class GUI {
     /**
      *
      */
-    private void handleModelChange() {
-        if (simulator.modelName().equals(simControlPanel.getChosenModel())) return;
-        generateModelByName(DEFAULT_CELL_NUM, simControlPanel.getChosenModel());
+    private void handleModelChange(String newVal) {
+        generateModelByName(
+                modelPanel.getCellNum(),
+                newVal,
+                simControlPanel.getChosenShape()
+        );
+        generateModelPanelByName(simControlPanel.getChosenModel());
+    }
+
+    private void handleShapeChange(String newVal) {
+        generateModelByName(
+                modelPanel.getCellNum(),
+                simControlPanel.getChosenModel(),
+                newVal
+        );
         generateModelPanelByName(simControlPanel.getChosenModel());
     }
 
@@ -148,7 +164,11 @@ public class GUI {
      */
     private void handleCellNumChange() {
         if (modelPanel.isNumCellChanged()) {
-            generateModelByName(modelPanel.getCellNum(), simControlPanel.getChosenModel());
+            generateModelByName(
+                    modelPanel.getCellNum(),
+                    simControlPanel.getChosenModel(),
+                    simControlPanel.getChosenShape()
+            );
             modelPanel.cleanNumCellChanged();
         }
     }
@@ -182,15 +202,16 @@ public class GUI {
      * @param cellNum
      * @param modelName
      */
-    private void generateModelByName(int cellNum, String modelName) {
+    private void generateModelByName(int cellNum, String modelName, String shape) {
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
-            initializeSimulation(GameOfLife.generate(cellNum));
+            initializeSimulation(GameOfLife.generate(cellNum, shape));
         } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
-            initializeSimulation(Segregation.generate(cellNum));
+            //TODO: implement that for all others
+            initializeSimulation(Segregation.generateRect(cellNum));
         } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
-            initializeSimulation(SpreadingFire.generate(cellNum));
+            initializeSimulation(SpreadingFire.generateRect(cellNum));
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
-            initializeSimulation(WaTor.generate(cellNum));
+            initializeSimulation(WaTor.generateRect(cellNum));
         }
     }
 

@@ -97,7 +97,7 @@ public class Simulator<T> {
     public String modelName() { return model.modelName(); }
 
     /**
-     * Call the corresponding XML writer for each model to generate XML file
+     * Call the corresponding XML writer for each model to generateRect XML file
      *
      * @param outFile
      * @return an XML file that will be saved into user's directory
