@@ -123,7 +123,7 @@ public class SimulationControl extends HBox {
         save.setOnMouseClicked(e -> handleFileSave());
         load.setOnMouseClicked(e -> handleFileLoad());
         playStop.setOnMouseClicked(e -> handlePlayStop());
-        tick.setOnMouseClicked(e -> modelControl.simulator().tick());
+        tick.setOnMouseClicked(e -> handleSingleTick());
         inc.setOnMouseClicked(e -> handleSpeedChange(-0.05));
         dec.setOnMouseClicked(e -> handleSpeedChange(0.05));
         chooseModel.valueProperty().addListener((a, b, c) -> handleModelChange(c));
@@ -177,6 +177,11 @@ public class SimulationControl extends HBox {
     private void handleShapeChange(String newShape) {
         stop();
         initializeModelControl(chooseModel.getValue(), newShape);
+    }
+
+    private void handleSingleTick() {
+        modelControl.simulator().tick();
+        numTick.setText(myResources.getString("NumTickDynamic")+modelControl.simulator().tickCount());
     }
 
     private void handleFileLoad() {

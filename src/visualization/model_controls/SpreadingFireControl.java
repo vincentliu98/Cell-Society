@@ -35,7 +35,7 @@ public class SpreadingFireControl extends ModelControl<Integer> {
             handleParamChange();
         });
         probCatchBar.valueProperty().addListener((ov, old_val, new_val) ->
-                probCatchValue.setText(String.valueOf(new_val.intValue())));
+                probCatchValue.setText(String.valueOf(new_val.doubleValue())));
         getChildren().addAll(probCatchCaption, probCatchValue, probCatchBar);
     }
 

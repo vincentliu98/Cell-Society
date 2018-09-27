@@ -37,7 +37,7 @@ public class SegregationControl extends ModelControl<Integer> {
             handleParamChange();
         });
         thresholdBar.valueProperty().addListener((ov, old_val, new_val) ->
-                thresholdValue.setText(String.valueOf(new_val.intValue())));
+                thresholdValue.setText(String.valueOf(new_val.doubleValue())));
         getChildren().addAll(thresholdCaption, thresholdValue, thresholdBar);
     }
 
