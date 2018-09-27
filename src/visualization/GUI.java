@@ -3,6 +3,8 @@ package visualization;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -18,6 +20,7 @@ import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 import visualization.model_panels.*;
+import xml.XMLException;
 import xml.parser.ParentXMLParser;
 
 import java.io.File;
@@ -51,12 +54,12 @@ public class GUI {
     private SimulationControlPanel simControlPanel;
     private ModelPanel modelPanel;
     private VBox simPanel;
+
     private ResourceBundle myResources;
     private Simulator<?> simulator;
 
     public GUI (String language) {
         myResources = ResourceBundle.getBundle(language);
-
         root = new GridPane();
         root.getStyleClass().add("root");
 
@@ -161,13 +164,21 @@ public class GUI {
      *
      */
     private void handleFileLoad() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(myResources.getString("OpenFile"));
-        File file = fileChooser.showOpenDialog(window);
-        if(!file.exists()) return;
-        var sim = new ParentXMLParser().getSimulator(file);
-        initializeSimulation(sim);
-        generateModelPanelByName(sim.modelName());
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle(myResources.getString("OpenFile"));
+            File file = fileChooser.showOpenDialog(window);
+            if (!file.exists()) return;
+            var sim = new ParentXMLParser(myLanguage).getSimulator(file);
+            initializeSimulation(sim);
+            generateModelPanelByName(sim.modelName());
+        }
+        catch (XMLException e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText(e.getMessage());
+            errorAlert.setContentText(e.getMessage());
+            errorAlert.showAndWait();
+        }
     }
 
     /**
