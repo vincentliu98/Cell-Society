@@ -10,10 +10,11 @@ import javafx.stage.Stage;
  * @author Inchan Hwang
  */
 public class Main extends Application {
+    public static final String LANGUAGE = "English";
 
     @Override
     public void start(Stage primaryStage) {
-        GUI myGUI = new GUI();
+        GUI myGUI = new GUI(LANGUAGE);
         primaryStage.setResizable(false);
         myGUI.runGUI(primaryStage);
     }

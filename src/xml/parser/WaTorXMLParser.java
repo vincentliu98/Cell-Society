@@ -29,6 +29,15 @@ public class WaTorXMLParser extends ParentXMLParser {
     public static final String CELL_STARVE_COUNTER_TAG = "starveCounter";
 
     /**
+     * Create a parser for XML files of given type.
+     *
+     * @param language
+     */
+    public WaTorXMLParser(String language) {
+        super(language);
+    }
+
+    /**
      *
      * @param root
      * @return
@@ -72,7 +81,7 @@ public class WaTorXMLParser extends ParentXMLParser {
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
             int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
-            ArrayList<Integer> neighborIDs = parseNeighbors(curCell, 0);
+            ArrayList<Integer> neighborIDs = parseNeighbors(curCell);
             List<Cell<Fish>> neighborList = new ArrayList<>();
             for (int n : neighborIDs)
                 neighborList.add(IDToCellMap.get(n));

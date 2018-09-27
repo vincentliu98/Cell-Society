@@ -11,6 +11,10 @@ import java.io.File;
  * @author Inchan Hwang
  */
 public class GameOfLifeXMLParser extends ParentXMLParser {
+    public GameOfLifeXMLParser(String language) {
+        super(language);
+    }
+
     public static final String IS_ALIVE_TAG = "isAlive";
 
     /**

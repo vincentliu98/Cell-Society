@@ -10,6 +10,7 @@ import simulation.models.GameOfLifeModel;
 import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
+import utility.ShapeUtils;
 import xml.XMLException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,11 +18,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 /**
  * This class handles parsing XML files and returning a completed object.
@@ -31,10 +28,14 @@ import java.util.Map;
  * @author jgp17 
  * @author Inchan Hwang
  */
+
 public abstract class ParentXMLParser<T> {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
     // keep only one documentBuilder because it is expensive to make and can numCellChanged it before parsing
     private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
+    public static final String DEFAULT_RESOURCES = "Errors";
+    private static final String LOAD_AGAIN_KEY = "LoadAgainMsg";
+    private static ResourceBundle myResources;
     // name of root attribute that notes the type of file expecting to parse
     public static final String MODEL_ATTRIBUTE_STRING = "modelName";
     public static final List<String> VALID_MODEL_NAMES = List.of(
@@ -57,8 +58,16 @@ public abstract class ParentXMLParser<T> {
     public static final String CELL_YPOS_TAG = "cy";
 
     /**
+     * Create a parser for XML files of given type.
+     */
+    public ParentXMLParser(String language) {
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCES + language);
+    }
+
+    /**
      * Get the data contained in this XML file as an object
      */
+
     public abstract Simulator<T> getSimulator(File datafile);
 
     /**
@@ -76,6 +85,12 @@ public abstract class ParentXMLParser<T> {
             int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
             int val = getIntValue(curCell, valTag);
             int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG);
+
+            if(Arrays.stream(ShapeUtils.SHAPE_CODES).filter(p -> p == shapeCode).count() == 0)
+                throw new XMLException(
+                        myResources.getString("ShapeErrorMsg") + myResources.getString(LOAD_AGAIN_KEY), shapeCode
+                );
+
             double shapeWidth = getDoubleValue(curCell, SHAPE_WIDTH_TAG);
             double shapeHeight = getDoubleValue(curCell, SHAPE_HEIGHT_TAG);
             double xPos = getDoubleValue(curCell, CELL_XPOS_TAG);
@@ -85,7 +100,7 @@ public abstract class ParentXMLParser<T> {
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
             int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
-            ArrayList<Integer> neighborIDs = parseNeighbors(curCell, 0);
+            ArrayList<Integer> neighborIDs = parseNeighbors(curCell);
             List<Cell<Integer>> neighborList = new ArrayList<>();
             for (int n : neighborIDs)
                 neighborList.add(IDToCellMap.get(n));
@@ -94,21 +109,13 @@ public abstract class ParentXMLParser<T> {
         return graph;
     }
 
-//    public static Map<String, NodeList> parseTagToEltListMap(Element root, List<String> tagList) {
-//        Map<String, NodeList> tagsToEltLists = new HashMap<String, NodeList>();
-//        for (String tag : tagList)
-//            tagsToEltLists.put(tag, root.getElementsByTagName(tag));
-//        return tagsToEltLists;
-//    }
-
     /**
      *
      * @param root
-     * @param cellIndex
      * @return
      */
-    public static ArrayList<Integer> parseNeighbors(Element root, int cellIndex) {
-        String neighborStr = getTextValueAtIndex(root, CELL_NEIGHBORS_TAG, cellIndex);
+    public static ArrayList<Integer> parseNeighbors(Element root) {
+        String neighborStr = getTextValue(root, CELL_NEIGHBORS_TAG);
         ArrayList<Integer> neighborArrayList = new ArrayList<Integer>();
         String[] neighborStrArray = neighborStr.replaceAll("\\s", "").split(",");
         for (String s : neighborStrArray)
@@ -131,25 +138,8 @@ public abstract class ParentXMLParser<T> {
         if (nodeList != null && nodeList.getLength() > 0) {
             return nodeList.item(0).getTextContent();
         } else {
-            // FIXME: empty string or null, is it an error to not find the text value?
-            return "";
-        }
-    }
-
-    /**
-     *
-     * @param e
-     * @param tagName
-     * @param i
-     * @return
-     */
-    public static String getTextValueAtIndex(Element e, String tagName, int i) {
-        var nodeList = e.getElementsByTagName(tagName);
-        if (nodeList != null && nodeList.getLength() > 0) {
-            return nodeList.item(i).getTextContent();
-        } else {
-            // FIXME: empty string or null, is it an error to not find the text value?
-            return "";
+            throw new XMLException(myResources.getString("MissingTagMsg")+ myResources.getString(LOAD_AGAIN_KEY),
+                    e.toString(), tagName);
         }
     }
 
@@ -160,20 +150,15 @@ public abstract class ParentXMLParser<T> {
      * @return
      */
     public static int getIntValue(Element e, String tagName) {
-        String str = getTextValue(e, tagName).replaceAll("\\s","");
-        return Integer.parseInt(str);
-    }
+        String str = getTextValue(e, tagName).replaceAll("\\s", "");
+        try {
 
-    /**
-     *
-     * @param e
-     * @param tagName
-     * @param i
-     * @return
-     */
-    public static int getIntValueAtIndex(Element e, String tagName, int i) {
-        String str = getTextValueAtIndex(e, tagName, i).replaceAll("\\s","");
-        return Integer.parseInt(str);
+            return Integer.parseInt(str);
+        }
+        catch (NumberFormatException ex){
+            throw new XMLException(myResources.getString("ValueNotIntMsg") + myResources.getString(LOAD_AGAIN_KEY),
+                    tagName, str);
+        }
     }
 
     /**
@@ -183,20 +168,13 @@ public abstract class ParentXMLParser<T> {
      * @return
      */
     public static double getDoubleValue(Element e, String tagName) {
-        String str = getTextValue(e, tagName).replaceAll("\\s","");
-        return Double.parseDouble(str);
-    }
-
-    /**
-     *
-     * @param e
-     * @param tagName
-     * @param i
-     * @return
-     */
-    public static double getDoubleValueAtIndex(Element e, String tagName, int i) {
-        String str = getTextValueAtIndex(e, tagName, i).replaceAll("\\s","");
-        return Double.parseDouble(str);
+        String str = getTextValue(e, tagName).replaceAll("\\s", "");
+        try {
+            return Double.parseDouble(str);
+        } catch (NumberFormatException ex){
+            throw new XMLException(myResources.getString("ValueNotDoubleMsg") + myResources.getString(LOAD_AGAIN_KEY),
+                    tagName, str);
+        }
     }
 
     /**

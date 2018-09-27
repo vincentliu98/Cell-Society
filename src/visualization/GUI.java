@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
+import java.util.ResourceBundle;
+
 /**
  * This is the Graphical User Interface for displaying the simulation models.
  * It contains three components:
@@ -30,12 +32,17 @@ public class GUI {
     public static final int FRAMES_PER_SECOND = 10;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = MILLISECOND_DELAY / 1000.;
+    public static final String STYLESHEET = "style.css";
 
     private Window window;
     private GridPane root;
     private SimulationControl simControl;
+    private ResourceBundle myResources;
+    private String myLanguage;
 
-    public GUI () {
+    public GUI (String language) {
+        myLanguage = language;
+        myResources = ResourceBundle.getBundle(myLanguage);
         root = new GridPane();
         root.getStyleClass().add("root");
 
@@ -50,7 +57,7 @@ public class GUI {
         row2.setPercentHeight(15);
         root.getRowConstraints().addAll(row1, row2);
 
-        simControl = new SimulationControl(window);
+        simControl = new SimulationControl(window, myResources, myLanguage);
 
         root.add(simControl.getModelControl(), 0, 0);
         root.add(simControl.getSimPanel(), 1, 0);
@@ -60,9 +67,9 @@ public class GUI {
     public void runGUI (Stage primaryStage) {
         window = primaryStage;
 
-        primaryStage.setTitle("Simulations");
+        primaryStage.setTitle(myResources.getString("PrimaryStageTitle"));
         Scene scene = new Scene(root, SCREEN_WIDTH, SCREEN_HEIGHT);
-        scene.getStylesheets().add("style.css");
+        scene.getStylesheets().add(STYLESHEET);
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -79,7 +86,6 @@ public class GUI {
             root.add(simControl.getModelControl(), 0, 0);
             root.add(simControl.getSimPanel(), 1, 0);
             root.add(simControl, 0, 1, 2, 1);
-        }
-        simControl.tick(duration);
+        } simControl.tick(duration);
     }
 }

@@ -22,6 +22,11 @@ public class ShapeUtils {
     public static final int RECTANGLE = 0;
     public static final int TRIANGLE = 1;
     public static final int TRIANGLE_FLIP = 2;
+    public static final int[] SHAPE_CODES = new int[] {
+            RECTANGLE,
+            TRIANGLE,
+            TRIANGLE_FLIP
+    };
 
     public static void centerShape(Shape s, double cx, double cy) {
         s.setLayoutX(cx - s.getLayoutBounds().getMinX() - s.getLayoutBounds().getWidth()/2);

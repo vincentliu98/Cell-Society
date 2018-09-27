@@ -16,6 +16,15 @@ public class SegregationXMLParser extends ParentXMLParser {
     public static final String TYPE_VALUE_TAG = "type";
 
     /**
+     * Create a parser for XML files of given type.
+     *
+     * @param language
+     */
+    public SegregationXMLParser(String language) {
+        super(language);
+    }
+
+    /**
      *
      * @param root
      * @return

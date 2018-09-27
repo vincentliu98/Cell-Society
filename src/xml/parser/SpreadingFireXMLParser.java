@@ -17,6 +17,15 @@ public class SpreadingFireXMLParser extends ParentXMLParser {
     public static final String LIVE_STATE_TAG = "liveState";
 
     /**
+     * Create a parser for XML files of given type.
+     *
+     * @param language
+     */
+    public SpreadingFireXMLParser(String language) {
+        super(language);
+    }
+
+    /**
      *
      * @param root
      * @return
