@@ -56,10 +56,12 @@ public class GUI {
     private VBox simPanel;
 
     private ResourceBundle myResources;
+    private String myLanguage;
     private Simulator<?> simulator;
 
     public GUI (String language) {
-        myResources = ResourceBundle.getBundle(language);
+        myLanguage = language;
+        myResources = ResourceBundle.getBundle(myLanguage);
         root = new GridPane();
         root.getStyleClass().add("root");
 
