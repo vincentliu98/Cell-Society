@@ -1,4 +1,4 @@
-package visualization.model_panels;
+package visualization.model_controls;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -36,6 +36,8 @@ public class SegregationControl extends ModelControl<Integer> {
             thresholdValue.setText(String.format("%.2f", thresholdBar.getValue()));
             handleParamChange();
         });
+        thresholdBar.valueProperty().addListener((ov, old_val, new_val) ->
+                thresholdValue.setText(String.valueOf(new_val.intValue())));
         getChildren().addAll(thresholdCaption, thresholdValue, thresholdBar);
     }
 

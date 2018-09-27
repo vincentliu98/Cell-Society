@@ -1,4 +1,4 @@
-package visualization.model_panels;
+package visualization.model_controls;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;

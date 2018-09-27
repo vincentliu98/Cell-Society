@@ -1,4 +1,4 @@
-package visualization.model_panels;
+package visualization.model_controls;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -56,6 +56,8 @@ public class WaTorControl extends ModelControl<Fish> {
             fishBreedValue.setText(String.valueOf((int) fishBreedBar.getValue()));
             handleParamChange();
         });
+        fishBreedBar.valueProperty().addListener((ov, old_val, new_val) ->
+                fishBreedValue.setText(String.valueOf(new_val.intValue())));
 
         sharkBreedBar.setShowTickMarks(true);
         sharkBreedBar.setShowTickLabels(true);
@@ -63,6 +65,8 @@ public class WaTorControl extends ModelControl<Fish> {
             sharkBreedValue.setText(String.valueOf((int) sharkBreedBar.getValue()));
             handleParamChange();
         });
+        sharkBreedBar.valueProperty().addListener((ov, old_val, new_val) ->
+                sharkBreedValue.setText(String.valueOf(new_val.intValue())));
 
         sharkStarveBar.setShowTickMarks(true);
         sharkStarveBar.setShowTickLabels(true);
@@ -70,6 +74,8 @@ public class WaTorControl extends ModelControl<Fish> {
             sharkStarveValue.setText(String.valueOf((int) sharkStarveBar.getValue()));
             handleParamChange();
         });
+        sharkStarveBar.valueProperty().addListener((ov, old_val, new_val) ->
+                sharkStarveValue.setText(String.valueOf(new_val.intValue())));
 
 		wrapper.getChildren().addAll(fishBreedCaption, fishBreedValue, fishBreedBar,
         sharkBreedCaption, sharkBreedValue, sharkBreedBar,

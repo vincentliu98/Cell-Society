@@ -7,7 +7,7 @@ import simulation.factory.GameOfLife;
 import simulation.models.SimulationModel;
 import utility.ColorUtils;
 import utility.ShapeUtils;
-import visualization.model_panels.ModelControl;
+import visualization.model_controls.ModelControl;
 import xml.writer.XMLWriter;
 
 import java.io.File;

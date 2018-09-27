@@ -12,7 +12,7 @@ import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 import utility.ShapeUtils;
-import visualization.model_panels.*;
+import visualization.model_controls.*;
 import xml.parser.*;
 
 import java.io.File;
@@ -101,7 +101,10 @@ public class SimulationControl extends HBox {
     }
 
     public void tick(double duration) {
-        if(modelControl.consumeIsDirty()) statusCode = StatusCode.UPDATE;
+        if(modelControl.consumeIsDirty()) {
+            stop();
+            statusCode = StatusCode.UPDATE;
+        }
 
         if(isPlaying) {
             elapsedTime += duration;
@@ -119,21 +122,28 @@ public class SimulationControl extends HBox {
         elapsedTime = 0;
     }
 
+    private void stop() {
+        isPlaying = true;
+        handlePlayStop();
+    }
+
     private void handleSpeedChange(double by) {
         simPeriod = Math.min(Math.max(0.1, simPeriod+by), 20);
         stepRate.setText("Step Rate: " + ((double) Math.round(1/simPeriod * 100) / 100) + "/s");
     }
 
     private void handleModelChange(String newModel) {
+        stop();
         initializeModelControl(newModel, chooseShape.getValue());
-        System.out.println(newModel);
     }
 
     private void handleShapeChange(String newShape) {
+        stop();
         initializeModelControl(chooseModel.getValue(), newShape);
     }
 
     private void handleFileLoad() {
+        stop();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(window);
@@ -143,6 +153,7 @@ public class SimulationControl extends HBox {
     }
 
     private void handleFileSave() {
+        stop();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showSaveDialog(window);

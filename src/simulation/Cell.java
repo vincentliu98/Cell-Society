@@ -85,7 +85,6 @@ public class Cell<T> {
      */
     public double height() { return height; }
 
-
     /**
      *
      * @return

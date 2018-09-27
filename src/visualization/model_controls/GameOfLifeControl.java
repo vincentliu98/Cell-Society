@@ -1,4 +1,4 @@
-package visualization.model_panels;
+package visualization.model_controls;
 
 import simulation.Simulator;
 import simulation.factory.GameOfLife;

@@ -1,4 +1,4 @@
-package visualization.model_panels;
+package visualization.model_controls;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -34,6 +34,8 @@ public class SpreadingFireControl extends ModelControl<Integer> {
             probCatchValue.setText(String.format("%.2f", probCatchBar.getValue()));
             handleParamChange();
         });
+        probCatchBar.valueProperty().addListener((ov, old_val, new_val) ->
+                probCatchValue.setText(String.valueOf(new_val.intValue())));
         getChildren().addAll(probCatchCaption, probCatchValue, probCatchBar);
     }
 
