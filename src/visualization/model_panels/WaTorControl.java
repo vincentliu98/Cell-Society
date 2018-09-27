@@ -1,17 +1,15 @@
 package visualization.model_panels;
 
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
-import simulation.models.WaTorModel;
-
-
-import java.util.HashMap;
-import java.util.Map;
+import simulation.Simulator;
+import simulation.factory.WaTor;
+import simulation.models.wator.Fish;
 
 /**
- * WaTorPanel extends the abstract class ModelPanel.
+ * WaTorControl extends the abstract class ModelControl.
  * It has three extra parameters - fish's breeding period, shark's breeding period,
  * and shark's starving period. Thus, it contains three extra Slider for each parameters.
  *
@@ -19,7 +17,7 @@ import java.util.Map;
  * @author Inchan Hwang
  */
 
-public class WaTorPanel extends ModelPanel {
+public class WaTorControl extends ModelControl<Fish> {
     public static final double DEFAULT_FISHBREED = 2;
     public static final double DEFAULT_SHARKBREED = 5;
     public static final double DEFAULT_SHARKSTARVE = 5;
@@ -39,8 +37,14 @@ public class WaTorPanel extends ModelPanel {
     private Label sharkStarveValue = new Label(
             Double.toString(sharkStarveBar.getValue()));
 
-    public WaTorPanel() {
-        super();
+    private Simulator<Fish> simulator;
+
+    public WaTorControl(String shape) {
+        simulator = WaTor.generate(DEFAULT_CELL_NUM, shape);
+    }
+
+    public WaTorControl(Simulator<Fish> sim) {
+        simulator = sim;
 
         var scrollPane = new ScrollPane();
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -49,21 +53,18 @@ public class WaTorPanel extends ModelPanel {
         fishBreedBar.setShowTickMarks(true);
         fishBreedBar.setShowTickLabels(true);
         fishBreedBar.setOnMouseReleased(e -> {
-            paramChanged = true;
             fishBreedValue.setText(String.valueOf((int) fishBreedBar.getValue()));
         });
 
         sharkBreedBar.setShowTickMarks(true);
         sharkBreedBar.setShowTickLabels(true);
         sharkBreedBar.setOnMouseReleased(e -> {
-            paramChanged = true;
             sharkBreedValue.setText(String.valueOf((int) sharkBreedBar.getValue()));
         });
 
         sharkStarveBar.setShowTickMarks(true);
         sharkStarveBar.setShowTickLabels(true);
         sharkStarveBar.setOnMouseReleased(e -> {
-            paramChanged = true;
             sharkStarveValue.setText(String.valueOf((int) sharkStarveBar.getValue()));
         });
 
@@ -76,11 +77,5 @@ public class WaTorPanel extends ModelPanel {
     }
 
     @Override
-    public Map<String, String> getParams() {
-        var ret = new HashMap<String, String>();
-        ret.put(WaTorModel.PARAM_FISHBREED, Integer.toString((int) fishBreedBar.getValue()));
-        ret.put(WaTorModel.PARAM_SHARKBREED, Integer.toString((int) sharkBreedBar.getValue()));
-        ret.put(WaTorModel.PARAM_SHARKSTARVE, Integer.toString((int) sharkStarveBar.getValue()));
-        return ret;
-    }
+    public Simulator<Fish> simulator() { return simulator; }
 }

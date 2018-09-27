@@ -18,6 +18,25 @@ import java.util.Random;
 public class SpreadingFire {
     public static final double DEFAULT_PROBCATCH = 0.7;
 
+    public static Simulator<Integer> generateTri(int row, int column, int[][] initial, double probCatch) {
+        var model = new SpreadingFireModel(probCatch);
+        ArrayList<Cell<Integer>> cells = new ArrayList<>();
+        double width = Simulator.SIMULATION_SX / ((column+1)/2);
+        double height = Simulator.SIMULATION_SY / row;
+
+        for(int i = 0 ; i < row ; i ++) {
+            for(int j = 0 ; j < column ; j ++) {
+                var cell = new Cell<>(initial[i][j], (i+j)%2==0 ? ShapeUtils.TRIANGLE : ShapeUtils.TRIANGLE_FLIP,
+                        (0.5*j)*width, (i+0.5)*height,
+                        width, height
+                );
+                cells.add(cell);
+            }
+        }
+
+        var graph = new TriangleGridUtils<Integer>().graphWith3Neighbors(cells, row, column);
+        return new Simulator<>(graph, model);
+    }
     /**
      *
      * @param row
@@ -51,7 +70,7 @@ public class SpreadingFire {
      * @param n
      * @return
      */
-    public static Simulator<Integer> generateRect(int n) {
+    public static Simulator<Integer> generate(int n, String shape) {
         var rng = new Random();
         int tmp[][] = new int[n][n];
         for(int i = 0 ; i < n ; i ++) {
@@ -61,6 +80,8 @@ public class SpreadingFire {
                              x < 0.75 ? SpreadingFireModel.BURNING : SpreadingFireModel.EMPTY;
             }
         }
-        return SpreadingFire.generateRect(n, n, tmp, DEFAULT_PROBCATCH);
+        if(shape.equals(ShapeUtils.RECTANGULAR)) return SpreadingFire.generateRect(n, n, tmp, DEFAULT_PROBCATCH);
+        else if(shape.equals(ShapeUtils.TRIANGULAR)) return SpreadingFire.generateTri(n, n, tmp, DEFAULT_PROBCATCH);
+        return null;
     }
 }

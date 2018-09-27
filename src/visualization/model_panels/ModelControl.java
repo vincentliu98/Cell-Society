@@ -3,6 +3,7 @@ package visualization.model_panels;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
+import simulation.Simulator;
 
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import java.util.Map;
  *  uniform theme across different panels. It is purposefully made
  *  abstract so that it would never actually be initialized.
  *
- *  ModelPanel contains a common parameter for all models - number of cells.
+ *  ModelControl contains a common parameter for all models - number of cells.
  *  It contains a Slider that dynamically change the number of cells and update the simulation
  *  It is also able to detect any parameter change that occurs in the UI and pass the change to the model
  *
@@ -19,19 +20,16 @@ import java.util.Map;
  * @author Inchan Hwang
  */
  
-public abstract class ModelPanel extends VBox {
+public abstract class ModelControl<T> extends VBox {
     public static final int DEFAULT_CELL_NUM = 10;
 
-    protected boolean numCellChanged, paramChanged;
+    public static final Label CELL_NUMBER_CAPTION = new Label("Cell Number / Side:");
 
     private Slider numberBar = new Slider(0, 100, DEFAULT_CELL_NUM);
+    private Label cellNumValue = new Label(Integer.toString((int) numberBar.getValue()));
     private int cellNum;
 
-    public static final Label cellNumCaption = new Label("Cell Number / Side:");
-    private Label cellNumValue = new Label(
-           Integer.toString((int) numberBar.getValue()));
-
-    public ModelPanel() {
+    public ModelControl() {
         super(25);
         getStyleClass().add("modelPanel");
 
@@ -43,49 +41,17 @@ public abstract class ModelPanel extends VBox {
         numberBar.setBlockIncrement(4);
 
         numberBar.setOnMouseReleased(e -> {
-            numCellChanged = true;
             cellNum = (int) numberBar.getValue();
             cellNumValue.setText(Integer.toString(cellNum));
+            // reinitialize simulator
         });
 
         numberBar.valueProperty().addListener((ov, old_val, new_val) -> {
             cellNumValue.setText(String.valueOf(new_val.intValue()));
         });
 
-        getChildren().addAll(cellNumCaption, cellNumValue, numberBar);
+        getChildren().addAll(CELL_NUMBER_CAPTION, cellNumValue, numberBar);
     }
 
-    /**
-     *
-     * @return
-     */
-    public int getCellNum() { return cellNum; }
-
-    /**
-     *
-     * @return
-     */
-    public boolean isNumCellChanged() { return numCellChanged; }
-
-    /**
-     *
-     * @return
-     */
-    public boolean isParamChanged() { return paramChanged; }
-
-    /**
-     *
-     */
-    public void cleanNumCellChanged() { numCellChanged = false; }
-
-    /**
-     *
-     */
-    public void cleanParamChanged() { paramChanged = false; }
-
-    /**
-     *
-     * @return
-     */
-    public abstract Map<String, String> getParams();
+    public abstract Simulator<T> simulator();
 }

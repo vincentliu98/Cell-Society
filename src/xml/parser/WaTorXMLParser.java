@@ -10,6 +10,7 @@ import simulation.models.WaTorModel;
 import simulation.models.wator.Fish;
 import simulation.models.wator.Shark;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,11 +33,11 @@ public class WaTorXMLParser extends ParentXMLParser {
      * @param root
      * @return
      */
-    public static Simulator getModelSimulator(Element root) {
+    private static Simulator<Fish> getModelSimulator(Element root) {
         WaTorModel model = new WaTorModel(getIntValue(root, FISH_BREED_PERIOD_TAG),
                 getIntValue(root, SHARK_BREED_PERIOD_TAG), getIntValue(root, SHARK_STARVE_PERIOD_TAG));
         CellGraph<Fish> graph = getWaTorCellGraph(root);
-        return new Simulator(graph, model);
+        return new Simulator<>(graph, model);
     }
 
     /**
@@ -44,7 +45,7 @@ public class WaTorXMLParser extends ParentXMLParser {
      * @param root
      * @return
      */
-    public static CellGraph<Fish> getWaTorCellGraph(Element root) {
+    private static CellGraph<Fish> getWaTorCellGraph(Element root) {
         CellGraph<Fish> graph = new CellGraph<>();
         NodeList cells = root.getElementsByTagName(CELL_TAG);
         Map<Integer, Cell<Fish>> IDToCellMap = new HashMap<Integer, Cell<Fish>>();
@@ -78,5 +79,9 @@ public class WaTorXMLParser extends ParentXMLParser {
             graph.put(IDToCellMap.get(uniqueID), neighborList);
         }
         return graph;
+    }
+
+    public Simulator<Fish> getSimulator(File datafile) {
+        return WaTorXMLParser.getModelSimulator(getRootElement(datafile));
     }
 }

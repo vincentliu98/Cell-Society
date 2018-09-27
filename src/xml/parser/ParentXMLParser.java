@@ -31,10 +31,10 @@ import java.util.Map;
  * @author jgp17 
  * @author Inchan Hwang
  */
-public class ParentXMLParser {
+public abstract class ParentXMLParser<T> {
     public static final String ERROR_MESSAGE = "XML file does not represent %s";
     // keep only one documentBuilder because it is expensive to make and can numCellChanged it before parsing
-    private final DocumentBuilder DOCUMENT_BUILDER;
+    private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
     // name of root attribute that notes the type of file expecting to parse
     public static final String MODEL_ATTRIBUTE_STRING = "modelName";
     public static final List<String> VALID_MODEL_NAMES = List.of(
@@ -57,28 +57,9 @@ public class ParentXMLParser {
     public static final String CELL_YPOS_TAG = "cy";
 
     /**
-     * Create a parser for XML files of given type.
-     */
-    public ParentXMLParser() {
-        DOCUMENT_BUILDER = getDocumentBuilder();
-    }
-
-    /**
      * Get the data contained in this XML file as an object
      */
-    public Simulator getSimulator(File datafile) {
-        Element root = getRootElement(datafile);
-        if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(GameOfLifeModel.MODEL_NAME))
-            return GameOfLifeXMLParser.getModelSimulator(root);
-        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SegregationModel.MODEL_NAME))
-            return SegregationXMLParser.getModelSimulator(root);
-        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(SpreadingFireModel.MODEL_NAME))
-            return SpreadingFireXMLParser.getModelSimulator(root);
-        else if (getTextValue(root, MODEL_ATTRIBUTE_STRING).equals(WaTorModel.MODEL_NAME))
-            return WaTorXMLParser.getModelSimulator(root);
-        else
-            throw new XMLException(ERROR_MESSAGE, MODEL_ATTRIBUTE_STRING);
-    }
+    public abstract Simulator<T> getSimulator(File datafile);
 
     /**
      *
@@ -224,7 +205,7 @@ public class ParentXMLParser {
      * @param xmlFile
      * @return
      */
-    public Element getRootElement(File xmlFile) {
+    public static Element getRootElement(File xmlFile) {
         try {
             DOCUMENT_BUILDER.reset();
             var xmlDocument = DOCUMENT_BUILDER.parse(xmlFile);
@@ -232,6 +213,10 @@ public class ParentXMLParser {
         } catch (SAXException | IOException e) {
             throw new XMLException(e);
         }
+    }
+
+    public static String peekModelName(File xmlFile) {
+        return getTextValue(getRootElement(xmlFile), MODEL_ATTRIBUTE_STRING);
     }
 
     /**
@@ -250,7 +235,7 @@ public class ParentXMLParser {
     /**
      * Boilerplate code needed to make a documentBuilder
      */
-    public DocumentBuilder getDocumentBuilder() {
+    public static DocumentBuilder getDocumentBuilder() {
         try {
             return DocumentBuilderFactory.newInstance().newDocumentBuilder();
         } catch (ParserConfigurationException e) {

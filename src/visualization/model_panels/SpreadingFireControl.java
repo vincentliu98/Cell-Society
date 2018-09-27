@@ -2,32 +2,36 @@ package visualization.model_panels;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import simulation.models.SpreadingFireModel;
-
-import java.util.HashMap;
-import java.util.Map;
+import simulation.Simulator;
+import simulation.factory.SpreadingFire;
 
 /**
- * SpreadingFirePanel extends the abstract class ModelPanel.
+ * SpreadingFireControl extends the abstract class ModelControl.
  * It contains one extra parameter - the probability of catching fire, thus having an extra Slider.
  *
  * @author Vincent Liu
  */
 
-public class SpreadingFirePanel extends ModelPanel {
+public class SpreadingFireControl extends ModelControl<Integer> {
     public static final double DEFAULT_PROBCATCH = 0.70;
-    private Slider probCatchBar = new Slider(0, 1, DEFAULT_PROBCATCH);
-
     public static final Label probCatchCaption = new Label("probCatch:");
+
+    private Slider probCatchBar = new Slider(0, 1, DEFAULT_PROBCATCH);
     private Label probCatchValue = new Label(
             Double.toString(probCatchBar.getValue()));
 
-    public SpreadingFirePanel() {
-        super();
+    private Simulator<Integer> simulator;
+
+    public SpreadingFireControl(String shape) {
+        simulator = SpreadingFire.generate(DEFAULT_CELL_NUM, shape);
+    }
+
+    public SpreadingFireControl(Simulator<Integer> sim) {
+        simulator = sim;
+
         probCatchBar.setShowTickMarks(true);
         probCatchBar.setShowTickLabels(true);
         probCatchBar.setOnMouseReleased(e -> {
-            paramChanged = true;
             probCatchValue.setText(String.format("%.2f", probCatchBar.getValue()));
         });
         getChildren().addAll(probCatchCaption, probCatchValue, probCatchBar);
@@ -35,9 +39,5 @@ public class SpreadingFirePanel extends ModelPanel {
     }
 
     @Override
-    public Map<String, String> getParams() {
-        var ret = new HashMap<String, String>();
-        ret.put(SpreadingFireModel.PARAM_CATCHPROB, Double.toString(probCatchBar.getValue()));
-        return ret;
-    }
+    public Simulator<Integer> simulator() { return simulator; }
 }
