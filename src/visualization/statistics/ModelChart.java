@@ -1,4 +1,4 @@
-package visualization;
+package visualization.statistics;
 
 import javafx.collections.*;
 import javafx.geometry.Pos;
@@ -20,7 +20,6 @@ import java.util.*;
 public class ModelChart{
     private LineChart<Number, Number> lineChart;
     private ObservableList<Integer> number;
-    private HBox layout;
     private NumberAxis xAxis = new NumberAxis();
     private NumberAxis yAxis = new NumberAxis();
 
@@ -34,12 +33,11 @@ public class ModelChart{
         lineChart = new LineChart<>(xAxis, yAxis);
         lineChart.setAnimated(true);
         lineChart.autosize();
-        lineChart.setTitle("This is my Line Chart");
         lineChart.getStyleClass().add("line-chart");
     }
 
     public Pane getLineChart() {
-        layout = new HBox();
+        HBox layout = new HBox();
         layout.getChildren().add(lineChart);
         layout.getStyleClass().add("chartBox");
         layout.setAlignment(Pos.CENTER);

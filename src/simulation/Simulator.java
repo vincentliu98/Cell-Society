@@ -22,9 +22,9 @@ import static javafx.scene.shape.StrokeType.INSIDE;
  * @author Inchan Hwang
  */
 public class Simulator<T> {
-    public static final double SIMULATION_SX = 636;
+    public static final double SIMULATION_SX = 628;
     public static final double SIMULATION_SY = 470;
-
+ 
     private CellGraph<T> graph;
     protected SimulationModel<T> model;
 
@@ -116,7 +116,6 @@ public class Simulator<T> {
     }
 
     /**
-     * ??????????????????????????????????????????????????????
      */
     private void globalUpdate() { model.globalUpdate(graph); }
 

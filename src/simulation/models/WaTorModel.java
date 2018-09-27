@@ -104,7 +104,9 @@ public class WaTorModel implements SimulationModel<Fish> {
     }
 
     @Override
-    public void globalUpdate(CellGraph<Fish> graph) { }
+    public void globalUpdate(CellGraph<Fish> graph) {
+        // waTor model doesn't require global update
+    }
 
     @Override
     public Fish nextValue(Fish myVal) {

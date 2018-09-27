@@ -30,7 +30,9 @@ public class Fish {
      */
     public void breed() { breedCounter = 0; }
 
-    public void eat() { }
+    public void eat() {
+        // fish doesn't eat
+    }
 
     /**
      *

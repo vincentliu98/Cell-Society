@@ -22,5 +22,7 @@ public class GameOfLifeControl extends ModelControl<Integer> {
     }
 
     @Override
-    public void handleParamChange() {}
+    public void handleParamChange() {
+        // game of life doesn't have any model parameters
+    }
 }

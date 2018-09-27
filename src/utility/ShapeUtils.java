@@ -14,19 +14,10 @@ import simulation.Simulator;
 public class ShapeUtils {
     public static final String RECTANGULAR = "rectangular";
     public static final String TRIANGULAR = "triangular";
-    public static final String[] SHAPES = new String[] {
-            RECTANGULAR,
-            TRIANGULAR
-    };
 
     public static final int RECTANGLE = 0;
     public static final int TRIANGLE = 1;
     public static final int TRIANGLE_FLIP = 2;
-    public static final int[] SHAPE_CODES = new int[] {
-            RECTANGLE,
-            TRIANGLE,
-            TRIANGLE_FLIP
-    };
 
     public static void centerShape(Shape s, double cx, double cy) {
         s.setLayoutX(cx - s.getLayoutBounds().getMinX() - s.getLayoutBounds().getWidth()/2);
@@ -55,5 +46,20 @@ public class ShapeUtils {
         // clip the shape to fit the simulation panel
         return Shape.intersect(ret,
                 new Rectangle(0, 0, Simulator.SIMULATION_SX, Simulator.SIMULATION_SY));
+    }
+
+    public static int[] shapeCodes() {
+        return new int[] {
+            RECTANGLE,
+            TRIANGLE,
+            TRIANGLE_FLIP
+        };
+    }
+
+    public static String[] shapes() {
+        return new String[] {
+            RECTANGULAR,
+            TRIANGULAR
+        };
     }
 }

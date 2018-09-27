@@ -13,6 +13,8 @@ import java.util.Random;
  *  @author Inchan Hwang
  */
 public class GameOfLife {
+    private static double MARGIN = 0.5;
+
     /**
      * @param row
      * @param column
@@ -28,7 +30,7 @@ public class GameOfLife {
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
                 var cell = new Cell<>(initial[i][j], (i+j)%2==0 ? ShapeUtils.TRIANGLE : ShapeUtils.TRIANGLE_FLIP,
-                        (0.5*j)*width, (i+0.5)*height,
+                        (MARGIN*j)*width, (i+MARGIN)*height,
                         width, height
                 );
                 cells.add(cell);
@@ -54,7 +56,7 @@ public class GameOfLife {
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
                 var cell = new Cell<>(initial[i][j], ShapeUtils.RECTANGLE,
-                        (j+0.5)*width, (i+0.5)*height,
+                        (j+MARGIN)*width, (i+MARGIN)*height,
                         width, height
                 );
                 cells.add(cell);

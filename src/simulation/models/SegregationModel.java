@@ -32,7 +32,9 @@ public class SegregationModel implements SimulationModel<Integer> {
     public int getPriority(Integer myVal) { return 0; }
 
     @Override
-    public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) { }
+    public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) {
+        // segregation doesn't require local updates
+    }
 
     @Override
     public void globalUpdate(CellGraph<Integer> graph) {
