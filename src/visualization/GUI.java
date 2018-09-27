@@ -14,10 +14,9 @@ import java.util.ResourceBundle;
 
 /**
  * This is the Graphical User Interface for displaying the simulation models.
- * It contains three components:
- *  1. modelPanel that displays the model's parameters
- *  2. simPanel that displays the real-time simulation
- *  3. controlPanel that allows the user to adjust settings
+ * There are three main panels, SimulationControl - ModelControl - SimulationPanel.
+ * SimulationControl also manages the modelControl, and the modelControl manages
+ * simulationPanel.
  *
  * The controlPanel contains multiple buttons that will handle events, such as loading/saving settings
  * from XML file, start/pause the simulation, change the rate of simulation, or change the model
@@ -85,6 +84,12 @@ public class GUI {
         animation.play();
     }
 
+    /**
+     * step() ticks the simulation control, while checking whether
+     * it should update the view or not by checking simulation
+     * control's status code
+     * @param duration
+     */
     public void step(double duration) {
         if(simControl.consumeStatusCode() == StatusCode.UPDATE) {
             root.getChildren().clear();

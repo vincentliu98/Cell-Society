@@ -71,6 +71,10 @@ public class SimulationControl extends HBox {
         initializeFunctionality();
     }
 
+
+    /**
+     *  Initializes the components, without any functionality
+     */
     private void initializeStructure() {
         getStyleClass().add("simControlPanelWrapper");
         var grid = new GridPane();
@@ -112,17 +116,26 @@ public class SimulationControl extends HBox {
         getChildren().add(grid);
     }
 
+    /**
+     *  Sets up each component's interactions
+     */
     private void initializeFunctionality() {
         save.setOnMouseClicked(e -> handleFileSave());
         load.setOnMouseClicked(e -> handleFileLoad());
         playStop.setOnMouseClicked(e -> handlePlayStop());
-        tick.setOnMouseClicked(e -> modelControl.simulator().tick());
+        tick.setOnMouseClicked(e -> handleSingleTick());
         inc.setOnMouseClicked(e -> handleSpeedChange(-0.05));
         dec.setOnMouseClicked(e -> handleSpeedChange(0.05));
         chooseModel.valueProperty().addListener((a, b, c) -> handleModelChange(c));
         chooseShape.valueProperty().addListener((a, b, c) -> handleShapeChange(c));
     }
 
+    /**
+     * It first checks whether it should update the model control,
+     * reporting to the GUI via statusCode. <br>
+     *  It keeps a internal timer to tick once in simPeriod.
+     * @param duration
+     */
     public void tick(double duration) {
         if(modelControl.consumeIsDirty()) {
             stop();
@@ -166,6 +179,11 @@ public class SimulationControl extends HBox {
         initializeModelControl(chooseModel.getValue(), newShape);
     }
 
+    private void handleSingleTick() {
+        modelControl.simulator().tick();
+        numTick.setText(myResources.getString("NumTickDynamic")+modelControl.simulator().tickCount());
+    }
+
     private void handleFileLoad() {
         try {
             stop();
@@ -191,7 +209,13 @@ public class SimulationControl extends HBox {
         modelControl.simulator().getWriter(file).generate();
     }
 
-    // There are two ways of initializing a simulation - from file or from factory
+    /**
+     *  There are two ways of initializing a simulation - from file or from factory.
+     *  This one handles the former
+     * @param modelName
+     * @param file
+     */
+
     private void initializeModelControl(String modelName, File file) {
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
             modelControl = new GameOfLifeControl(new GameOfLifeXMLParser(myLanguage).getSimulator(file));
@@ -206,6 +230,12 @@ public class SimulationControl extends HBox {
         statusCode = StatusCode.UPDATE;
     }
 
+    /**
+     *  There are two ways of initializing a simulation - from file or from factory.
+     *  This one handles the latter
+     * @param modelName
+     * @param shape
+     */
     private void initializeModelControl(String modelName, String shape) {
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
             modelControl = new GameOfLifeControl(shape);
@@ -222,6 +252,10 @@ public class SimulationControl extends HBox {
     SimulationPanel getSimPanel() { return modelControl.simPanel(); }
     ModelControl<?> getModelControl() { return modelControl; }
 
+    /**
+     * It's named "consume" since once drawn, statusCode should go back to its default state.
+     * @return
+     */
     public StatusCode consumeStatusCode() {
         var ret = statusCode;
         statusCode = StatusCode.NO_UPDATE;
