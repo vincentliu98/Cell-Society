@@ -1,15 +1,12 @@
 package visualization;
 
-import javafx.application.Application;
 import javafx.collections.*;
 import javafx.geometry.Pos;
-import javafx.scene.*;
 import javafx.scene.chart.*;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
-import javafx.stage.Stage;
 
 import java.util.*;
 
@@ -23,28 +20,29 @@ import java.util.*;
 public class ModelChart{
     private LineChart<Number, Number> lineChart;
     private ObservableList<Integer> number;
-    private Pane layout = new HBox();
+    private HBox layout;
     private NumberAxis xAxis = new NumberAxis();
     private NumberAxis yAxis = new NumberAxis();
-    private HBox chartBox;
 
     public ModelChart() {
         xAxis.setLabel("Time (s)");
         yAxis.setLabel("Number");
         xAxis.setMinorTickVisible(false);
         xAxis.setAutoRanging(false);
-        xAxis.setTickUnit(1);
+        xAxis.autosize();
 
         lineChart = new LineChart<>(xAxis, yAxis);
-        lineChart.getStyleClass().add("line-chart");
         lineChart.setAnimated(true);
+        lineChart.autosize();
         lineChart.setTitle("This is my Line Chart");
+        lineChart.getStyleClass().add("line-chart");
     }
 
-    public HBox getLineChart() {
-        chartBox = new HBox();
-        chartBox.getStyleClass().add("chart-box");
-        chartBox.getChildren().add(lineChart);
-        return chartBox;
+    public Pane getLineChart() {
+        layout = new HBox();
+        layout.getChildren().add(lineChart);
+        layout.getStyleClass().add("chartBox");
+        layout.setAlignment(Pos.CENTER);
+        return layout;
     }
 }

@@ -56,7 +56,11 @@
     -fx-vgap: 12;
 }
 
+.line-chart {
+    -fx-padding: 10px;
+    -fx-alignment: center;
+}
+
 .chart-box {
-    -fx-border-color: black;
-    -fx-border-width: 2px;
+    -fx-alignment: middle center;
 }
