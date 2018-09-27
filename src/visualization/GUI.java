@@ -9,6 +9,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import visualization.statistics.ModelChart;
 
 import java.util.ResourceBundle;
 

@@ -1,4 +1,4 @@
-package visualization;
+package visualization.statistics;
 
 import javafx.application.Application;
 import javafx.collections.*;
