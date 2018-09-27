@@ -241,7 +241,6 @@ public class SimulationControl extends HBox {
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
             modelControl = new WaTorControl(shape);
         }
-
         statusCode = StatusCode.UPDATE;
     }
 
