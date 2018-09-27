@@ -86,7 +86,7 @@ public abstract class ParentXMLParser<T> {
             int val = getIntValue(curCell, valTag);
             int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG);
 
-            if(Arrays.stream(ShapeUtils.SHAPE_CODES).filter(p -> p == shapeCode).count() == 0)
+            if(Arrays.stream(ShapeUtils.shapeCodes()).filter(p -> p == shapeCode).count() == 0)
                 throw new XMLException(
                         myResources.getString("ShapeErrorMsg") + myResources.getString(LOAD_AGAIN_KEY), shapeCode
                 );
