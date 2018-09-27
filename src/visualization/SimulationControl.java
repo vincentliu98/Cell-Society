@@ -36,7 +36,7 @@ public class SimulationControl extends HBox {
 
     private StatusCode statusCode;
     private boolean isPlaying;
-    private Text numTick, stepRate;
+    private Text numTick, stepRate, modelName, shapeName;
     private Button save, load, tick, playStop, inc, dec;
     private double simPeriod, elapsedTime;
     private ComboBox<String> chooseModel;
@@ -79,6 +79,30 @@ public class SimulationControl extends HBox {
         getStyleClass().add("simControlPanelWrapper");
         var grid = new GridPane();
         grid.getStyleClass().add("simControlPanel");
+
+        initializeElements();
+
+        var comboBox = new GridPane();
+        comboBox.add(modelName, 0,0);
+        comboBox.add(shapeName, 0,1);
+        comboBox.add(chooseModel, 1, 0);
+        comboBox.add(chooseShape, 1, 1);
+        comboBox.getStyleClass().add("combo-choice");
+
+        grid.add(save, 0, 0);
+        grid.add(load, 0, 1);
+        grid.add(playStop, 1, 0);
+        grid.add(tick, 1, 1);
+        grid.add(inc, 2, 0);
+        grid.add(dec, 2, 1);
+        grid.add(numTick, 3, 0);
+        grid.add(stepRate, 3, 1);
+        grid.add(comboBox, 4, 0, 1, 2);
+
+        getChildren().add(grid);
+    }
+
+    private void initializeElements() {
         save = new Button(myResources.getString("SaveButton"));
         load = new Button(myResources.getString("LoadButton"));
         playStop = new Button(myResources.getString("PlayButton"));
@@ -102,26 +126,8 @@ public class SimulationControl extends HBox {
             chooseShape.hide();
             chooseShape.show();
         });
-        var modelName = new Text(myResources.getString("SelectModel"));
-        var shapeName = new Text(myResources.getString("SelectShape"));
-        var comboBox = new GridPane();
-        comboBox.add(modelName, 0,0);
-        comboBox.add(shapeName, 0,1);
-        comboBox.add(chooseModel, 1, 0);
-        comboBox.add(chooseShape, 1, 1);
-        comboBox.getStyleClass().add("combo-choice");
-
-        grid.add(save, 0, 0);
-        grid.add(load, 0, 1);
-        grid.add(playStop, 1, 0);
-        grid.add(tick, 1, 1);
-        grid.add(inc, 2, 0);
-        grid.add(dec, 2, 1);
-        grid.add(numTick, 3, 0);
-        grid.add(stepRate, 3, 1);
-        grid.add(comboBox, 4, 0, 1, 2);
-
-        getChildren().add(grid);
+        modelName = new Text(myResources.getString("SelectModel"));
+        shapeName = new Text(myResources.getString("SelectShape"));
     }
 
     /**
