@@ -89,10 +89,10 @@ public class SimulationControl extends HBox {
         inc = new Button(myResources.getString("RateUpButton"));
         dec = new Button(myResources.getString("RateDownButton"));
         chooseModel = new ComboBox<>();
-        chooseModel.getItems().addAll(models[0]);
+        chooseModel.getItems().addAll(models);
         chooseModel.setValue(models[0]);
         chooseShape = new ComboBox<>();
-        chooseShape.getItems().addAll(ShapeUtils.shapes()[0]);
+        chooseShape.getItems().addAll(ShapeUtils.shapes());
         chooseShape.setValue(ShapeUtils.shapes()[0]);
         var modelName = new Text(myResources.getString("SelectModel"));
         var shapeName = new Text(myResources.getString("SelectShape"));

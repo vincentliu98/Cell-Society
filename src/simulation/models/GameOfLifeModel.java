@@ -49,5 +49,7 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
     }
 
     @Override
-    public void updateParams(Map<String, String> params) { }
+    public void updateParams(Map<String, String> params) {
+        // game of life doesn't have any parameters
+    }
 }
