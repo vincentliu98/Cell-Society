@@ -8,12 +8,17 @@ import visualization.SimulationPanel;
 
 /**
  *  For various model-specific panels that defines
- *  uniform theme across different panels. It is purposefully made
- *  abstract so that it would never actually be initialized.
+ *  uniform theme across different panels.
  *
  *  ModelControl contains a common parameter for all models - number of cells.
  *  It contains a Slider that dynamically change the number of cells and update the simulation
  *  It is also able to detect any parameter change that occurs in the UI and pass the change to the model
+ *
+ *  ModelControl holds reference to a simulation panel, replacing it if
+ *  number of cells change. Each subclasses must implement two methods
+ *  handleCellNumChange(), handleParamChange(), each handling the changes in
+ *  each sliders.
+ *
  *
  * @author Vincent Liu
  * @author Inchan Hwang
@@ -56,9 +61,25 @@ public abstract class ModelControl<T> extends VBox {
         getChildren().addAll(CELL_NUMBER_CAPTION, cellNumValue, numberBar);
     }
 
+    /**
+     * Since various models have different factory methods, the reinitialization
+     * is left for each model's controller
+     *
+     * @param numCell
+     */
     public abstract void handleNumCellChange(int numCell);
+
+    /**
+     * Since various models have different set of parameters, they
+     * handle the parameter changes in their own way
+     */
     public abstract void handleParamChange();
 
+    /**
+     * The word "consume" is used to emphasize that isDirty is reset to its default state
+     * once the variable has been seen by its parent
+     * @return
+     */
     public boolean consumeIsDirty() {
         var ret = isDirty;
         isDirty = false;
