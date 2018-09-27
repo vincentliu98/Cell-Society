@@ -3,27 +3,13 @@ package visualization;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
-import javafx.scene.layout.*;
-import javafx.stage.FileChooser;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
-import simulation.Simulator;
-import simulation.factory.GameOfLife;
-import simulation.factory.Segregation;
-import simulation.factory.SpreadingFire;
-import simulation.factory.WaTor;
-import simulation.models.GameOfLifeModel;
-import simulation.models.SegregationModel;
-import simulation.models.SpreadingFireModel;
-import simulation.models.WaTorModel;
-import visualization.model_panels.*;
-import xml.XMLException;
-import xml.parser.ParentXMLParser;
 
-import java.io.File;
 import java.util.ResourceBundle;
 
 /**
@@ -42,7 +28,6 @@ import java.util.ResourceBundle;
 public class GUI {
     public static final int SCREEN_WIDTH = 840;
     public static final int SCREEN_HEIGHT = 726;
-    public static final int DEFAULT_CELL_NUM = 10;
 
     public static final int FRAMES_PER_SECOND = 10;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
@@ -51,13 +36,9 @@ public class GUI {
 
     private Window window;
     private GridPane root;
-    private SimulationControlPanel simControlPanel;
-    private ModelPanel modelPanel;
-    private VBox simPanel;
-
+    private SimulationControl simControl;
     private ResourceBundle myResources;
     private String myLanguage;
-    private Simulator<?> simulator;
 
     public GUI (String language) {
         myLanguage = language;
@@ -76,33 +57,13 @@ public class GUI {
         row2.setPercentHeight(15);
         root.getRowConstraints().addAll(row1, row2);
 
-        modelPanel = new GameOfLifePanel();
-        simControlPanel = new SimulationControlPanel(myResources);
-        simPanel = new VBox();
-        simPanel.getStyleClass().add("simPanel");
+        simControl = new SimulationControl(window, myResources, myLanguage);
 
-        root.add(modelPanel, 0, 0);
-        root.add(simPanel, 1, 0);
-        root.add(simControlPanel, 0, 1, 2, 1);
-
-        initializeSimulation(GameOfLife.generate(DEFAULT_CELL_NUM));
+        root.add(simControl.getModelControl(), 0, 0);
+        root.add(simControl.getSimPanel(), 1, 0);
+        root.add(simControl, 0, 1, 2, 1);
     }
 
-    /**
-     *
-     * @param sim
-     */
-    protected void initializeSimulation(Simulator<?> sim) {
-        simulator = sim;
-        simControlPanel.setupPanel(simulator, e -> handleFileLoad(), e -> handleFileSave());
-        simPanel.getChildren().clear();
-        simPanel.getChildren().add(simulator.view());
-    }
-
-    /**
-     *
-     * @param primaryStage
-     */
     public void runGUI (Stage primaryStage) {
         window = primaryStage;
 
@@ -119,113 +80,12 @@ public class GUI {
         animation.play();
     }
 
-    /**
-     *
-     * @param duration
-     */
     public void step(double duration) {
-        if(simControlPanel.canTick(duration)) simulator.tick();
-        simControlPanel.setNumTick(simulator.tickCount());
-        simControlPanel.updateStepRate();
-
-        handleModelChange();
-        handleModelPanelParametersChange();
-        handleCellNumChange();
-    }
-
-    /**
-     *
-     */
-    private void handleModelPanelParametersChange() {
-        if(modelPanel.isParamChanged()) {
-            simulator.updateSimulationModel(modelPanel.getParams());
-            modelPanel.cleanParamChanged();
-        }
-    }
-
-    /**
-     *
-     */
-    private void handleModelChange() {
-        if (simulator.modelName().equals(simControlPanel.getChosenModel())) return;
-        generateModelByName(DEFAULT_CELL_NUM, simControlPanel.getChosenModel());
-        generateModelPanelByName(simControlPanel.getChosenModel());
-    }
-
-    /**
-     *
-     */
-    private void handleCellNumChange() {
-        if (modelPanel.isNumCellChanged()) {
-            generateModelByName(modelPanel.getCellNum(), simControlPanel.getChosenModel());
-            modelPanel.cleanNumCellChanged();
-        }
-    }
-
-    /**
-     *
-     */
-    private void handleFileLoad() {
-        try {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle(myResources.getString("OpenFile"));
-            File file = fileChooser.showOpenDialog(window);
-            if (!file.exists()) return;
-            var sim = new ParentXMLParser(myLanguage).getSimulator(file);
-            initializeSimulation(sim);
-            generateModelPanelByName(sim.modelName());
-        }
-        catch (XMLException e) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setHeaderText(e.getMessage());
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
-        }
-    }
-
-    /**
-     *
-     */
-    private void handleFileSave() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(myResources.getString("OpenFile"));
-        File file = fileChooser.showSaveDialog(window);
-        if(file == null) return; // display "OH NO!" DIALOG
-        simulator.getWriter(file).generate();
-    }
-
-    /**
-     *
-     * @param cellNum
-     * @param modelName
-     */
-    private void generateModelByName(int cellNum, String modelName) {
-        if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
-            initializeSimulation(GameOfLife.generate(cellNum));
-        } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
-            initializeSimulation(Segregation.generate(cellNum));
-        } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
-            initializeSimulation(SpreadingFire.generate(cellNum));
-        } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
-            initializeSimulation(WaTor.generate(cellNum));
-        }
-    }
-
-    /**
-     *
-     * @param modelName
-     */
-    private void generateModelPanelByName(String modelName) {
-        if(modelPanel != null) root.getChildren().remove(modelPanel);
-        if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
-            modelPanel = new GameOfLifePanel();
-        } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
-            modelPanel = new SegregationPanel();
-        } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
-            modelPanel =  new SpreadingFirePanel();
-        } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
-            modelPanel = new WaTorPanel();
-        }
-        root.add(modelPanel, 0, 0);
+        if(simControl.consumeStatusCode() == StatusCode.UPDATE) {
+            root.getChildren().clear();
+            root.add(simControl.getModelControl(), 0, 0);
+            root.add(simControl.getSimPanel(), 1, 0);
+            root.add(simControl, 0, 1, 2, 1);
+        } simControl.tick(duration);
     }
 }

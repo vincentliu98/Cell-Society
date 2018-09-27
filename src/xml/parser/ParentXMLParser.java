@@ -1,7 +1,5 @@
 package xml.parser;
 
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -12,6 +10,7 @@ import simulation.models.GameOfLifeModel;
 import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
+import utility.ShapeUtils;
 import xml.XMLException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -29,12 +28,14 @@ import java.util.*;
  * @author jgp17 
  * @author Inchan Hwang
  */
-public class ParentXMLParser {
+
+public abstract class ParentXMLParser<T> {
+    public static final String ERROR_MESSAGE = "XML file does not represent %s";
+    // keep only one documentBuilder because it is expensive to make and can numCellChanged it before parsing
+    private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
     public static final String DEFAULT_RESOURCES = "Errors";
     private static final String LOAD_AGAIN_KEY = "LoadAgainMsg";
     private static ResourceBundle myResources;
-    // keep only one documentBuilder because it is expensive to make and can reset it before parsing
-    private final DocumentBuilder DOCUMENT_BUILDER;
     // name of root attribute that notes the type of file expecting to parse
     public static final String MODEL_ATTRIBUTE_STRING = "modelName";
     public static final List<String> VALID_MODEL_NAMES = List.of(
@@ -48,9 +49,7 @@ public class ParentXMLParser {
     public static final String SHAPE_WIDTH_TAG = "shapeWidth";
     public static final String SHAPE_HEIGHT_TAG = "shapeHeight";
     public static final String SHAPE_RADIUS_TAG = "shapeRadius";
-    public static final String SHAPE_TAG = "shape";
-    public static final String RECTANGLE_STRING = "rectangle";
-    public static final String CIRCLE_STRING = "circle";
+    public static final String SHAPE_CODE_TAG = "shapeCode";
 
     public static final String CELL_TAG = "cell";
     public static final String CELL_UNIQUE_ID_TAG = "uniqueID";
@@ -62,30 +61,14 @@ public class ParentXMLParser {
      * Create a parser for XML files of given type.
      */
     public ParentXMLParser(String language) {
-        DOCUMENT_BUILDER = getDocumentBuilder();
-        // use resources for labels
         myResources = ResourceBundle.getBundle(DEFAULT_RESOURCES + language);
     }
 
     /**
      * Get the data contained in this XML file as an object
      */
-    public Simulator getSimulator(File datafile) {
-        Element root = getRootElement(datafile);
-        String fileModelName = getTextValue(root, MODEL_ATTRIBUTE_STRING);
-        switch (fileModelName) {
-            case GameOfLifeModel.MODEL_NAME:
-                return GameOfLifeXMLParser.getModelSimulator(root);
-            case SegregationModel.MODEL_NAME:
-                return SegregationXMLParser.getModelSimulator(root);
-            case SpreadingFireModel.MODEL_NAME:
-                return SpreadingFireXMLParser.getModelSimulator(root);
-            case WaTorModel.MODEL_NAME:
-                return WaTorXMLParser.getModelSimulator(root);
-            default:
-                throw new XMLException(myResources.getString("ModelNameErrorMsg"), fileModelName);
-        }
-    }
+
+    public abstract Simulator<T> getSimulator(File datafile);
 
     /**
      *
@@ -94,24 +77,25 @@ public class ParentXMLParser {
      * @return
      */
     public static CellGraph<Integer> getIntegerCellGraph(Element root, String valTag) {
-        CellGraph<Integer> graph;
-        String shapeString = getTextValue(root, SHAPE_TAG).replaceAll("\\s","");
-        if (shapeString.equals(RECTANGLE_STRING)) {
-            graph = new CellGraph<Integer>(parseRectangle(root));
-        } else if (shapeString.equals(CIRCLE_STRING)) {
-            graph = new CellGraph<Integer>(parseCircle(root));
-        } else {
-            throw new XMLException(myResources.getString("ShapeErrorMsg")+ myResources.getString(LOAD_AGAIN_KEY), shapeString);
-        }
+        CellGraph<Integer> graph = new CellGraph<>();
         NodeList cells = root.getElementsByTagName(CELL_TAG);
         Map<Integer, Cell<Integer>> IDToCellMap = new HashMap<Integer, Cell<Integer>>();
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
             int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
             int val = getIntValue(curCell, valTag);
+            int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG);
+
+            if(Arrays.stream(ShapeUtils.SHAPE_CODES).filter(p -> p == shapeCode).count() == 0)
+                throw new XMLException(
+                        myResources.getString("ShapeErrorMsg") + myResources.getString(LOAD_AGAIN_KEY), shapeCode
+                );
+
+            double shapeWidth = getDoubleValue(curCell, SHAPE_WIDTH_TAG);
+            double shapeHeight = getDoubleValue(curCell, SHAPE_HEIGHT_TAG);
             double xPos = getDoubleValue(curCell, CELL_XPOS_TAG);
             double yPos = getDoubleValue(curCell, CELL_YPOS_TAG);
-            IDToCellMap.put(uniqueID, new Cell<Integer>(val, xPos, yPos));
+            IDToCellMap.put(uniqueID, new Cell<>(val, shapeCode, xPos, yPos, shapeWidth, shapeHeight));
         }
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
@@ -123,27 +107,6 @@ public class ParentXMLParser {
             graph.put(IDToCellMap.get(uniqueID), neighborList);
         }
         return graph;
-    }
-
-    /**
-     *
-     * @param root
-     * @return
-     */
-    public static Rectangle parseRectangle(Element root) {
-        double shapeWidth = getDoubleValue(root, SHAPE_WIDTH_TAG);
-        double shapeHeight = getDoubleValue(root, SHAPE_HEIGHT_TAG);
-        return new Rectangle(shapeWidth, shapeHeight);
-    }
-
-    /**
-     *
-     * @param root
-     * @return
-     */
-    public static Circle parseCircle(Element root) {
-        double shapeRadius = getDoubleValue(root, SHAPE_RADIUS_TAG);
-        return new Circle(shapeRadius);
     }
 
     /**
@@ -220,7 +183,7 @@ public class ParentXMLParser {
      * @param xmlFile
      * @return
      */
-    public Element getRootElement(File xmlFile) {
+    public static Element getRootElement(File xmlFile) {
         try {
             DOCUMENT_BUILDER.reset();
             var xmlDocument = DOCUMENT_BUILDER.parse(xmlFile);
@@ -228,6 +191,10 @@ public class ParentXMLParser {
         } catch (SAXException | IOException e) {
             throw new XMLException(e);
         }
+    }
+
+    public static String peekModelName(File xmlFile) {
+        return getTextValue(getRootElement(xmlFile), MODEL_ATTRIBUTE_STRING);
     }
 
     /**
@@ -246,7 +213,7 @@ public class ParentXMLParser {
     /**
      * Boilerplate code needed to make a documentBuilder
      */
-    public DocumentBuilder getDocumentBuilder() {
+    public static DocumentBuilder getDocumentBuilder() {
         try {
             return DocumentBuilderFactory.newInstance().newDocumentBuilder();
         } catch (ParserConfigurationException e) {

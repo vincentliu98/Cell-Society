@@ -1,5 +1,6 @@
 package simulation;
 
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import simulation.models.SimulationModel;
 import utility.ShapeUtils;
@@ -14,11 +15,15 @@ import utility.ShapeUtils;
 public class Cell<T> {
     private T value, next;
     private Shape view;
-    private double cx, cy;
 
-    public Cell(T value_, double cx_, double cy_) {
+    private int shapeCode;
+    private double cx, cy, width, height;
+
+    public Cell(T value_, int shapeCode_, double cx_, double cy_, double width_, double height_) {
         value = value_; next = null;
-        cx = cx_; cy = cy_;
+        shapeCode = shapeCode_;
+        cx = cx_; cy = cy_; width = width_; height = height_;
+        view = ShapeUtils.makeShape(shapeCode, cx, cy, width, height);
     }
 
     /**
@@ -54,6 +59,12 @@ public class Cell<T> {
      *
      * @return
      */
+    public int shapeCode() { return shapeCode; }
+
+    /**
+     *
+     * @return
+     */
     public double cx() { return cx; }
 
     /**
@@ -66,6 +77,18 @@ public class Cell<T> {
      *
      * @return
      */
+    public double width() { return width; }
+
+    /**
+     *
+     * @return
+     */
+    public double height() { return height; }
+
+    /**
+     *
+     * @return
+     */
     public Shape view() { return view; }
 
     /**
@@ -73,13 +96,4 @@ public class Cell<T> {
      * @param next_
      */
     public void setNext(T next_) { next = next_; }
-
-    /**
-     *
-     * @param view_
-     */
-    public void setShape(Shape view_) {
-        view = view_;
-        ShapeUtils.centerShape(view, cx, cy);
-    }
 }

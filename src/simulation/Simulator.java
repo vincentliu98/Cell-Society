@@ -3,8 +3,11 @@ package simulation;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import simulation.factory.GameOfLife;
 import simulation.models.SimulationModel;
 import utility.ColorUtils;
+import utility.ShapeUtils;
+import visualization.model_controls.ModelControl;
 import xml.writer.XMLWriter;
 
 import java.io.File;
@@ -27,6 +30,10 @@ public class Simulator<T> {
 
     private Pane view;
     private int tickCount;
+
+    public static Simulator<Integer> defaultSimulator() {
+        return GameOfLife.generate(ModelControl.DEFAULT_CELL_NUM, ShapeUtils.RECTANGULAR);
+    }
 
     public Simulator(CellGraph<T> graph_, SimulationModel<T> model_) {
         graph = graph_; model = model_;
@@ -77,9 +84,6 @@ public class Simulator<T> {
      * @return the graph consisting cells as a Node
      */
     public Node view() {
-        graph.getCells().forEach(c -> {
-
-        });
         return view;
     }
 
@@ -97,7 +101,7 @@ public class Simulator<T> {
     public String modelName() { return model.modelName(); }
 
     /**
-     * Call the corresponding XML writer for each model to generate XML file
+     * Call the corresponding XML writer for each model to generateRect XML file
      *
      * @param outFile
      * @return an XML file that will be saved into user's directory
@@ -127,9 +131,16 @@ public class Simulator<T> {
     private void updateView() { graph.getCells().forEach(c -> c.updateView(model)); }
 
     /**
-     * Update the parameters with the new value passed from the UI's ModelPanel
+     * Update the parameters with the new value passed from the UI's ModelControl
      *
      * @param params
      */
     public void updateSimulationModel(Map<String, String> params) { model.updateParams(params); }
+
+    public String peekShape() {
+        var code = graph.getCells().iterator().next().shapeCode();
+        if(code == ShapeUtils.RECTANGLE) return ShapeUtils.RECTANGULAR;
+        else if(code == ShapeUtils.TRIANGLE || code == ShapeUtils.TRIANGLE_FLIP) return ShapeUtils.TRIANGULAR;
+        else return ""; // shouldn't happen for now
+    }
 }

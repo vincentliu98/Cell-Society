@@ -1,16 +1,14 @@
 package simulation.factory;
 
-import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
 import simulation.Cell;
 import simulation.CellGraph;
-import simulation.Simulator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Convenience class to generate "Segregation" CellGraph
+ *  Convenience class to generateRect "Segregation" CellGraph
  *  @author Inchan Hwang
  */
 public class SquareGridUtils<T> {
@@ -19,14 +17,14 @@ public class SquareGridUtils<T> {
 
     /**
      *
-     * @param cells
+     * @param
+     * cells
      * @param r
      * @param c
      * @return
      */
     public CellGraph<T> graphWith8Neighbors(List<Cell<T>> cells, int r, int c) {
-        CellGraph<T> neighbors = new CellGraph<>(
-                new Rectangle(Simulator.SIMULATION_SX/c, Simulator.SIMULATION_SY/r));
+        CellGraph<T> neighbors = new CellGraph<>();
 
         for(int i = 0 ; i < cells.size() ; i ++) {
             var cur = cells.get(i);
@@ -56,8 +54,8 @@ public class SquareGridUtils<T> {
      * @return
      */
     public CellGraph<T> graphWith4Neighbors(List<Cell<T>> cells, int r, int c) {
-        CellGraph<T> neighbors = new CellGraph<>(
-                new Rectangle(Simulator.SIMULATION_SX/c, Simulator.SIMULATION_SY/r));
+        CellGraph<T> neighbors = new CellGraph<>();
+
         for(int i = 0 ; i < cells.size() ; i ++) {
             var cur = cells.get(i);
             var neighbor = new ArrayList<Cell<T>>();
@@ -82,8 +80,7 @@ public class SquareGridUtils<T> {
      * @return
      */
     public CellGraph<T> graphWith8NeighborsNoBoundary(List<Cell<T>> cells, int r, int c) {
-        CellGraph<T> neighbors = new CellGraph<>(
-                new Rectangle(Simulator.SIMULATION_SX/c, Simulator.SIMULATION_SY/r));
+        CellGraph<T> neighbors = new CellGraph<>();
 
         for(int i = 0 ; i < cells.size() ; i ++) {
             var cur = cells.get(i);

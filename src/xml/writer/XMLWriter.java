@@ -4,6 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import simulation.Cell;
 import simulation.CellGraph;
+import utility.ShapeUtils;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,8 +28,6 @@ import java.util.stream.Collectors;
  */
 public abstract class XMLWriter<T> {
     public static final String DELIMITER = ",";
-    public static final String SHAPE_RECTANGLE = "rectangle";
-    public static final String SHAPE_TRIANGLE = "triangle";
 
     private CellGraph<T> graph;
     private Map<Cell<T>, Integer> uniqueId;
@@ -58,16 +57,6 @@ public abstract class XMLWriter<T> {
             var modelName = doc.createElement("modelName");
             modelName.appendChild(doc.createTextNode(getModelName()));
             rootElement.appendChild(modelName);
-            var shape = doc.createElement("shape");
-            shape.appendChild(doc.createTextNode(SHAPE_RECTANGLE));
-            rootElement.appendChild(shape);
-            var width = doc.createElement("shapeWidth");
-            width.appendChild(doc.createTextNode(Double.toString(graph.getShapeWidth())));
-            rootElement.appendChild(width);
-            var height = doc.createElement("shapeHeight");
-            height.appendChild(doc.createTextNode(Double.toString(graph.getShapeHeight())));
-            rootElement.appendChild(height);
-
             graph.getCells().forEach(c -> rootElement.appendChild(encodeCell(c)));
 
             parseModelParams().forEach(p -> rootElement.appendChild(p));
@@ -94,6 +83,13 @@ public abstract class XMLWriter<T> {
                 String.join(DELIMITER, graph.getNeighbors(cell).stream().map(c ->
                         uniqueId.get(c).toString()).collect(Collectors.toList()))
         ));
+
+        var shapeCode = doc.createElement("shapeCode");
+        shapeCode.appendChild(doc.createTextNode(Integer.toString(cell.shapeCode())));
+        var width = doc.createElement("shapeWidth");
+        width.appendChild(doc.createTextNode(Double.toString(cell.width())));
+        var height = doc.createElement("shapeHeight");
+        height.appendChild(doc.createTextNode(Double.toString(cell.height())));
         var cx = doc.createElement("cx");
         cx.appendChild(doc.createTextNode(Double.toString(cell.cx())));
         var cy = doc.createElement("cy");
@@ -101,8 +97,12 @@ public abstract class XMLWriter<T> {
 
         parent.appendChild(id);
         parent.appendChild(neighbors);
+        parent.appendChild(shapeCode);
         parent.appendChild(cx);
         parent.appendChild(cy);
+        parent.appendChild(width);
+        parent.appendChild(height);
+
         encodeCellValue(cell.value()).forEach(parent::appendChild);
 
         return parent;

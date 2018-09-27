@@ -5,6 +5,8 @@ import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.models.SpreadingFireModel;
 
+import java.io.File;
+
 /**
  * Returns a Simulator for a Spreading Of Fire simulation based on the file being loaded
  * @author jgp17
@@ -28,9 +30,13 @@ public class SpreadingFireXMLParser extends ParentXMLParser {
      * @param root
      * @return
      */
-    public static Simulator getModelSimulator(Element root) {
+    private static Simulator<Integer> getModelSimulator(Element root) {
         SpreadingFireModel model = new SpreadingFireModel(getDoubleValue(root, PROB_CATCH_TAG));
         CellGraph<Integer> graph = getIntegerCellGraph(root, LIVE_STATE_TAG);
-        return new Simulator(graph, model);
+        return new Simulator<>(graph, model);
+    }
+
+    public Simulator<Integer> getSimulator(File datafile) {
+        return SpreadingFireXMLParser.getModelSimulator(getRootElement(datafile));
     }
 }

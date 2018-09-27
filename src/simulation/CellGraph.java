@@ -1,11 +1,12 @@
 package simulation;
 
 import javafx.scene.Node;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import simulation.models.SimulationModel;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -14,21 +15,6 @@ import java.util.stream.Collectors;
  */
 
 public class CellGraph<T> extends HashMap<Cell<T>, List<Cell<T>>> {
-    private Shape shape;
-    public CellGraph(Shape shape_) { shape = shape_; }
-
-    /**
-     *
-     * @param cell
-     * @param neighbors
-     * @return
-     */
-    @Override
-    public List<Cell<T>> put(Cell<T> cell, List<Cell<T>> neighbors) {
-        cell.setShape(Shape.subtract(shape, new Rectangle(0,0)));
-        return super.put(cell, neighbors);
-    }
-
     /**
      *
      * @return
@@ -58,16 +44,4 @@ public class CellGraph<T> extends HashMap<Cell<T>, List<Cell<T>>> {
      * @return
      */
     public List<Cell<T>> getNeighbors(Cell<T> cell) { return get(cell); }
-
-    /**
-     *
-     * @return
-     */
-    public double getShapeWidth() { return shape.getLayoutBounds().getWidth(); }
-
-    /**
-     *
-     * @return
-     */
-    public double getShapeHeight() { return shape.getLayoutBounds().getHeight(); }
 }

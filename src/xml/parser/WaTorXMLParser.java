@@ -10,6 +10,7 @@ import simulation.models.WaTorModel;
 import simulation.models.wator.Fish;
 import simulation.models.wator.Shark;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,11 +42,11 @@ public class WaTorXMLParser extends ParentXMLParser {
      * @param root
      * @return
      */
-    public static Simulator getModelSimulator(Element root) {
+    private static Simulator<Fish> getModelSimulator(Element root) {
         WaTorModel model = new WaTorModel(getIntValue(root, FISH_BREED_PERIOD_TAG),
                 getIntValue(root, SHARK_BREED_PERIOD_TAG), getIntValue(root, SHARK_STARVE_PERIOD_TAG));
         CellGraph<Fish> graph = getWaTorCellGraph(root);
-        return new Simulator(graph, model);
+        return new Simulator<>(graph, model);
     }
 
     /**
@@ -53,16 +54,8 @@ public class WaTorXMLParser extends ParentXMLParser {
      * @param root
      * @return
      */
-    public static CellGraph<Fish> getWaTorCellGraph(Element root) {
-        CellGraph<Fish> graph;
-        String shapeString = getTextValue(root, SHAPE_TAG).replaceAll("\\s", "");
-        if (shapeString.equals(RECTANGLE_STRING)) {
-            graph = new CellGraph<Fish>(parseRectangle(root));
-        } else if (shapeString.equals(CIRCLE_STRING)) {
-            graph = new CellGraph<Fish>(parseCircle(root));
-        } else {
-            graph = null;
-        }
+    private static CellGraph<Fish> getWaTorCellGraph(Element root) {
+        CellGraph<Fish> graph = new CellGraph<>();
         NodeList cells = root.getElementsByTagName(CELL_TAG);
         Map<Integer, Cell<Fish>> IDToCellMap = new HashMap<Integer, Cell<Fish>>();
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
@@ -78,9 +71,12 @@ public class WaTorXMLParser extends ParentXMLParser {
                 else
                     val = new Shark(breedCounter, starveCounter);
             }
+            int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG);
             double xPos = getDoubleValue(curCell, CELL_XPOS_TAG);
             double yPos = getDoubleValue(curCell, CELL_YPOS_TAG);
-            IDToCellMap.put(uniqueID, new Cell<Fish>(val, xPos, yPos));
+            double width = getDoubleValue(curCell, SHAPE_WIDTH_TAG);
+            double height = getDoubleValue(curCell, SHAPE_HEIGHT_TAG);
+            IDToCellMap.put(uniqueID, new Cell<>(val, shapeCode, xPos, yPos, width, height));
         }
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
@@ -92,5 +88,9 @@ public class WaTorXMLParser extends ParentXMLParser {
             graph.put(IDToCellMap.get(uniqueID), neighborList);
         }
         return graph;
+    }
+
+    public Simulator<Fish> getSimulator(File datafile) {
+        return WaTorXMLParser.getModelSimulator(getRootElement(datafile));
     }
 }

@@ -5,6 +5,8 @@ import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.models.SegregationModel;
 
+import java.io.File;
+
 /**
  * Returns a Simulator for a Segregation simulation based on the file being loaded
  * @author jgp17
@@ -27,9 +29,13 @@ public class SegregationXMLParser extends ParentXMLParser {
      * @param root
      * @return
      */
-    public static Simulator getModelSimulator(Element root) {
+    private static Simulator<Integer> getModelSimulator(Element root) {
         SegregationModel model = new SegregationModel(getDoubleValue(root, THRESHOLD_TAG));
         CellGraph<Integer> graph = getIntegerCellGraph(root, TYPE_VALUE_TAG);
-        return new Simulator(graph, model);
+        return new Simulator<>(graph, model);
+    }
+
+    public Simulator<Integer> getSimulator(File datafile) {
+        return SegregationXMLParser.getModelSimulator(getRootElement(datafile));
     }
 }
