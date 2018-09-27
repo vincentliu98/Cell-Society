@@ -8,10 +8,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import simulation.Simulator;
+import simulation.factory.GameOfLife;
 import simulation.models.GameOfLifeModel;
 import simulation.models.SegregationModel;
 import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
+
+import java.util.ResourceBundle;
 
 /**
  * SimulationControlPanel extends HBox and will be located in the bottom of UI
@@ -23,21 +26,22 @@ import simulation.models.WaTorModel;
  */
 
 public class SimulationControlPanel extends HBox {
-    public static final String[] SIMULATION_MODELS = new String[] {
-            GameOfLifeModel.MODEL_NAME,
-            SegregationModel.MODEL_NAME,
-            WaTorModel.MODEL_NAME,
-            SpreadingFireModel.MODEL_NAME
-    };
+    public static final String[] SIMULATION_MODELS = new String[] {"", "", "", ""};
 
     private boolean isPlaying;
     private Text numTick, stepRate;
     private double simPeriod, elapsedTime;
     private ComboBox<String> chooseModel;
     private Simulator<?> simulator;
+    private ResourceBundle myResources;
 
-    public SimulationControlPanel() {
+    public SimulationControlPanel(ResourceBundle myResources) {
         super(25);
+        this.myResources = myResources;
+        SIMULATION_MODELS[0] = myResources.getString("GameOfLifeModelName");
+        SIMULATION_MODELS[1] = myResources.getString("SegregationModelName");
+        SIMULATION_MODELS[2] = myResources.getString("WaTorModelName");
+        SIMULATION_MODELS[3] = myResources.getString("SpreadingFireName");
         getStyleClass().add("simControlPanelWrapper");
     }
 
@@ -62,31 +66,31 @@ public class SimulationControlPanel extends HBox {
         var grid = new GridPane();
         grid.getStyleClass().add("simControlPanel");
 
-        var modelName = new Text("       Select Model:");
-        numTick = new Text("# of ticks: 0");
-        stepRate = new Text("Step Rate: " + 1/simPeriod + "/s");
+        var modelName = new Text(myResources.getString("SelectModel"));
+        numTick = new Text(myResources.getString("DefaultNumTickDisplay"));
+        stepRate = new Text(myResources.getString("DefaultStepRateDisplay") + 1/simPeriod + myResources.getString("StepRateUnit"));
 
-        var save = new Button("Save");
+        var save = new Button(myResources.getString("SaveButton"));
         save.setOnMouseClicked(onSave);
-        var load = new Button("Load");
+        var load = new Button(myResources.getString("LoadButton"));
         load.setOnMouseClicked(onLoad);
 
 
-        var playStop = new Button("Play");
+        var playStop = new Button(myResources.getString("PlayButton"));
         playStop.setOnMouseClicked(e -> {
             isPlaying = !isPlaying;
-            playStop.setText(isPlaying ? "Stop" : "Play");
+            playStop.setText(isPlaying ? myResources.getString("StopButton") : myResources.getString("PlayButton"));
             elapsedTime = 0;
         });
-        var tick = new Button("Tick");
+        var tick = new Button(myResources.getString("TickButton"));
         tick.setOnMouseClicked(e -> simulator.tick());
 
-        var increase = new Button("Up");
+        var increase = new Button(myResources.getString("RateUpButton"));
         increase.setOnMouseClicked(e -> {
             simPeriod = Math.max(0.05, simPeriod-0.05);
             updateStepRate();
         });
-        var decrease = new Button("Down");
+        var decrease = new Button(myResources.getString("RateDownButton"));
         decrease.setOnMouseClicked(e -> {
             simPeriod = Math.min(5, simPeriod+0.05);
             updateStepRate();
@@ -129,7 +133,7 @@ public class SimulationControlPanel extends HBox {
      *
      */
     public void updateStepRate() {
-        stepRate.setText("Step Rate: " + ((double) Math.round(1/simPeriod * 100) / 100) + "/s");
+        stepRate.setText(myResources.getString("DefaultStepRateDisplay") + ((double) Math.round(1/simPeriod * 100) / 100) + myResources.getString("StepRateUnit"));
     }
 
     /**
@@ -142,5 +146,5 @@ public class SimulationControlPanel extends HBox {
      *
      * @param ticks
      */
-    public void setNumTick(int ticks) { numTick.setText("# of ticks: "+ticks); }
+    public void setNumTick(int ticks) { numTick.setText(myResources.getString("NumTickDynamic")+ticks); }
 }
