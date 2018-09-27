@@ -52,6 +52,7 @@ public class ShapeUtils {
         } else ret = new Rectangle(w, h);
         centerShape(ret, cx, cy);
 
+        // clip the shape to fit the simulation panel
         return Shape.intersect(ret,
                 new Rectangle(0, 0, Simulator.SIMULATION_SX, Simulator.SIMULATION_SY));
     }
