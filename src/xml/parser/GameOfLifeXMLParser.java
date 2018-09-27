@@ -19,16 +19,17 @@ public class GameOfLifeXMLParser extends ParentXMLParser {
 
     /**
      *
-     * @param root
+     * @param datafile
      * @return
      */
-    private static Simulator<Integer> getModelSimulator(Element root) {
+    public Simulator<Integer> getSimulator(File datafile) {
         GameOfLifeModel model = new GameOfLifeModel();
-        CellGraph<Integer> graph = getIntegerCellGraph(root, IS_ALIVE_TAG);
+        CellGraph<Integer> graph = getCellGraph(getRootElement(datafile));
         return new Simulator<>(graph, model);
     }
 
-    public Simulator<Integer> getSimulator(File datafile) {
-        return GameOfLifeXMLParser.getModelSimulator(getRootElement(datafile));
+    @Override
+    public Integer getCellValue(Element e) {
+        return getIntValue(e, IS_ALIVE_TAG);
     }
 }

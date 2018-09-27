@@ -18,7 +18,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
+
 
 /**
  * This class handles parsing XML files and returning a completed object.
@@ -48,7 +54,6 @@ public abstract class ParentXMLParser<T> {
     public static final String WHITESPACE = "\\s";
     public static final String SHAPE_WIDTH_TAG = "shapeWidth";
     public static final String SHAPE_HEIGHT_TAG = "shapeHeight";
-    public static final String SHAPE_RADIUS_TAG = "shapeRadius";
     public static final String SHAPE_CODE_TAG = "shapeCode";
 
     public static final String CELL_TAG = "cell";
@@ -70,27 +75,26 @@ public abstract class ParentXMLParser<T> {
 
     public abstract Simulator<T> getSimulator(File datafile);
 
+    public abstract T getCellValue(Element e);
     /**
      *
      * @param root
-     * @param valTag
      * @return
      */
-    public static CellGraph<Integer> getIntegerCellGraph(Element root, String valTag) {
-        CellGraph<Integer> graph = new CellGraph<>();
+    public CellGraph<T> getCellGraph(Element root) {
+        CellGraph<T> graph = new CellGraph<>();
         NodeList cells = root.getElementsByTagName(CELL_TAG);
-        Map<Integer, Cell<Integer>> IDToCellMap = new HashMap<Integer, Cell<Integer>>();
+        Map<Integer, Cell<T>> IDToCellMap = new HashMap<>();
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
             int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
-            int val = getIntValue(curCell, valTag);
+            T val = (T) getCellValue(curCell);
             int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG);
-
-            if(Arrays.stream(ShapeUtils.SHAPE_CODES).filter(p -> p == shapeCode).count() == 0)
+            if(Arrays.stream(ShapeUtils.SHAPE_CODES).filter(p -> p == shapeCode).count() == 0) {
                 throw new XMLException(
                         myResources.getString("ShapeErrorMsg") + myResources.getString(LOAD_AGAIN_KEY), shapeCode
                 );
-
+            }
             double shapeWidth = getDoubleValue(curCell, SHAPE_WIDTH_TAG);
             double shapeHeight = getDoubleValue(curCell, SHAPE_HEIGHT_TAG);
             double xPos = getDoubleValue(curCell, CELL_XPOS_TAG);
@@ -100,10 +104,11 @@ public abstract class ParentXMLParser<T> {
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
             int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
-            ArrayList<Integer> neighborIDs = parseNeighbors(curCell);
-            List<Cell<Integer>> neighborList = new ArrayList<>();
-            for (int n : neighborIDs)
+            List<Integer> neighborIDs = parseNeighbors(curCell);
+            List<Cell<T>> neighborList = new ArrayList<>();
+            for (int n : neighborIDs) {
                 neighborList.add(IDToCellMap.get(n));
+            }
             graph.put(IDToCellMap.get(uniqueID), neighborList);
         }
         return graph;
@@ -114,9 +119,9 @@ public abstract class ParentXMLParser<T> {
      * @param root
      * @return
      */
-    public static ArrayList<Integer> parseNeighbors(Element root) {
+    public static List<Integer> parseNeighbors(Element root) {
         String neighborStr = getTextValue(root, CELL_NEIGHBORS_TAG);
-        ArrayList<Integer> neighborArrayList = new ArrayList<Integer>();
+        ArrayList<Integer> neighborArrayList = new ArrayList<>();
         String[] neighborStrArray = neighborStr.replaceAll("\\s", "").split(",");
         for (String s : neighborStrArray)
             neighborArrayList.add(Integer.parseInt(s));
@@ -152,7 +157,6 @@ public abstract class ParentXMLParser<T> {
     public static int getIntValue(Element e, String tagName) {
         String str = getTextValue(e, tagName).replaceAll("\\s", "");
         try {
-
             return Integer.parseInt(str);
         }
         catch (NumberFormatException ex){
@@ -204,9 +208,11 @@ public abstract class ParentXMLParser<T> {
      * @return
      */
     public static boolean isValidFile (Element root) {
-        for (String typeAttr : VALID_MODEL_NAMES)
-            if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(typeAttr))
+        for (String typeAttr : VALID_MODEL_NAMES) {
+            if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(typeAttr)) {
                 return true;
+            }
+        }
         return false;
     }
 

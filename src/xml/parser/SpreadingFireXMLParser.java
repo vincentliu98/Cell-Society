@@ -27,16 +27,19 @@ public class SpreadingFireXMLParser extends ParentXMLParser {
 
     /**
      *
-     * @param root
+     * @param datafile
      * @return
      */
-    private static Simulator<Integer> getModelSimulator(Element root) {
+
+    public Simulator<Integer> getSimulator(File datafile) {
+        Element root = getRootElement(datafile);
         SpreadingFireModel model = new SpreadingFireModel(getDoubleValue(root, PROB_CATCH_TAG));
-        CellGraph<Integer> graph = getIntegerCellGraph(root, LIVE_STATE_TAG);
+        CellGraph<Integer> graph = getCellGraph(root);
         return new Simulator<>(graph, model);
     }
 
-    public Simulator<Integer> getSimulator(File datafile) {
-        return SpreadingFireXMLParser.getModelSimulator(getRootElement(datafile));
+    @Override
+    public Integer getCellValue(Element e) {
+        return getIntValue(e, LIVE_STATE_TAG);
     }
 }
