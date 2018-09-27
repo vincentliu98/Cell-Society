@@ -4,15 +4,11 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import simulation.Simulator;
-import simulation.factory.GameOfLife;
-import simulation.models.GameOfLifeModel;
-import simulation.models.SegregationModel;
-import simulation.models.SpreadingFireModel;
-import simulation.models.WaTorModel;
 
 import java.util.ResourceBundle;
 
@@ -27,11 +23,13 @@ import java.util.ResourceBundle;
 
 public class SimulationControlPanel extends HBox {
     public static final String[] SIMULATION_MODELS = new String[] {"", "", "", ""};
+    public static final String[] SIMULATION_SHAPES = new String[] {"Rectangle", "Square", "Triangle", "Hexagon"};
 
     private boolean isPlaying;
     private Text numTick, stepRate;
     private double simPeriod, elapsedTime;
     private ComboBox<String> chooseModel;
+    private ComboBox<String> chooseShape;
     private Simulator<?> simulator;
     private ResourceBundle myResources;
 
@@ -67,6 +65,7 @@ public class SimulationControlPanel extends HBox {
         grid.getStyleClass().add("simControlPanel");
 
         var modelName = new Text(myResources.getString("SelectModel"));
+        var shapeName = new Text(myResources.getString("SelectShape"));
         numTick = new Text(myResources.getString("DefaultNumTickDisplay"));
         stepRate = new Text(myResources.getString("DefaultStepRateDisplay") + 1/simPeriod + myResources.getString("StepRateUnit"));
 
@@ -99,6 +98,15 @@ public class SimulationControlPanel extends HBox {
         chooseModel = new ComboBox<>();
         chooseModel.getItems().addAll(SIMULATION_MODELS);
         chooseModel.setValue(sim.modelName());
+        chooseShape = new ComboBox<>();
+        chooseShape.getItems().addAll(SIMULATION_SHAPES);
+        chooseShape.setValue(SIMULATION_SHAPES[0]);
+        var comboBox = new GridPane();
+        comboBox.getStyleClass().add("combo-choice");
+        comboBox.add(modelName, 0,0);
+        comboBox.add(shapeName, 0,1);
+        comboBox.add(chooseModel, 1, 0);
+        comboBox.add(chooseShape, 1, 1);
 
         grid.add(save, 0, 0);
         grid.add(load, 0, 1);
@@ -108,8 +116,7 @@ public class SimulationControlPanel extends HBox {
         grid.add(decrease, 2, 1);
         grid.add(numTick, 3, 0);
         grid.add(stepRate, 3, 1);
-        grid.add(modelName, 4, 0);
-        grid.add(chooseModel, 4, 1);
+        grid.add(comboBox, 4, 0, 1, 2);
 
         getChildren().add(grid);
     }
