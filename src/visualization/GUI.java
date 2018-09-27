@@ -39,6 +39,7 @@ public class GUI {
     private SimulationControl simControl;
     private ResourceBundle myResources;
     private String myLanguage;
+    private ModelChart modelChart;
 
     public GUI (String language) {
         myLanguage = language;
@@ -52,16 +53,20 @@ public class GUI {
         column2.setPercentWidth(80);
         root.getColumnConstraints().addAll(column1, column2);
         var row1 = new RowConstraints();
-        row1.setPercentHeight(85);
+        row1.setPercentHeight(15);
         var row2 = new RowConstraints();
-        row2.setPercentHeight(15);
-        root.getRowConstraints().addAll(row1, row2);
+        row2.setPercentHeight(70);
+        var row3 = new RowConstraints();
+        row3.setPercentHeight(15);
+        root.getRowConstraints().addAll(row1, row2, row3);
 
         simControl = new SimulationControl(window, myResources, myLanguage);
 
-        root.add(simControl.getModelControl(), 0, 0);
-        root.add(simControl.getSimPanel(), 1, 0);
-        root.add(simControl, 0, 1, 2, 1);
+        modelChart = new ModelChart();
+        root.add(modelChart.getLineChart(), 0, 0);
+        root.add(simControl.getModelControl(), 0, 1);
+        root.add(simControl.getSimPanel(), 1, 1);
+        root.add(simControl, 0, 2, 2, 1);
     }
 
     public void runGUI (Stage primaryStage) {
@@ -83,9 +88,10 @@ public class GUI {
     public void step(double duration) {
         if(simControl.consumeStatusCode() == StatusCode.UPDATE) {
             root.getChildren().clear();
-            root.add(simControl.getModelControl(), 0, 0);
-            root.add(simControl.getSimPanel(), 1, 0);
-            root.add(simControl, 0, 1, 2, 1);
+            root.add(modelChart.getLineChart(), 0, 0);
+            root.add(simControl.getModelControl(), 0, 1);
+            root.add(simControl.getSimPanel(), 1, 1);
+            root.add(simControl, 0, 2, 2, 1);
         } simControl.tick(duration);
     }
 }

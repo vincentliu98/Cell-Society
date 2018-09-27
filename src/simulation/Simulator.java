@@ -23,7 +23,7 @@ import static javafx.scene.shape.StrokeType.INSIDE;
  */
 public class Simulator<T> {
     public static final double SIMULATION_SX = 636;
-    public static final double SIMULATION_SY = 579;
+    public static final double SIMULATION_SY = 470;
 
     private CellGraph<T> graph;
     protected SimulationModel<T> model;
