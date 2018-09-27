@@ -20,7 +20,6 @@ import java.util.*;
 public class ModelChart{
     private LineChart<Number, Number> lineChart;
     private ObservableList<Integer> number;
-    private HBox layout;
     private NumberAxis xAxis = new NumberAxis();
     private NumberAxis yAxis = new NumberAxis();
 
@@ -38,7 +37,7 @@ public class ModelChart{
     }
 
     public Pane getLineChart() {
-        layout = new HBox();
+        HBox layout = new HBox();
         layout.getChildren().add(lineChart);
         layout.getStyleClass().add("chartBox");
         layout.setAlignment(Pos.CENTER);
