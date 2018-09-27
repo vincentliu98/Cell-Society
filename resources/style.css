@@ -55,3 +55,8 @@
 .combo-choice{
     -fx-vgap: 12;
 }
+
+.chart-box {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+}
