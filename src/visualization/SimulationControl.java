@@ -91,9 +91,17 @@ public class SimulationControl extends HBox {
         chooseModel = new ComboBox<>();
         chooseModel.getItems().addAll(models);
         chooseModel.setValue(models[0]);
+        chooseModel.setOnMouseClicked(e -> {
+            chooseModel.hide();
+            chooseModel.show();
+        });
         chooseShape = new ComboBox<>();
         chooseShape.getItems().addAll(ShapeUtils.shapes());
         chooseShape.setValue(ShapeUtils.shapes()[0]);
+        chooseShape.setOnMouseClicked(e -> {
+            chooseShape.hide();
+            chooseShape.show();
+        });
         var modelName = new Text(myResources.getString("SelectModel"));
         var shapeName = new Text(myResources.getString("SelectShape"));
         var comboBox = new GridPane();

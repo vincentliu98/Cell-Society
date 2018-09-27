@@ -43,7 +43,9 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     }
 
     @Override
-    public void globalUpdate(CellGraph<Integer> graph) { }
+    public void globalUpdate(CellGraph<Integer> graph) {
+        // spreading fire model doesn't require global update
+    }
 
     @Override
     public Integer nextValue(Integer myVal) {

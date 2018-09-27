@@ -30,7 +30,7 @@ public class GameOfLife {
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
                 var cell = new Cell<>(initial[i][j], (i+j)%2==0 ? ShapeUtils.TRIANGLE : ShapeUtils.TRIANGLE_FLIP,
-                        (MARGIN+j)*width, (i+MARGIN)*height,
+                        (MARGIN*j)*width, (i+MARGIN)*height,
                         width, height
                 );
                 cells.add(cell);

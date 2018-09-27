@@ -17,9 +17,10 @@ import java.util.Random;
  */
 
 public class WaTor {
-    public static final int DEFAULT_FISHBREEDPERIOD = 4;
-    public static final int DEFAULT_SHARKBREEDPERIOD = 5;
-    public static final int DEFAULT_SHARKSTARVEPERIOD = 5;
+    private static double MARGIN = 0.5;
+    public static final int DEFAULT_FISHBREED_PERIOD = 4;
+    public static final int DEFAULT_SHARKBREED_PERIOD = 5;
+    public static final int DEFAULT_SHARKSTARVE_PERIOD = 5;
 
     public static Simulator<Fish> generateTri(int row, int column, int[][] initial, int fishBreedPeriod,
                                                int sharkBreedPeriod, int sharkStarvePeriod) {
@@ -92,9 +93,9 @@ public class WaTor {
             }
         }
         if(shape.equals(ShapeUtils.RECTANGULAR)) return WaTor.generateRect(n, n, tmp,
-                DEFAULT_FISHBREEDPERIOD, DEFAULT_SHARKBREEDPERIOD,DEFAULT_SHARKSTARVEPERIOD);
+                DEFAULT_FISHBREED_PERIOD, DEFAULT_SHARKBREED_PERIOD, DEFAULT_SHARKSTARVE_PERIOD);
         else if(shape.equals(ShapeUtils.TRIANGULAR)) return WaTor.generateTri(n, n, tmp,
-                DEFAULT_FISHBREEDPERIOD, DEFAULT_SHARKBREEDPERIOD,DEFAULT_SHARKSTARVEPERIOD);
+                DEFAULT_FISHBREED_PERIOD, DEFAULT_SHARKBREED_PERIOD, DEFAULT_SHARKSTARVE_PERIOD);
         return null;
     }
 }

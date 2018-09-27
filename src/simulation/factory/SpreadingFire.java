@@ -16,6 +16,7 @@ import java.util.Random;
  */
 
 public class SpreadingFire {
+    private static double MARGIN = 0.5;
     public static final double DEFAULT_PROBCATCH = 0.7;
 
     public static Simulator<Integer> generateTri(int row, int column, int[][] initial, double probCatch) {
@@ -27,7 +28,7 @@ public class SpreadingFire {
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
                 var cell = new Cell<>(initial[i][j], (i+j)%2==0 ? ShapeUtils.TRIANGLE : ShapeUtils.TRIANGLE_FLIP,
-                        (0.5*j)*width, (i+0.5)*height,
+                        (MARGIN*j)*width, (i+MARGIN)*height,
                         width, height
                 );
                 cells.add(cell);
@@ -54,7 +55,7 @@ public class SpreadingFire {
         for(int i = 0 ; i < row ; i ++) {
             for(int j = 0 ; j < column ; j ++) {
                 var cell = new Cell<>(initial[i][j], ShapeUtils.RECTANGLE,
-                        (j+0.5)*width, (i+0.5)*height,
+                        (j+MARGIN)*width, (i+MARGIN)*height,
                         width, height
                 );
                 cells.add(cell);
