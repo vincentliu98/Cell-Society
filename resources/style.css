@@ -51,3 +51,7 @@
 .scroll-pane {
     -fx-background-color: white;
 }
+
+.combo-choice{
+    -fx-vgap: 12;
+}

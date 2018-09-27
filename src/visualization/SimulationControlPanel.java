@@ -4,14 +4,13 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import simulation.Simulator;
-import simulation.models.GameOfLifeModel;
-import simulation.models.SegregationModel;
-import simulation.models.SpreadingFireModel;
-import simulation.models.WaTorModel;
+
+import java.util.ResourceBundle;
 
 /**
  * SimulationControlPanel extends HBox and will be located in the bottom of UI
@@ -23,21 +22,24 @@ import simulation.models.WaTorModel;
  */
 
 public class SimulationControlPanel extends HBox {
-    public static final String[] SIMULATION_MODELS = new String[] {
-            GameOfLifeModel.MODEL_NAME,
-            SegregationModel.MODEL_NAME,
-            WaTorModel.MODEL_NAME,
-            SpreadingFireModel.MODEL_NAME
-    };
+    public static final String[] SIMULATION_MODELS = new String[] {"", "", "", ""};
+    public static final String[] SIMULATION_SHAPES = new String[] {"Rectangle", "Square", "Triangle", "Hexagon"};
 
     private boolean isPlaying;
     private Text numTick, stepRate;
     private double simPeriod, elapsedTime;
     private ComboBox<String> chooseModel;
+    private ComboBox<String> chooseShape;
     private Simulator<?> simulator;
+    private ResourceBundle myResources;
 
-    public SimulationControlPanel() {
+    public SimulationControlPanel(ResourceBundle myResources) {
         super(25);
+        this.myResources = myResources;
+        SIMULATION_MODELS[0] = myResources.getString("GameOfLifeModelName");
+        SIMULATION_MODELS[1] = myResources.getString("SegregationModelName");
+        SIMULATION_MODELS[2] = myResources.getString("WaTorModelName");
+        SIMULATION_MODELS[3] = myResources.getString("SpreadingFireName");
         getStyleClass().add("simControlPanelWrapper");
     }
 
@@ -62,31 +64,32 @@ public class SimulationControlPanel extends HBox {
         var grid = new GridPane();
         grid.getStyleClass().add("simControlPanel");
 
-        var modelName = new Text("       Select Model:");
-        numTick = new Text("# of ticks: 0");
-        stepRate = new Text("Step Rate: " + 1/simPeriod + "/s");
+        var modelName = new Text(myResources.getString("SelectModel"));
+        var shapeName = new Text(myResources.getString("SelectShape"));
+        numTick = new Text(myResources.getString("DefaultNumTickDisplay"));
+        stepRate = new Text(myResources.getString("DefaultStepRateDisplay") + 1/simPeriod + myResources.getString("StepRateUnit"));
 
-        var save = new Button("Save");
+        var save = new Button(myResources.getString("SaveButton"));
         save.setOnMouseClicked(onSave);
-        var load = new Button("Load");
+        var load = new Button(myResources.getString("LoadButton"));
         load.setOnMouseClicked(onLoad);
 
 
-        var playStop = new Button("Play");
+        var playStop = new Button(myResources.getString("PlayButton"));
         playStop.setOnMouseClicked(e -> {
             isPlaying = !isPlaying;
-            playStop.setText(isPlaying ? "Stop" : "Play");
+            playStop.setText(isPlaying ? myResources.getString("StopButton") : myResources.getString("PlayButton"));
             elapsedTime = 0;
         });
-        var tick = new Button("Tick");
+        var tick = new Button(myResources.getString("TickButton"));
         tick.setOnMouseClicked(e -> simulator.tick());
 
-        var increase = new Button("Up");
+        var increase = new Button(myResources.getString("RateUpButton"));
         increase.setOnMouseClicked(e -> {
             simPeriod = Math.max(0.05, simPeriod-0.05);
             updateStepRate();
         });
-        var decrease = new Button("Down");
+        var decrease = new Button(myResources.getString("RateDownButton"));
         decrease.setOnMouseClicked(e -> {
             simPeriod = Math.min(5, simPeriod+0.05);
             updateStepRate();
@@ -95,6 +98,15 @@ public class SimulationControlPanel extends HBox {
         chooseModel = new ComboBox<>();
         chooseModel.getItems().addAll(SIMULATION_MODELS);
         chooseModel.setValue(sim.modelName());
+        chooseShape = new ComboBox<>();
+        chooseShape.getItems().addAll(SIMULATION_SHAPES);
+        chooseShape.setValue(SIMULATION_SHAPES[0]);
+        var comboBox = new GridPane();
+        comboBox.getStyleClass().add("combo-choice");
+        comboBox.add(modelName, 0,0);
+        comboBox.add(shapeName, 0,1);
+        comboBox.add(chooseModel, 1, 0);
+        comboBox.add(chooseShape, 1, 1);
 
         grid.add(save, 0, 0);
         grid.add(load, 0, 1);
@@ -104,8 +116,7 @@ public class SimulationControlPanel extends HBox {
         grid.add(decrease, 2, 1);
         grid.add(numTick, 3, 0);
         grid.add(stepRate, 3, 1);
-        grid.add(modelName, 4, 0);
-        grid.add(chooseModel, 4, 1);
+        grid.add(comboBox, 4, 0, 1, 2);
 
         getChildren().add(grid);
     }
@@ -129,7 +140,7 @@ public class SimulationControlPanel extends HBox {
      *
      */
     public void updateStepRate() {
-        stepRate.setText("Step Rate: " + ((double) Math.round(1/simPeriod * 100) / 100) + "/s");
+        stepRate.setText(myResources.getString("DefaultStepRateDisplay") + ((double) Math.round(1/simPeriod * 100) / 100) + myResources.getString("StepRateUnit"));
     }
 
     /**
@@ -142,5 +153,5 @@ public class SimulationControlPanel extends HBox {
      *
      * @param ticks
      */
-    public void setNumTick(int ticks) { numTick.setText("# of ticks: "+ticks); }
+    public void setNumTick(int ticks) { numTick.setText(myResources.getString("NumTickDynamic")+ticks); }
 }

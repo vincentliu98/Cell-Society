@@ -24,6 +24,7 @@ import xml.XMLException;
 import xml.parser.ParentXMLParser;
 
 import java.io.File;
+import java.util.ResourceBundle;
 
 /**
  * This is the Graphical User Interface for displaying the simulation models.
@@ -46,18 +47,19 @@ public class GUI {
     public static final int FRAMES_PER_SECOND = 10;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = MILLISECOND_DELAY / 1000.;
+    public static final String STYLESHEET = "style.css";
 
     private Window window;
     private GridPane root;
     private SimulationControlPanel simControlPanel;
     private ModelPanel modelPanel;
     private VBox simPanel;
-    private String myLanguage;
 
+    private ResourceBundle myResources;
     private Simulator<?> simulator;
 
     public GUI (String language) {
-        myLanguage = language;
+        myResources = ResourceBundle.getBundle(language);
         root = new GridPane();
         root.getStyleClass().add("root");
 
@@ -73,7 +75,7 @@ public class GUI {
         root.getRowConstraints().addAll(row1, row2);
 
         modelPanel = new GameOfLifePanel();
-        simControlPanel = new SimulationControlPanel();
+        simControlPanel = new SimulationControlPanel(myResources);
         simPanel = new VBox();
         simPanel.getStyleClass().add("simPanel");
 
@@ -102,9 +104,9 @@ public class GUI {
     public void runGUI (Stage primaryStage) {
         window = primaryStage;
 
-        primaryStage.setTitle("Simulations");
+        primaryStage.setTitle(myResources.getString("PrimaryStageTitle"));
         Scene scene = new Scene(root, SCREEN_WIDTH, SCREEN_HEIGHT);
-        scene.getStylesheets().add("style.css");
+        scene.getStylesheets().add(STYLESHEET);
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -164,7 +166,7 @@ public class GUI {
     private void handleFileLoad() {
         try {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Resource File");
+            fileChooser.setTitle(myResources.getString("OpenFile"));
             File file = fileChooser.showOpenDialog(window);
             if (!file.exists()) return;
             var sim = new ParentXMLParser(myLanguage).getSimulator(file);
@@ -184,7 +186,7 @@ public class GUI {
      */
     private void handleFileSave() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Resource File");
+        fileChooser.setTitle(myResources.getString("OpenFile"));
         File file = fileChooser.showSaveDialog(window);
         if(file == null) return; // display "OH NO!" DIALOG
         simulator.getWriter(file).generate();
