@@ -5,6 +5,10 @@ import javafx.scene.chart.XYChart;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * @author Vincent Liu
+ */
+
 public class SpreadingFireStatistics extends ModelStatistics{
     public XYChart.Series Empty, Tree, Burning;
 

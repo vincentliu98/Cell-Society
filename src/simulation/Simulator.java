@@ -25,7 +25,7 @@ import static javafx.scene.shape.StrokeType.INSIDE;
  * @author Inchan Hwang
  */
 public class Simulator<T> {
-    public static final double SIMULATION_SX = 628;
+    public static final double SIMULATION_SX = 588.5;
     public static final double SIMULATION_SY = 470;
  
     private CellGraph<T> graph;
@@ -147,7 +147,6 @@ public class Simulator<T> {
     }
 
     public Map<String, Integer> getStatistics() {
-        // feed the model
         return model.getStatisitcs(
                 graph.getCells()
                         .stream()

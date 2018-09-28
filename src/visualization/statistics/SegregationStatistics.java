@@ -1,10 +1,13 @@
 package visualization.statistics;
 
-
 import javafx.scene.chart.XYChart;
 
 import java.util.Map;
 import java.util.ResourceBundle;
+
+/**
+ * @author Vincent Liu
+ */
 
 public class SegregationStatistics extends ModelStatistics{
     public XYChart.Series Empty, Blue, Red;
