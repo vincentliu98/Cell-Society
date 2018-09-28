@@ -6,8 +6,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * A 2D chart displaying the time and the number of each elements from the model.
- * Whenever the lines reach the right side of the chart, the scale decreases to half to accommodate all the data
+ * An abstract class that serves as a building block for customized line charts
+ * Contains x and y axis of the time and the number of each elements from the model.
+ * The line chart dynamically expand when the new data feeds in
  *
  * @author Vincent Liu
  */
@@ -16,6 +17,9 @@ public abstract class ModelStatistics extends LineChart{
     private NumberAxis xAxis;
     private final NumberAxis yAxis;
 
+    /**
+     * Constructor: Add the axis and change some settings
+     */
     ModelStatistics() {
         super(new NumberAxis(), new NumberAxis());
         xAxis = (NumberAxis) getXAxis();
@@ -33,5 +37,12 @@ public abstract class ModelStatistics extends LineChart{
         getStyleClass().add("line-chart");
     }
 
+    /**
+     * Allow the specific objects from each model to update themselves
+     *
+     * @param durationCounter
+     * @param myResources
+     * @param newStatistics
+     */
     public abstract void updateStatistics(Double durationCounter, ResourceBundle myResources, Map<String, Integer> newStatistics);
 }
