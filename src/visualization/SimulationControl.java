@@ -44,7 +44,6 @@ public class SimulationControl extends HBox {
     private double simPeriod, elapsedTime, durationCounter;
     private ComboBox<String> chooseModel;
     private ComboBox<String> chooseShape;
-    private Map<String, Integer> newStatistics;
 
     private ModelControl<?> modelControl;
 
@@ -164,8 +163,9 @@ public class SimulationControl extends HBox {
         if(isPlaying) {
             elapsedTime += duration;
             durationCounter++;
-            newStatistics = modelControl.simulator().getStatistics();
-            modelChart.Alive.getData().add(new XYChart.Data<>(durationCounter, newStatistics.get("Alive")));
+            Map<String, Integer> newStatistics = modelControl.simulator().getStatistics();
+            modelChart.updateStatistics(durationCounter, myResources, newStatistics);
+
             if (elapsedTime >= simPeriod) {
                 elapsedTime = 0;
                 modelControl.simulator().tick();

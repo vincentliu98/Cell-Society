@@ -9,6 +9,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
+import visualization.statistics.GameOfLifeStatistics;
 import visualization.statistics.ModelChart;
 
 import java.util.ResourceBundle;
@@ -62,7 +63,7 @@ public class GUI {
 
         simControl = new SimulationControl(window, myResources, myLanguage);
 
-        modelChart = new ModelChart();
+        modelChart = new GameOfLifeStatistics();
         root.add(modelChart.getLineChart(), 0, 0, 3, 1);
         root.add(simControl.getModelControl(), 0, 1);
         root.add(simControl.getSimPanel(), 1, 1);
@@ -94,7 +95,7 @@ public class GUI {
     public void step(double duration) {
         if(simControl.consumeStatusCode() == StatusCode.UPDATE) {
             root.getChildren().clear();
-            root.add(modelChart.getChartBox(), 0, 0, 3, 1);
+            root.add(modelChart.getLineChart(), 0, 0, 3, 1);
             root.add(simControl.getModelControl(), 0, 1);
             root.add(simControl.getSimPanel(), 1, 1);
             root.add(simControl, 0, 2, 2, 1);
