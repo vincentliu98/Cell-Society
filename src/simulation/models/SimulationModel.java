@@ -59,6 +59,8 @@ public interface SimulationModel<T> {
      */
     String modelName();
 
+    Map<String, Integer> getStatisitcs(List<T> values);
+
     /**
      *
      * @param graph

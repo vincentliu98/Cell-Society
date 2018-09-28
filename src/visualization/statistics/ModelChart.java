@@ -1,14 +1,9 @@
 package visualization.statistics;
 
-import javafx.collections.*;
-import javafx.geometry.Pos;
 import javafx.scene.chart.*;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.shape.Line;
 
-import java.util.*;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * A 2D chart displaying the time and the number of each elements from the model.
@@ -17,30 +12,26 @@ import java.util.*;
  * @author Vincent Liu
  */
 
-public class ModelChart{
-    private LineChart<Number, Number> lineChart;
-    private ObservableList<Integer> number;
-    private NumberAxis xAxis = new NumberAxis();
-    private NumberAxis yAxis = new NumberAxis();
+public abstract class ModelChart extends LineChart{
+    private NumberAxis xAxis;
+    private final NumberAxis yAxis;
 
-    public ModelChart() {
-        xAxis.setLabel("Time (s)");
-        yAxis.setLabel("Number");
+    ModelChart() {
+        super(new NumberAxis(), new NumberAxis());
+        xAxis = (NumberAxis) getXAxis();
+        xAxis.setLabel("Time (0.1s)");
         xAxis.setMinorTickVisible(false);
-        xAxis.setAutoRanging(false);
-        xAxis.autosize();
+        xAxis.setAutoRanging(true);
 
-        lineChart = new LineChart<>(xAxis, yAxis);
-        lineChart.setAnimated(true);
-        lineChart.autosize();
-        lineChart.getStyleClass().add("line-chart");
+        yAxis = (NumberAxis) getYAxis();
+        yAxis.setLabel("Number");
+        yAxis.setAutoRanging(true);
+
+        setAnimated(true);
+        autosize();
+        setCreateSymbols(false);
+        getStyleClass().add("line-chart");
     }
 
-    public Pane getLineChart() {
-        HBox layout = new HBox();
-        layout.getChildren().add(lineChart);
-        layout.getStyleClass().add("chartBox");
-        layout.setAlignment(Pos.CENTER);
-        return layout;
-    }
+    public abstract void updateStatistics(Double durationCounter, ResourceBundle myResources, Map<String, Integer> newStatistics);
 }

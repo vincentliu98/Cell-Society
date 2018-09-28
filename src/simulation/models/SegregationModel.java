@@ -7,10 +7,7 @@ import xml.writer.SegregationWriter;
 import xml.writer.XMLWriter;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * SegregationModel implements SimulationModel interface.
@@ -77,6 +74,23 @@ public class SegregationModel implements SimulationModel<Integer> {
 
     @Override
     public String modelName() { return MODEL_NAME; }
+
+    @Override
+    public Map<String, Integer> getStatisitcs(List<Integer> values) {
+        HashMap<String, Integer> myMap = new HashMap<>();
+        int redNum = 0;
+        int blueNum = 0;
+        int emptyNum = 0;
+        for (Integer a : values) {
+            if (a == RED) redNum++;
+            else if (a == BLUE) blueNum++;
+            else emptyNum++;
+        }
+        myMap.put("Empty", emptyNum);
+        myMap.put("Red", redNum);
+        myMap.put("Blue", blueNum);
+        return myMap;
+    }
 
     @Override
     public XMLWriter<Integer> getXMLWriter(CellGraph<Integer> graph, File outFile) {

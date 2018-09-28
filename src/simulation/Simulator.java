@@ -11,7 +11,10 @@ import visualization.model_controls.ModelControl;
 import xml.writer.XMLWriter;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static javafx.scene.shape.StrokeType.INSIDE;
 
@@ -141,5 +144,15 @@ public class Simulator<T> {
         if(code == ShapeUtils.RECTANGLE) return ShapeUtils.RECTANGULAR;
         else if(code == ShapeUtils.TRIANGLE || code == ShapeUtils.TRIANGLE_FLIP) return ShapeUtils.TRIANGULAR;
         else return ""; // shouldn't happen for now
+    }
+
+    public Map<String, Integer> getStatistics() {
+        // feed the model
+        return model.getStatisitcs(
+                graph.getCells()
+                        .stream()
+                        .map(Cell::value)
+                        .collect(Collectors.toList())
+        );
     }
 }
