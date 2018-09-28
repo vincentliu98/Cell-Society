@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 public class WaTorStatistics extends ModelChart{
     public XYChart.Series Empty, Shark, Fish;
 
-    WaTorStatistics() {
+    public WaTorStatistics() {
         super();
         Empty = new XYChart.Series();
         Empty.setName("Empty");

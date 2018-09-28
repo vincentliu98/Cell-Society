@@ -15,7 +15,7 @@ import simulation.models.SpreadingFireModel;
 import simulation.models.WaTorModel;
 import utility.ShapeUtils;
 import visualization.model_controls.*;
-import visualization.statistics.ModelChart;
+import visualization.statistics.*;
 import xml.XMLException;
 import xml.parser.*;
 
@@ -46,6 +46,7 @@ public class SimulationControl extends HBox {
     private ComboBox<String> chooseShape;
 
     private ModelControl<?> modelControl;
+    private ModelChart modelChart;
 
     private String[] models = new String[] {
             GameOfLifeModel.MODEL_NAME,
@@ -241,15 +242,20 @@ public class SimulationControl extends HBox {
     private void initializeModelControl(String modelName, File file) {
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
             modelControl = new GameOfLifeControl(new GameOfLifeXMLParser(myLanguage).getSimulator(file));
+            modelChart = new GameOfLifeStatistics();
         } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
             modelControl = new SegregationControl(new SegregationXMLParser(myLanguage).getSimulator(file));
+            modelChart = new SegregationStatistics();
         } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
             modelControl = new SpreadingFireControl(new SpreadingFireXMLParser(myLanguage).getSimulator(file));
+            modelChart = new SpreadingFireStatistics();
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
             modelControl = new WaTorControl(new WaTorXMLParser(myLanguage).getSimulator(file));
+            modelChart = new WaTorStatistics();
         }
 
         statusCode = StatusCode.UPDATE;
+        durationCounter = 0;
     }
 
     /**
@@ -261,18 +267,24 @@ public class SimulationControl extends HBox {
     private void initializeModelControl(String modelName, String shape) {
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
             modelControl = new GameOfLifeControl(shape);
+            modelChart = new GameOfLifeStatistics();
         } else if(modelName.equals(SegregationModel.MODEL_NAME)) {
             modelControl = new SegregationControl(shape);
+            modelChart = new SegregationStatistics();
         } else if(modelName.equals(SpreadingFireModel.MODEL_NAME)) {
             modelControl =  new SpreadingFireControl(shape);
+            modelChart = new SpreadingFireStatistics();
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
             modelControl = new WaTorControl(shape);
+            modelChart = new WaTorStatistics();
         }
         statusCode = StatusCode.UPDATE;
+        durationCounter = 0;
     }
 
     SimulationPanel getSimPanel() { return modelControl.simPanel(); }
     ModelControl<?> getModelControl() { return modelControl; }
+    ModelChart getModelChart() { return modelChart; }
 
     /**
      * It's named "consume" since once drawn, statusCode should go back to its default state.
