@@ -1,5 +1,6 @@
 package xml.parser;
 
+import javafx.util.Pair;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -61,6 +62,16 @@ public abstract class ParentXMLParser<T> {
     public static final String CELL_NEIGHBORS_TAG = "neighbors";
     public static final String CELL_XPOS_TAG = "cx";
     public static final String CELL_YPOS_TAG = "cy";
+    public static final String MIN_STRING = "min";
+    public static final String MAX_STRING = "max";
+    public static final String DEF_STRING = "def";
+    public static final Map<String, Map<String, Double>> STD_TAG_TO_RANGE_MAP = Map.ofEntries(
+            Map.entry(SHAPE_WIDTH_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE, DEF_STRING, 1.0)),
+            Map.entry(SHAPE_HEIGHT_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE, DEF_STRING, 1.0)),
+            Map.entry(CELL_XPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE, DEF_STRING, 0.0)),
+            Map.entry(CELL_YPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE, DEF_STRING, 0.0))
+    );
+
 
     /**
      * Create a parser for XML files of given type.
@@ -88,18 +99,16 @@ public abstract class ParentXMLParser<T> {
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
             int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
-            T val = getCellValue(curCell);
             int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG);
             if(Arrays.stream(ShapeUtils.shapeCodes()).filter(p -> p == shapeCode).count() == 0) {
                 throw new XMLException(
-                        myResources.getString("ShapeErrorMsg") + myResources.getString(LOAD_AGAIN_KEY), shapeCode
-                );
+                        myResources.getString("ShapeErrorMsg") + myResources.getString(LOAD_AGAIN_KEY), shapeCode);
             }
-            double shapeWidth = getDoubleValue(curCell, SHAPE_WIDTH_TAG);
-            double shapeHeight = getDoubleValue(curCell, SHAPE_HEIGHT_TAG);
-            double xPos = getDoubleValue(curCell, CELL_XPOS_TAG);
-            double yPos = getDoubleValue(curCell, CELL_YPOS_TAG);
-            IDToCellMap.put(uniqueID, new Cell<>(val, shapeCode, xPos, yPos, shapeWidth, shapeHeight));
+            double shapeWidth = getDoubleValue(curCell, SHAPE_WIDTH_TAG, STD_TAG_TO_RANGE_MAP);
+            double shapeHeight = getDoubleValue(curCell, SHAPE_HEIGHT_TAG, STD_TAG_TO_RANGE_MAP);
+            double xPos = getDoubleValue(curCell, CELL_XPOS_TAG, STD_TAG_TO_RANGE_MAP);
+            double yPos = getDoubleValue(curCell, CELL_YPOS_TAG, STD_TAG_TO_RANGE_MAP);
+            IDToCellMap.put(uniqueID, new Cell<>(getCellValue(curCell), shapeCode, xPos, yPos, shapeWidth, shapeHeight));
         }
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
@@ -171,10 +180,18 @@ public abstract class ParentXMLParser<T> {
      * @param tagName
      * @return
      */
-    public static double getDoubleValue(Element e, String tagName) {
+    public static double getDoubleValue(Element e, String tagName, Map<String, Map<String, Double>> rangeMap) {
         String str = getTextValue(e, tagName).replaceAll("\\s", "");
         try {
-            return Double.parseDouble(str);
+            double db = Double.parseDouble(str);
+            double min = rangeMap.get(tagName).get(MIN_STRING);
+            double max = rangeMap.get(tagName).get(MAX_STRING);
+            double def = rangeMap.get(tagName).get(DEF_STRING);
+            if (db < min || db > max) {
+                throw new XMLException(myResources.getString("DoubleOutOfRangeMsg"), tagName, db, min, max, 0.0);
+
+            }
+            return db;
         } catch (NumberFormatException ex){
             throw new XMLException(myResources.getString("ValueNotDoubleMsg") + myResources.getString(LOAD_AGAIN_KEY),
                     tagName, str);
