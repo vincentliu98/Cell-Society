@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 public class SpreadingFireStatistics extends ModelChart{
     public XYChart.Series Empty, Tree, Burning;
 
-    SpreadingFireStatistics() {
+    public SpreadingFireStatistics() {
         super();
         Empty = new XYChart.Series();
         Empty.setName("Empty");

@@ -128,9 +128,9 @@ public class WaTorModel implements SimulationModel<Fish> {
         int sharkNum = 0;
         int emptyNum = 0;
         for (Fish a : values) {
-            if (a.kind() == FISH) fishNum++;
+            if (a == null) emptyNum++;
             else if (a.kind() == SHARK) sharkNum++;
-            else emptyNum++;
+            else fishNum++;
         }
         myMap.put("Empty", emptyNum);
         myMap.put("Fish", fishNum);

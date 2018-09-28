@@ -40,7 +40,6 @@ public class GUI {
     private SimulationControl simControl;
     private ResourceBundle myResources;
     private String myLanguage;
-    private ModelChart modelChart;
 
     public GUI (String language) {
         myLanguage = language;
@@ -63,8 +62,7 @@ public class GUI {
 
         simControl = new SimulationControl(window, myResources, myLanguage);
 
-        modelChart = new GameOfLifeStatistics();
-        root.add(modelChart, 0, 0, 3, 1);
+        root.add(new GameOfLifeStatistics(), 0, 0, 3, 1);
         root.add(simControl.getModelControl(), 0, 1);
         root.add(simControl.getSimPanel(), 1, 1);
         root.add(simControl, 0, 2, 2, 1);
@@ -95,10 +93,10 @@ public class GUI {
     public void step(double duration) {
         if(simControl.consumeStatusCode() == StatusCode.UPDATE) {
             root.getChildren().clear();
-            root.add(modelChart, 0, 0, 3, 1);
+            root.add(simControl.getModelChart(), 0, 0, 3, 1);
             root.add(simControl.getModelControl(), 0, 1);
             root.add(simControl.getSimPanel(), 1, 1);
             root.add(simControl, 0, 2, 2, 1);
-        } simControl.tick(duration, modelChart);
+        } simControl.tick(duration, simControl.getModelChart());
     }
 }
