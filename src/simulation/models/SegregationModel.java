@@ -77,7 +77,19 @@ public class SegregationModel implements SimulationModel<Integer> {
 
     @Override
     public Map<String, Integer> getStatisitcs(List<Integer> values) {
-        return null;
+        HashMap<String, Integer> myMap = new HashMap<>();
+        int redNum = 0;
+        int blueNum = 0;
+        int emptyNum = 0;
+        for (Integer a : values) {
+            if (a == RED) redNum++;
+            else if (a == BLUE) blueNum++;
+            else emptyNum++;
+        }
+        myMap.put("Empty", emptyNum);
+        myMap.put("Red", redNum);
+        myMap.put("Blue", blueNum);
+        return myMap;
     }
 
     @Override

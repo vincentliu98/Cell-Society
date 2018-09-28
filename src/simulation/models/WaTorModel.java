@@ -9,10 +9,7 @@ import xml.writer.WaTorWriter;
 import xml.writer.XMLWriter;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -126,7 +123,19 @@ public class WaTorModel implements SimulationModel<Fish> {
 
     @Override
     public Map<String, Integer> getStatisitcs(List<Fish> values) {
-        return null;
+        HashMap<String, Integer> myMap = new HashMap<>();
+        int fishNum = 0;
+        int sharkNum = 0;
+        int emptyNum = 0;
+        for (Fish a : values) {
+            if (a.kind() == FISH) fishNum++;
+            else if (a.kind() == SHARK) sharkNum++;
+            else emptyNum++;
+        }
+        myMap.put("Empty", emptyNum);
+        myMap.put("Fish", fishNum);
+        myMap.put("Shark", sharkNum);
+        return myMap;
     }
 
     @Override

@@ -13,36 +13,25 @@ import java.util.ResourceBundle;
  */
 
 public abstract class ModelChart extends LineChart{
-    private LineChart<Number, Number> lineChart;
     private NumberAxis xAxis;
-    private final NumberAxis yAxis = new NumberAxis();
+    private final NumberAxis yAxis;
 
     ModelChart() {
         super(new NumberAxis(), new NumberAxis());
         xAxis = (NumberAxis) getXAxis();
         xAxis.setLabel("Time (0.1s)");
-        yAxis.setLabel("Number");
         xAxis.setMinorTickVisible(false);
         xAxis.setAutoRanging(true);
 
-        lineChart = new LineChart<>(xAxis, yAxis);
-        lineChart.setAnimated(true);
-        lineChart.autosize();
-        lineChart.setCreateSymbols(false);
-        lineChart.getStyleClass().add("line-chart");
-    }
+        yAxis = (NumberAxis) getYAxis();
+        yAxis.setLabel("Number");
+        yAxis.setAutoRanging(true);
 
-    public LineChart<Number, Number> getLineChart() {
-        return lineChart;
+        setAnimated(true);
+        autosize();
+        setCreateSymbols(false);
+        getStyleClass().add("line-chart");
     }
 
     public abstract void updateStatistics(Double durationCounter, ResourceBundle myResources, Map<String, Integer> newStatistics);
-
-//    public Pane getChartBox() {
-//        HBox layout = new HBox();
-//        layout.getChildren().add(lineChart);
-//        layout.getStyleClass().add("chartBox");
-//        layout.setAlignment(Pos.CENTER);
-//        return layout;
-//    }
 }

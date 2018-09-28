@@ -20,9 +20,8 @@ public class GameOfLifeStatistics extends ModelChart{
 
     @Override
     public void updateStatistics(Double durationCounter, ResourceBundle myResources, Map<String, Integer> newStatistics) {
-        // data is indeed updating!! but it does not show up in the line chart!
-        Alive.getData().add(new XYChart.Data<>(durationCounter, newStatistics.get(myResources.getString("GameOfLifeAlive"))));
-        Dead.getData().add(new XYChart.Data<>(durationCounter, newStatistics.get(myResources.getString("GameOfLifeDead"))));
+        Alive.getData().add(new XYChart.Data<>(durationCounter, newStatistics.get("Alive")));
+        Dead.getData().add(new XYChart.Data<>(durationCounter, newStatistics.get("Dead")));
     }
 
 

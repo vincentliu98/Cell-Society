@@ -1,8 +1,30 @@
 package visualization.statistics;
 
-public class SpreadingFireStatistics {
+import javafx.scene.chart.XYChart;
 
-//                myResources.getString("Empty");
-//            myResources.getString("SpreadingFireTree");
-//            myResources.getString("SpreadingFireBurning");
+import java.util.Map;
+import java.util.ResourceBundle;
+
+public class SpreadingFireStatistics extends ModelChart{
+    public XYChart.Series Empty, Tree, Burning;
+
+    SpreadingFireStatistics() {
+        super();
+        Empty = new XYChart.Series();
+        Empty.setName("Empty");
+        Tree = new XYChart.Series();
+        Tree.setName("Tree");
+        Burning = new XYChart.Series();
+        Burning.setName("Burning");
+
+        getData().addAll(Empty, Tree, Burning);
+    }
+
+    @Override
+    public void updateStatistics(Double durationCounter, ResourceBundle myResources, Map<String, Integer> newStatistics) {
+        Empty.getData().add(new XYChart.Data<>(durationCounter, newStatistics.get("Empty")));
+        Tree.getData().add(new XYChart.Data<>(durationCounter, newStatistics.get("Tree")));
+        Burning.getData().add(new XYChart.Data<>(durationCounter, newStatistics.get("Burning")));
+
+    }
 }
