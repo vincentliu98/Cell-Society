@@ -12,11 +12,11 @@ import java.util.ResourceBundle;
  * @author Vincent Liu
  */
 
-public abstract class ModelChart extends LineChart{
+public abstract class ModelStatistics extends LineChart{
     private NumberAxis xAxis;
     private final NumberAxis yAxis;
 
-    ModelChart() {
+    ModelStatistics() {
         super(new NumberAxis(), new NumberAxis());
         xAxis = (NumberAxis) getXAxis();
         xAxis.setLabel("Time (0.1s)");
