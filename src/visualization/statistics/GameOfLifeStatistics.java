@@ -5,7 +5,7 @@ import javafx.scene.chart.XYChart;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class GameOfLifeStatistics extends ModelChart{
+public class GameOfLifeStatistics extends ModelStatistics{
     public XYChart.Series Alive, Dead;
 
     public GameOfLifeStatistics() {

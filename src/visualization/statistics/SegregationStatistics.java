@@ -6,7 +6,7 @@ import javafx.scene.chart.XYChart;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class SegregationStatistics extends ModelChart{
+public class SegregationStatistics extends ModelStatistics{
     public XYChart.Series Empty, Blue, Red;
 
     public SegregationStatistics() {

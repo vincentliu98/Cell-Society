@@ -5,7 +5,7 @@ import javafx.scene.chart.XYChart;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class WaTorStatistics extends ModelChart{
+public class WaTorStatistics extends ModelStatistics{
     public XYChart.Series Empty, Shark, Fish;
 
     public WaTorStatistics() {

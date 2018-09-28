@@ -46,7 +46,7 @@ public class SimulationControl extends HBox {
     private ComboBox<String> chooseShape;
 
     private ModelControl<?> modelControl;
-    private ModelChart modelChart;
+    private ModelStatistics modelChart;
 
     private String[] models = new String[] {
             GameOfLifeModel.MODEL_NAME,
@@ -154,7 +154,7 @@ public class SimulationControl extends HBox {
      *  It keeps a internal timer to tick once in simPeriod.
      * @param duration
      */
-    public void tick(double duration, ModelChart modelChart) {
+    public void tick(double duration, ModelStatistics modelChart) {
         if(modelControl.consumeIsDirty()) {
             stop();
             statusCode = StatusCode.UPDATE;
@@ -284,7 +284,7 @@ public class SimulationControl extends HBox {
 
     SimulationPanel getSimPanel() { return modelControl.simPanel(); }
     ModelControl<?> getModelControl() { return modelControl; }
-    ModelChart getModelChart() { return modelChart; }
+    ModelStatistics getModelChart() { return modelChart; }
 
     /**
      * It's named "consume" since once drawn, statusCode should go back to its default state.
