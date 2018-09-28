@@ -160,18 +160,18 @@ public class SimulationControl extends HBox {
             statusCode = StatusCode.UPDATE;
         }
 
-        /** TO DO: AFTER changing model configurations, re-render the line chart */
         if(isPlaying) {
             elapsedTime += duration;
-            durationCounter++;
-            Map<String, Integer> newStatistics = modelControl.simulator().getStatistics();
-            modelChart.updateStatistics(durationCounter, myResources, newStatistics);
-
+            if (durationCounter%(1/GUI.SECOND_DELAY)==0 || durationCounter==0) {
+                Map<String, Integer> newStatistics = modelControl.simulator().getStatistics();
+                modelChart.updateStatistics(durationCounter, myResources, newStatistics);
+            }
             if (elapsedTime >= simPeriod) {
                 elapsedTime = 0;
                 modelControl.simulator().tick();
                 numTick.setText(myResources.getString("NumTickDynamic")+modelControl.simulator().tickCount());
             }
+            durationCounter++;
         }
     }
 
@@ -205,6 +205,9 @@ public class SimulationControl extends HBox {
     private void handleSingleTick() {
         modelControl.simulator().tick();
         numTick.setText(myResources.getString("NumTickDynamic")+modelControl.simulator().tickCount());
+        Map<String, Integer> newStatistics = modelControl.simulator().getStatistics();
+        modelChart.updateStatistics(durationCounter, myResources, newStatistics);
+        durationCounter += 10;
     }
 
     private void handleFileLoad() {

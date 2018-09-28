@@ -57,8 +57,10 @@
 }
 
 .line-chart {
-    -fx-padding: 10px;
     -fx-alignment: center;
+    -fx-text-fill: black;
+    -fx-legend-visible: true;
+    -fx-legend-side: right;
 }
 
 .chart-box {
