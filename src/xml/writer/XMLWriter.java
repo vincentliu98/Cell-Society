@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import simulation.Cell;
 import simulation.CellGraph;
 import utility.ShapeUtils;
+import xml.XMLException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,10 +14,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,19 +25,22 @@ import java.util.stream.Collectors;
  * @author Inchan Hwang
  */
 public abstract class XMLWriter<T> {
+    public static final String DEFAULT_RESOURCES = "Errors";
     public static final String DELIMITER = ",";
 
     private CellGraph<T> graph;
     private Map<Cell<T>, Integer> uniqueId;
     protected Document doc;
     private File outFile;
+    private static ResourceBundle myResources;
 
-    public XMLWriter(CellGraph<T> graph_, File outFile_) {
+    public XMLWriter(CellGraph<T> graph_, File outFile_, String language) {
         graph = graph_; outFile = outFile_;
+        myResources = ResourceBundle.getBundle(DEFAULT_RESOURCES + language);
         try {
             doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
         } catch (ParserConfigurationException e) {
-            e.printStackTrace(); // Do some user-friendly things
+            throw new XMLException(myResources.getString("ConfigErrorMsg"));
         }
         uniqueId = new HashMap<>();
         var orderedCells = new ArrayList<>(graph.getCells());

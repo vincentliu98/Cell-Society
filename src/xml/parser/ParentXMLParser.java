@@ -1,6 +1,5 @@
 package xml.parser;
 
-import javafx.util.Pair;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -21,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-
 /**
  * This class handles parsing XML files and returning a completed object.
  *
@@ -32,7 +30,6 @@ import java.util.*;
  */
 
 public abstract class ParentXMLParser<T> {
-    public static final String ERROR_MESSAGE = "XML file does not represent %s";
     // keep only one documentBuilder because it is expensive to make and can numCellChanged it before parsing
     private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
     public static final String DEFAULT_RESOURCES = "Errors";
@@ -85,6 +82,7 @@ public abstract class ParentXMLParser<T> {
     public abstract Simulator<T> getSimulator(File datafile);
 
     public abstract T getCellValue(Element e);
+
     /**
      *
      * @param root
@@ -98,10 +96,6 @@ public abstract class ParentXMLParser<T> {
             Element curCell = (Element) cells.item(cIndex);
             int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG, STD_TAG_TO_RANGE_MAP);
             int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG, STD_TAG_TO_RANGE_MAP);
-//            if(Arrays.stream(ShapeUtils.shapeCodes()).filter(p -> p == shapeCode).count() == 0) {
-//                throw new XMLException(
-//                        myResources.getString("ShapeErrorMsg") + myResources.getString(LOAD_AGAIN_KEY), shapeCode);
-//            }
             double shapeWidth = getDoubleValue(curCell, SHAPE_WIDTH_TAG, STD_TAG_TO_RANGE_MAP);
             double shapeHeight = getDoubleValue(curCell, SHAPE_HEIGHT_TAG, STD_TAG_TO_RANGE_MAP);
             double xPos = getDoubleValue(curCell, CELL_XPOS_TAG, STD_TAG_TO_RANGE_MAP);
