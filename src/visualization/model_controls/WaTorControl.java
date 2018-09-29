@@ -25,10 +25,17 @@ public class WaTorControl extends ModelControl<Fish> {
     public static final double DEFAULT_FISHBREED = 2;
     public static final double DEFAULT_SHARKBREED = 5;
     public static final double DEFAULT_SHARKSTARVE = 5;
+    public static final int MIN_FISH_BREED = 1;
+    public static final int MAX_FISH_BREED = 20;
+    public static final int MIN_SHARK_BREED = 1;
+    public static final int MAX_SHARK_BREED = 20;
+    public static final int MIN_SHARK_STARVE = 1;
+    public static final int MAX_SHARK_STARVE = 20;
+    public static final int WRAPPER_SPACING = 10;
 
-    private Slider fishBreedBar = new Slider(1, 20, DEFAULT_FISHBREED);
-    private Slider sharkBreedBar = new Slider(1, 20, DEFAULT_SHARKBREED);
-    private Slider sharkStarveBar = new Slider(1, 20, DEFAULT_SHARKSTARVE);
+    private Slider fishBreedBar = new Slider(MIN_FISH_BREED, MAX_FISH_BREED, DEFAULT_FISHBREED);
+    private Slider sharkBreedBar = new Slider(MIN_SHARK_BREED, MAX_SHARK_BREED, DEFAULT_SHARKBREED);
+    private Slider sharkStarveBar = new Slider(MIN_SHARK_STARVE, MAX_SHARK_STARVE, DEFAULT_SHARKSTARVE);
 
     public static final Label fishBreedCaption = new Label("Fish Breeding Period:");
     public static final Label sharkBreedCaption = new Label("Shark Breeding Period:");
@@ -58,7 +65,7 @@ public class WaTorControl extends ModelControl<Fish> {
 
         var scrollPane = new ScrollPane();
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        var wrapper = new VBox(10);
+        var wrapper = new VBox(WRAPPER_SPACING);
 
         fishBreedBar.setShowTickMarks(true);
         fishBreedBar.setShowTickLabels(true);

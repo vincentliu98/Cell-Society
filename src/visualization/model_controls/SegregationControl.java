@@ -17,10 +17,11 @@ import static simulation.factory.Segregation.DEFAULT_THRESHOLD;
  *
  * @author Vincent Liu
  */
-
 public class SegregationControl extends ModelControl<Integer> {
+    public static final double MIN_THRESHOLD = 0;
+    public static final double MAX_THRESHOLD = 1;
     public static final Label thresholdCaption = new Label("Threshold:");
-    private Slider thresholdBar = new Slider(0, 1, DEFAULT_THRESHOLD);
+    private Slider thresholdBar = new Slider(MIN_THRESHOLD, MAX_THRESHOLD, DEFAULT_THRESHOLD);
     private Label thresholdValue = new Label(
             Double.toString(thresholdBar.getValue()));
 

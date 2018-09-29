@@ -22,10 +22,15 @@ import visualization.SimulationPanel;
  */
 public abstract class ModelControl<T> extends VBox {
     public static final int DEFAULT_CELL_NUM = 10;
+    public static final int MODELCONTROL_SPACING = 25;
+    public static final double MIN_CELL_NUM = 1;
+    public static final double MAX_CELL_NUM = 100;
+    public static final int BLOCK_INCREMENT = 4;
+    public static final int MAJOR_TICK_UNIT = 20;
 
     public static final Label CELL_NUMBER_CAPTION = new Label("Cell Number / Side:");
 
-    private Slider numberBar = new Slider(1, 100, DEFAULT_CELL_NUM);
+    private Slider numberBar = new Slider(MIN_CELL_NUM, MAX_CELL_NUM, DEFAULT_CELL_NUM);
     private Label cellNumValue = new Label(Integer.toString((int) numberBar.getValue()));
 
     protected SimulationPanel<T> simPanel;
@@ -37,7 +42,7 @@ public abstract class ModelControl<T> extends VBox {
      * @param sim
      */
     public ModelControl(Simulator<T> sim) {
-        super(25);
+        super(MODELCONTROL_SPACING);
         getStyleClass().add("modelPanel");
 
         isDirty = false;
@@ -45,9 +50,9 @@ public abstract class ModelControl<T> extends VBox {
 
         numberBar.setShowTickMarks(true);
         numberBar.setShowTickLabels(true);
-        numberBar.setMajorTickUnit(20);
+        numberBar.setMajorTickUnit(MAJOR_TICK_UNIT);
         numberBar.setSnapToTicks(true);
-        numberBar.setBlockIncrement(4);
+        numberBar.setBlockIncrement(BLOCK_INCREMENT);
 
         numberBar.setOnMouseReleased(e -> {
             cellNumValue.setText(Integer.toString((int) numberBar.getValue()));

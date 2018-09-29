@@ -32,6 +32,13 @@ import java.util.ResourceBundle;
  */
 
 public class SimulationControl extends HBox {
+    public static final int SIM_CONTROL_SPACING = 25;
+    public static final int DEFAULT_MODEL_INDEX = 0; // Game of Lfe
+    public static final int DEFAULT_SHAPE_INDEX = 0; // Rectangle
+    public static final double STEP_RATE_STEP = 0.05;
+    public static final double MAX_STEP_RATE = 20;
+    public static final double MIN_STEP_RATE = 0.1;
+
     private Window window; // for load/save binding
     private ResourceBundle myResources;
     private String myLanguage;
@@ -62,7 +69,7 @@ public class SimulationControl extends HBox {
      * @param myLanguage
      */
     public SimulationControl(Window window_, ResourceBundle myResources, String myLanguage) {
-        super(25);
+        super(SIM_CONTROL_SPACING);
         window = window_;
         statusCode = StatusCode.NO_UPDATE;
         isPlaying = false;
@@ -76,7 +83,7 @@ public class SimulationControl extends HBox {
         models[3] = myResources.getString("SpreadingFireName");
 
         getStyleClass().add("simControlPanelWrapper");
-        initializeModelControl(models[0], ShapeUtils.shapes()[0]);
+        initializeModelControl(models[DEFAULT_MODEL_INDEX], ShapeUtils.shapes()[DEFAULT_SHAPE_INDEX]);
         initializeStructure();
         initializeFunctionality();
     }
@@ -127,14 +134,14 @@ public class SimulationControl extends HBox {
         dec = new Button(myResources.getString("RateDownButton"));
         chooseModel = new ComboBox<>();
         chooseModel.getItems().addAll(models);
-        chooseModel.setValue(models[0]);
+        chooseModel.setValue(models[DEFAULT_MODEL_INDEX]);
         chooseModel.setOnMouseClicked(e -> {
             chooseModel.hide();
             chooseModel.show();
         });
         chooseShape = new ComboBox<>();
         chooseShape.getItems().addAll(ShapeUtils.shapes());
-        chooseShape.setValue(ShapeUtils.shapes()[0]);
+        chooseShape.setValue(ShapeUtils.shapes()[DEFAULT_SHAPE_INDEX]);
         chooseShape.setOnMouseClicked(e -> {
             chooseShape.hide();
             chooseShape.show();
@@ -151,8 +158,8 @@ public class SimulationControl extends HBox {
         load.setOnMouseClicked(e -> handleFileLoad());
         playStop.setOnMouseClicked(e -> handlePlayStop());
         tick.setOnMouseClicked(e -> handleSingleTick());
-        inc.setOnMouseClicked(e -> handleSpeedChange(-0.05));
-        dec.setOnMouseClicked(e -> handleSpeedChange(0.05));
+        inc.setOnMouseClicked(e -> handleSpeedChange(-STEP_RATE_STEP));
+        dec.setOnMouseClicked(e -> handleSpeedChange(STEP_RATE_STEP));
         chooseModel.valueProperty().addListener((a, b, c) -> handleModelChange(c));
         chooseShape.valueProperty().addListener((a, b, c) -> handleShapeChange(c));
     }
@@ -208,7 +215,7 @@ public class SimulationControl extends HBox {
      * @param by
      */
     private void handleSpeedChange(double by) {
-        simPeriod = Math.min(Math.max(0.1, simPeriod+by), 20);
+        simPeriod = Math.min(Math.max(MIN_STEP_RATE, simPeriod+by), MAX_STEP_RATE);
         stepRate.setText(myResources.getString("DefaultStepRateDisplay") +
                 ((double) Math.round(1/simPeriod * 100) / 100) + myResources.getString("StepRateUnit"));
     }

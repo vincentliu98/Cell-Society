@@ -27,6 +27,8 @@ import static javafx.scene.shape.StrokeType.INSIDE;
 public class Simulator<T> {
     public static final double SIMULATION_SX = 588.5;
     public static final double SIMULATION_SY = 470;
+    public static final double MOUSE_ENTER_OPACITY=0.7;
+    public static final double MIX_INDEX = 0.1;
  
     private CellGraph<T> graph;
     protected SimulationModel<T> model;
@@ -47,11 +49,11 @@ public class Simulator<T> {
             v.setOnMouseEntered(e -> {
                 v.toFront();
                 v.setFill(ColorUtils
-                        .mix(model.chooseColor(c.value()), model.chooseColor(model.nextValue(c.value())), 0.1));
+                        .mix(model.chooseColor(c.value()), model.chooseColor(model.nextValue(c.value())), MIX_INDEX));
                 v.setStroke(model.chooseColor(c.value()));
                 v.setStrokeDashOffset(5);
                 v.getStrokeDashArray().addAll(10d);
-                v.setOpacity(0.7);
+                v.setOpacity(MOUSE_ENTER_OPACITY);
             });
 
             v.setOnMouseExited(e -> {
