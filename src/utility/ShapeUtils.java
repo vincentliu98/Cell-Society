@@ -5,6 +5,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import simulation.Simulator;
 
+import java.util.List;
+
 /**
  * ???
  *
@@ -48,12 +50,12 @@ public class ShapeUtils {
                 new Rectangle(0, 0, Simulator.SIMULATION_SX, Simulator.SIMULATION_SY));
     }
 
-    public static int[] shapeCodes() {
-        return new int[] {
+    public static List<Integer> shapeCodes() {
+        return List.of(
             RECTANGLE,
             TRIANGLE,
             TRIANGLE_FLIP
-        };
+        );
     }
 
     public static String[] shapes() {
