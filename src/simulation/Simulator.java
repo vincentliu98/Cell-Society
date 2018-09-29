@@ -111,7 +111,7 @@ public class Simulator<T> {
      * @param outFile
      * @return an XML file that will be saved into user's directory
      */
-    public XMLWriter<T> getWriter(File outFile) { return model.getXMLWriter(graph, outFile); }
+    public XMLWriter<T> getWriter(File outFile, String language) { return model.getXMLWriter(graph, outFile, language); }
 
     /**
      * Update all the cells' nextVal in the simulator

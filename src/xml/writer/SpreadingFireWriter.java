@@ -17,8 +17,8 @@ import java.util.List;
 public class SpreadingFireWriter extends XMLWriter<Integer> {
     private SpreadingFireModel model;
 
-    public SpreadingFireWriter(SpreadingFireModel model_, CellGraph<Integer> graph_, File outFile_) {
-        super(graph_, outFile_);
+    public SpreadingFireWriter(SpreadingFireModel model_, CellGraph<Integer> graph_, File outFile_, String language) {
+        super(graph_, outFile_, language);
         model = model_;
     }
 

@@ -61,8 +61,8 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
     }
 
     @Override
-    public GameOfLifeWriter getXMLWriter(CellGraph<Integer> graph, File outFile) {
-        return new GameOfLifeWriter(graph, outFile);
+    public GameOfLifeWriter getXMLWriter(CellGraph<Integer> graph, File outFile, String language) {
+        return new GameOfLifeWriter(graph, outFile, language);
     }
 
     @Override
