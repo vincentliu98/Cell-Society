@@ -36,18 +36,18 @@ Jay Pande: XML parsers and error checking
 
 ### Running the Program
 
-#####Main class: src/visualization/Main.java
+##### Main class: src/visualization/Main.java
 
-#####Data files needed: 
+##### Data files needed: 
 * resources/English.properties
 * resources/ErrorsEnglish.properties
 * resources/style.css
 * data/error_files
 
-#####Interesting data files:
+##### Interesting data files:
 * data/*
 
-#####Features implemented:
+##### Features implemented:
 * Simulation
     * Implement a 2D grid of cells with flexible model (Game Of Life, Spreading Of Fire, Segregation, Wa-Tor), size (1-10000 cells), and shape (triangle, rectangle)
     * Display a dynamic line chart consisting the number of the each kind of cells
@@ -60,15 +60,15 @@ Jay Pande: XML parsers and error checking
     * Allow users to update the current model, the shape of the cell, and specific parameters of the model.
     * Allow users to pause and resume the simulation, as well as speeding up or slowing down the simulation
 
-#####Assumptions or Simplifications:
+##### Assumptions or Simplifications:
 
-#####Known Bugs:
+##### Known Bugs:
 * High Priority: None
 * Medium Priority: None
 * Low Priority
     * After switching the model, the num tick doesn't update immediately. It updates back to 0 only when the simulation starts.
 
-#####Extra credit:
+##### Extra credit:
 N/A
 
 ### Notes
