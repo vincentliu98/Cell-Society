@@ -7,23 +7,19 @@ import simulation.Simulator;
 import visualization.SimulationPanel;
 
 /**
- *  For various model-specific panels that defines
- *  uniform theme across different panels.
- *
- *  ModelControl contains a common parameter for all models - number of cells.
- *  It contains a Slider that dynamically change the number of cells and update the simulation
- *  It is also able to detect any parameter change that occurs in the UI and pass the change to the model
- *
- *  ModelControl holds reference to a simulation panel, replacing it if
+ *  For various model-specific panels that defines uniform theme across different panels.
+ *  <p>ModelControl contains a common parameter for all models - number of cells.
+ *  It contains a Slider that dynamically change the number of cells and update the simulation.
+ *  It is also able to detect any parameter change that occurs in the UI and pass the change to the model.
+ *  </p>
+ *  <p>ModelControl holds reference to a simulation panel, replacing it if
  *  number of cells change. Each subclasses must implement two methods
  *  handleCellNumChange(), handleParamChange(), each handling the changes in
- *  each sliders.
- *
+ *  each sliders.</p>
  *
  * @author Vincent Liu
  * @author Inchan Hwang
  */
- 
 public abstract class ModelControl<T> extends VBox {
     public static final int DEFAULT_CELL_NUM = 10;
 
@@ -35,6 +31,11 @@ public abstract class ModelControl<T> extends VBox {
     protected SimulationPanel<T> simPanel;
     protected boolean isDirty;
 
+    /**
+     * Constructs a ModelControl and adds a Slider to allow users to change the number of cells in each side of the model
+     *
+     * @param sim
+     */
     public ModelControl(Simulator<T> sim) {
         super(25);
         getStyleClass().add("modelPanel");
@@ -78,7 +79,7 @@ public abstract class ModelControl<T> extends VBox {
     /**
      * The word "consume" is used to emphasize that isDirty is reset to its default state
      * once the variable has been seen by its parent
-     * @return
+     * @return whether the model need to be updated or not
      */
     public boolean consumeIsDirty() {
         var ret = isDirty;

@@ -23,8 +23,18 @@ public class SpreadingFireControl extends ModelControl<Integer> {
     private Label probCatchValue = new Label(
             Double.toString(probCatchBar.getValue()));
 
+    /**
+     * Change the shape of cells based on the existing model
+     *
+     * @param shape
+     */
     public SpreadingFireControl(String shape) { this(SpreadingFire.generate(DEFAULT_CELL_NUM, shape)); }
 
+    /**
+     * Generate a SpreadingFireModel that contains a Slider to adjust the parameter probCatch
+     *
+     * @param sim
+     */
     public SpreadingFireControl(Simulator<Integer> sim) {
         super(sim);
 

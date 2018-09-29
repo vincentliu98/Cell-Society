@@ -41,8 +41,18 @@ public class WaTorControl extends ModelControl<Fish> {
     private Label sharkStarveValue = new Label(
             Double.toString(sharkStarveBar.getValue()));
 
+    /**
+     * Change the shape of cells based on the existing model
+     *
+     * @param shape
+     */
     public WaTorControl(String shape) { this(WaTor.generate(DEFAULT_CELL_NUM, shape)); }
 
+    /**
+     * Generate a WaTorControl that contains three Sliders to adjust the model parameters.
+     *
+     * @param sim
+     */
     public WaTorControl(Simulator<Fish> sim) {
         super(sim);
 
