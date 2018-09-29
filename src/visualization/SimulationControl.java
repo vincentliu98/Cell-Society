@@ -262,11 +262,15 @@ public class SimulationControl extends HBox {
             var modelName = ParentXMLParser.peekModelName(file);
             initializeModelControl(modelName, file);
         } catch (XMLException e) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setHeaderText(e.getMessage());
-            errorAlert.setContentText(e.getMessage());
-            errorAlert.showAndWait();
+            showError(e);
         }
+    }
+
+    private void showError(XMLException e) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setHeaderText(e.getMessage());
+        errorAlert.setContentText(e.getMessage());
+        errorAlert.showAndWait();
     }
 
     /**
@@ -274,11 +278,16 @@ public class SimulationControl extends HBox {
      */
     private void handleFileSave() {
         stop();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(myResources.getString("SaveFile"));
-        File file = fileChooser.showSaveDialog(window);
-        if(file == null) return; // display "OH NO!" DIALOG
-        modelControl.simulator().getWriter(file).generate();
+        try {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle(myResources.getString("SaveFile"));
+            File file = fileChooser.showSaveDialog(window);
+            if(file == null) return; // display "OH NO!" DIALOG
+            modelControl.simulator().getWriter(file).generate();
+        } catch (XMLException e) {
+            showError(e);
+        }
+
     }
 
     /**
