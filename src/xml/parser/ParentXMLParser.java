@@ -61,8 +61,8 @@ public abstract class ParentXMLParser<T> {
     public static final String MAX_STRING = "max";
     public static final String DEF_STRING = "def";
     public static final Map<String, Map<String, Object>> STD_TAG_TO_RANGE_MAP = Map.ofEntries(
-            Map.entry(SHAPE_CODE_TAG, Map.of(MIN_STRING, Collections.min(ShapeUtils.shapeCodes()), MAX_STRING,
-                    Collections.max(ShapeUtils.shapeCodes()))),
+            Map.entry(SHAPE_CODE_TAG, Map.of(MIN_STRING, Arrays.stream(ShapeUtils.shapeCodes()).min().getAsInt(), MAX_STRING,
+            Arrays.stream(ShapeUtils.shapeCodes()).max().getAsInt())),
             Map.entry(SHAPE_WIDTH_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)), //, DEF_STRING, 10.0
             Map.entry(SHAPE_HEIGHT_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)),
             Map.entry(CELL_UNIQUE_ID_TAG, Map.of(MIN_STRING, Integer.MIN_VALUE, MAX_STRING, Integer.MAX_VALUE)),
