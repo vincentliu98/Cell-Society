@@ -17,9 +17,10 @@ import java.util.Map;
 public class SpreadingFireXMLParser extends ParentXMLParser {
     public static final String PROB_CATCH_TAG = "probCatch";
     public static final String LIVE_STATE_TAG = "liveState";
-    public static final Map<String, Pair> VAL_TAG_TO_RANGE_MAP = Map.ofEntries(
-            Map.entry(PROB_CATCH_TAG, new Pair<>(0.0, 1.0)),
-            Map.entry(LIVE_STATE_TAG, new Pair<>(0, 2))
+    public static final Map<String, Map<String, Object>> VAL_TAG_TO_RANGE_MAP = Map.ofEntries(
+            Map.entry(PROB_CATCH_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, 1.0, DEF_STRING, 0.5)),
+            Map.entry(LIVE_STATE_TAG, Map.of(MIN_STRING, SpreadingFireModel.EMPTY, MAX_STRING, SpreadingFireModel.BURNING,
+                    DEF_STRING, SpreadingFireModel.EMPTY))
     );
 
     /**
@@ -46,6 +47,6 @@ public class SpreadingFireXMLParser extends ParentXMLParser {
 
     @Override
     public Integer getCellValue(Element e) {
-        return getIntValue(e, LIVE_STATE_TAG);
+        return getIntValue(e, LIVE_STATE_TAG, VAL_TAG_TO_RANGE_MAP);
     }
 }

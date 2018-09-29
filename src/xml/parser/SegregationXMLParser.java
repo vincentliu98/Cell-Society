@@ -7,6 +7,7 @@ import simulation.Simulator;
 import simulation.models.SegregationModel;
 
 import java.io.File;
+import java.util.EmptyStackException;
 import java.util.Map;
 
 /**
@@ -16,8 +17,11 @@ import java.util.Map;
 public class SegregationXMLParser extends ParentXMLParser {
     public static final String THRESHOLD_TAG = "satisfactionThreshold";
     public static final String TYPE_VALUE_TAG = "type";
-    public static final Map<String, Pair> VAL_TAG_TO_RANGE_MAP = Map.ofEntries(
-            Map.entry(THRESHOLD_TAG, new Pair<>(0.0, 1.0)));
+    public static final Map<String, Map<String, Object>> VAL_TAG_TO_RANGE_MAP = Map.ofEntries(
+            Map.entry(THRESHOLD_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, 1.0, DEF_STRING, 0.5)),
+            Map.entry(TYPE_VALUE_TAG, Map.of(MIN_STRING, SegregationModel.EMPTY, MAX_STRING, SegregationModel.RED,
+                    DEF_STRING, SegregationModel.EMPTY))
+    );
 
     /**
      * Create a parser for XML files of given type.
@@ -43,6 +47,6 @@ public class SegregationXMLParser extends ParentXMLParser {
 
     @Override
     public Integer getCellValue(Element e) {
-        return getIntValue(e, TYPE_VALUE_TAG);
+        return getIntValue(e, TYPE_VALUE_TAG, VAL_TAG_TO_RANGE_MAP);
     }
 }

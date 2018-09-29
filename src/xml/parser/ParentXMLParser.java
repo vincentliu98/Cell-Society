@@ -19,12 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 /**
@@ -65,11 +60,14 @@ public abstract class ParentXMLParser<T> {
     public static final String MIN_STRING = "min";
     public static final String MAX_STRING = "max";
     public static final String DEF_STRING = "def";
-    public static final Map<String, Map<String, Double>> STD_TAG_TO_RANGE_MAP = Map.ofEntries(
-            Map.entry(SHAPE_WIDTH_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE, DEF_STRING, 1.0)),
-            Map.entry(SHAPE_HEIGHT_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE, DEF_STRING, 1.0)),
-            Map.entry(CELL_XPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE, DEF_STRING, 0.0)),
-            Map.entry(CELL_YPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE, DEF_STRING, 0.0))
+    public static final Map<String, Map<String, Object>> STD_TAG_TO_RANGE_MAP = Map.ofEntries(
+            Map.entry(SHAPE_CODE_TAG, Map.of(MIN_STRING, Collections.min(ShapeUtils.shapeCodes()), MAX_STRING,
+                    Collections.max(ShapeUtils.shapeCodes()))),
+            Map.entry(SHAPE_WIDTH_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)), //, DEF_STRING, 10.0
+            Map.entry(SHAPE_HEIGHT_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)),
+            Map.entry(CELL_UNIQUE_ID_TAG, Map.of(MIN_STRING, Integer.MIN_VALUE, MAX_STRING, Integer.MAX_VALUE)),
+            Map.entry(CELL_XPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE)),
+            Map.entry(CELL_YPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE))
     );
 
 
@@ -98,12 +96,12 @@ public abstract class ParentXMLParser<T> {
         Map<Integer, Cell<T>> IDToCellMap = new HashMap<>();
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
-            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
-            int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG);
-            if(Arrays.stream(ShapeUtils.shapeCodes()).filter(p -> p == shapeCode).count() == 0) {
-                throw new XMLException(
-                        myResources.getString("ShapeErrorMsg") + myResources.getString(LOAD_AGAIN_KEY), shapeCode);
-            }
+            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG, STD_TAG_TO_RANGE_MAP);
+            int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG, STD_TAG_TO_RANGE_MAP);
+//            if(Arrays.stream(ShapeUtils.shapeCodes()).filter(p -> p == shapeCode).count() == 0) {
+//                throw new XMLException(
+//                        myResources.getString("ShapeErrorMsg") + myResources.getString(LOAD_AGAIN_KEY), shapeCode);
+//            }
             double shapeWidth = getDoubleValue(curCell, SHAPE_WIDTH_TAG, STD_TAG_TO_RANGE_MAP);
             double shapeHeight = getDoubleValue(curCell, SHAPE_HEIGHT_TAG, STD_TAG_TO_RANGE_MAP);
             double xPos = getDoubleValue(curCell, CELL_XPOS_TAG, STD_TAG_TO_RANGE_MAP);
@@ -112,7 +110,7 @@ public abstract class ParentXMLParser<T> {
         }
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
-            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG);
+            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG, STD_TAG_TO_RANGE_MAP);
             List<Integer> neighborIDs = parseNeighbors(curCell);
             List<Cell<T>> neighborList = new ArrayList<>();
             for (int n : neighborIDs) {
@@ -163,14 +161,22 @@ public abstract class ParentXMLParser<T> {
      * @param tagName
      * @return
      */
-    public static int getIntValue(Element e, String tagName) {
-        String str = getTextValue(e, tagName).replaceAll("\\s", "");
+    public static int getIntValue(Element e, String tagName, Map<String, Map<String, Object>> rangeMap) {
         try {
-            return Integer.parseInt(str);
-        }
-        catch (NumberFormatException ex){
-            throw new XMLException(myResources.getString("ValueNotIntMsg") + myResources.getString(LOAD_AGAIN_KEY),
-                    tagName, str);
+            int min = (int) rangeMap.get(tagName).get(MIN_STRING);
+            int max = (int) rangeMap.get(tagName).get(MAX_STRING);
+            String str = getTextValue(e, tagName).replaceAll("\\s", "");
+            try {
+                int i = Integer.parseInt(str);
+                if (i < min || i > max) {
+                    throw new XMLException(myResources.getString("IntOutOfRangeMsg"), tagName, i, min, max);
+                }
+                return i;
+            } catch (NumberFormatException ex) {
+                throw new XMLException(myResources.getString("ValueNotIntMsg"), tagName, str);
+            }
+        } catch (XMLException ex){
+            return (int) getDefault(tagName, rangeMap, ex);
         }
     }
 
@@ -180,22 +186,32 @@ public abstract class ParentXMLParser<T> {
      * @param tagName
      * @return
      */
-    public static double getDoubleValue(Element e, String tagName, Map<String, Map<String, Double>> rangeMap) {
-        String str = getTextValue(e, tagName).replaceAll("\\s", "");
+    public static double getDoubleValue(Element e, String tagName, Map<String, Map<String, Object>> rangeMap) {
         try {
-            double db = Double.parseDouble(str);
-            double min = rangeMap.get(tagName).get(MIN_STRING);
-            double max = rangeMap.get(tagName).get(MAX_STRING);
-            double def = rangeMap.get(tagName).get(DEF_STRING);
-            if (db < min || db > max) {
-                throw new XMLException(myResources.getString("DoubleOutOfRangeMsg"), tagName, db, min, max, 0.0);
-
+            double min = (double) rangeMap.get(tagName).get(MIN_STRING);
+            double max = (double) rangeMap.get(tagName).get(MAX_STRING);
+            String str = getTextValue(e, tagName).replaceAll("\\s", "");
+            try {
+                double db = Double.parseDouble(str);
+                if (db < min || db > max) {
+                    throw new XMLException(myResources.getString("DoubleOutOfRangeMsg"), tagName, db, min, max);
+                }
+                return db;
+            } catch (NumberFormatException ex) {
+                throw new XMLException(myResources.getString("ValueNotDoubleMsg"), tagName, str);
             }
-            return db;
-        } catch (NumberFormatException ex){
-            throw new XMLException(myResources.getString("ValueNotDoubleMsg") + myResources.getString(LOAD_AGAIN_KEY),
-                    tagName, str);
+        } catch (XMLException ex){
+            return (double) getDefault(tagName, rangeMap, ex);
         }
+    }
+
+    private static Object getDefault(String tagName, Map<String, Map<String, Object>> rangeMap, Exception ex) {
+            var def = rangeMap.get(tagName).get(DEF_STRING);
+            if (def == null) {
+                throw new XMLException(ex.getMessage() + myResources.getString("NoDefaultMsg") +
+                        myResources.getString(LOAD_AGAIN_KEY), tagName);
+            }
+            return rangeMap.get(tagName).get(DEF_STRING);
     }
 
     /**
@@ -216,21 +232,6 @@ public abstract class ParentXMLParser<T> {
 
     public static String peekModelName(File xmlFile) {
         return getTextValue(getRootElement(xmlFile), MODEL_ATTRIBUTE_STRING);
-    }
-
-    /**
-     * Returns if this is a valid XML file for the specified object type
-     *
-     * @param root
-     * @return
-     */
-    public static boolean isValidFile (Element root) {
-        for (String typeAttr : VALID_MODEL_NAMES) {
-            if (getAttribute(root, MODEL_ATTRIBUTE_STRING).equals(typeAttr)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
