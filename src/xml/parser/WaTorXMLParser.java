@@ -29,6 +29,14 @@ public class WaTorXMLParser extends ParentXMLParser {
     public static final String CELL_KIND_TAG = "kind";
     public static final String CELL_BREED_COUNTER_TAG = "breedCounter";
     public static final String CELL_STARVE_COUNTER_TAG = "starveCounter";
+    public static final Map<String, Map<String, Object>> VAL_TAG_TO_RANGE_MAP = Map.ofEntries(
+            Map.entry(FISH_BREED_PERIOD_TAG, Map.of(MIN_STRING, 0, MAX_STRING, Integer.MAX_VALUE, DEF_STRING, 10)),
+            Map.entry(SHARK_BREED_PERIOD_TAG, Map.of(MIN_STRING, 0, MAX_STRING, Integer.MAX_VALUE, DEF_STRING, 10)),
+            Map.entry(SHARK_STARVE_PERIOD_TAG, Map.of(MIN_STRING, 0, MAX_STRING, Integer.MAX_VALUE, DEF_STRING, 10)),
+            Map.entry(CELL_KIND_TAG, Map.of(MIN_STRING, WaTorModel.FISH, MAX_STRING, WaTorModel.EMPTY, DEF_STRING, WaTorModel.EMPTY)),
+            Map.entry(CELL_BREED_COUNTER_TAG, Map.of(MIN_STRING, 0, MAX_STRING, Integer.MAX_VALUE, DEF_STRING, 0)),
+            Map.entry(CELL_STARVE_COUNTER_TAG, Map.of(MIN_STRING, 0, MAX_STRING, Integer.MAX_VALUE, DEF_STRING, 0))
+    );
 
     /**
      * Create a parser for XML files of given type.
@@ -46,9 +54,9 @@ public class WaTorXMLParser extends ParentXMLParser {
      */
     public Simulator<Fish> getSimulator(File datafile) {
         Element root = getRootElement(datafile);
-        int fishBreedPeriod = getIntValue(root, FISH_BREED_PERIOD_TAG);
-        int sharkBreedPeriod = getIntValue(root, SHARK_BREED_PERIOD_TAG);
-        int sharkStarvePeriod = getIntValue(root, SHARK_STARVE_PERIOD_TAG);
+        int fishBreedPeriod = getIntValue(root, FISH_BREED_PERIOD_TAG, VAL_TAG_TO_RANGE_MAP);
+        int sharkBreedPeriod = getIntValue(root, SHARK_BREED_PERIOD_TAG, VAL_TAG_TO_RANGE_MAP);
+        int sharkStarvePeriod = getIntValue(root, SHARK_STARVE_PERIOD_TAG, VAL_TAG_TO_RANGE_MAP);
         WaTorModel model = new WaTorModel(fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod);
         CellGraph<Fish> graph = getCellGraph(root);
         return new Simulator<>(graph, model);
@@ -56,11 +64,11 @@ public class WaTorXMLParser extends ParentXMLParser {
 
     @Override
     public Fish getCellValue(Element e) {
-        int kind = getIntValue(e, CELL_KIND_TAG);
+        int kind = getIntValue(e, CELL_KIND_TAG, VAL_TAG_TO_RANGE_MAP);
         Fish val = null;
         if (kind == WaTorModel.FISH || kind == WaTorModel.SHARK) {
-            int breedCounter = getIntValue(e, CELL_BREED_COUNTER_TAG);
-            int starveCounter = getIntValue(e, CELL_STARVE_COUNTER_TAG);
+            int breedCounter = getIntValue(e, CELL_BREED_COUNTER_TAG, VAL_TAG_TO_RANGE_MAP);
+            int starveCounter = getIntValue(e, CELL_STARVE_COUNTER_TAG, VAL_TAG_TO_RANGE_MAP);
             if (kind == WaTorModel.FISH)
                 val = new Fish(breedCounter);
             else
