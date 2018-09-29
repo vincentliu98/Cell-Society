@@ -35,6 +35,25 @@ public class GUI {
     public static final int SCREEN_WIDTH = 840;
     public static final int SCREEN_HEIGHT = 726;
 
+    public static final int COL_1_PERCENT = 25;
+    public static final int COL_2_PERCENT = 75;
+    public static final int ROW_1_PERCENT = 15;
+    public static final int ROW_2_PERCENT = 70;
+    public static final int ROW_3_PERCENT = 15;
+
+    public static final int MODELCHART_ROW = 0;
+    public static final int MODELCHART_COL = 0;
+    public static final int MODELCHART_ROW_SPAN = 1;
+    public static final int MODELCHART_COL_SPAN = 3;
+    public static final int MODELCONTROL_ROW = 1;
+    public static final int MODELCONTROL_COL = 0;
+    public static final int SIMPANEL_ROW = 1;
+    public static final int SIMPANEL_COL = 1;
+    public static final int SIMCONTROL_ROW = 2;
+    public static final int SIMCONTROL_COL = 0;
+    public static final int SIMCONTROL_ROW_SPAN = 1;
+    public static final int SIMCONTROL_COL_SPAN = 2;
+
     public static final int FRAMES_PER_SECOND = 10;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = MILLISECOND_DELAY / 1000.;
@@ -58,24 +77,24 @@ public class GUI {
         root.getStyleClass().add("root");
 
         var column1 = new ColumnConstraints();
-        column1.setPercentWidth(25);
+        column1.setPercentWidth(COL_1_PERCENT);
         var column2 = new ColumnConstraints();
-        column2.setPercentWidth(75);
+        column2.setPercentWidth(COL_2_PERCENT);
         root.getColumnConstraints().addAll(column1, column2);
         var row1 = new RowConstraints();
-        row1.setPercentHeight(15);
+        row1.setPercentHeight(ROW_1_PERCENT);
         var row2 = new RowConstraints();
-        row2.setPercentHeight(70);
+        row2.setPercentHeight(ROW_2_PERCENT);
         var row3 = new RowConstraints();
-        row3.setPercentHeight(15);
+        row3.setPercentHeight(ROW_3_PERCENT);
         root.getRowConstraints().addAll(row1, row2, row3);
 
         simControl = new SimulationControl(window, myResources, myLanguage);
 
-        root.add(new GameOfLifeStatistics(), 0, 0, 3, 1);
-        root.add(simControl.getModelControl(), 0, 1);
-        root.add(simControl.getSimPanel(), 1, 1);
-        root.add(simControl, 0, 2, 2, 1);
+        root.add(new GameOfLifeStatistics(), MODELCHART_COL, MODELCHART_ROW, MODELCHART_COL_SPAN, MODELCHART_ROW_SPAN);
+        root.add(simControl.getModelControl(), MODELCONTROL_COL, MODELCONTROL_ROW);
+        root.add(simControl.getSimPanel(), SIMPANEL_ROW, SIMPANEL_COL);
+        root.add(simControl, SIMCONTROL_COL, SIMCONTROL_ROW, SIMCONTROL_COL_SPAN, SIMCONTROL_ROW_SPAN);
     }
 
     /**
@@ -109,10 +128,10 @@ public class GUI {
     public void step(double duration) {
         if(simControl.consumeStatusCode() == StatusCode.UPDATE) {
             root.getChildren().clear();
-            root.add(simControl.getModelChart(), 0, 0, 3, 1);
-            root.add(simControl.getModelControl(), 0, 1);
-            root.add(simControl.getSimPanel(), 1, 1);
-            root.add(simControl, 0, 2, 2, 1);
+            root.add(simControl.getModelChart(), MODELCHART_COL, MODELCHART_ROW, MODELCHART_COL_SPAN, MODELCHART_ROW_SPAN);
+            root.add(simControl.getModelControl(), MODELCONTROL_COL, MODELCONTROL_ROW);
+            root.add(simControl.getSimPanel(), SIMPANEL_ROW, SIMPANEL_COL);
+            root.add(simControl, SIMCONTROL_COL, SIMCONTROL_ROW, SIMCONTROL_COL_SPAN, SIMCONTROL_ROW_SPAN);
         } simControl.tick(duration, simControl.getModelChart());
     }
 }

@@ -18,8 +18,11 @@ import java.util.HashMap;
 
 public class SpreadingFireControl extends ModelControl<Integer> {
     public static final double DEFAULT_PROBCATCH = 0.70;
+    public static final double MIN_PROBCATCH = 0;
+    public static final double MAX_PROBCATCH = 1;
     public static final Label probCatchCaption = new Label("probCatch:");
-    private Slider probCatchBar = new Slider(0, 1, DEFAULT_PROBCATCH);
+
+    private Slider probCatchBar = new Slider(MIN_PROBCATCH, MAX_PROBCATCH, DEFAULT_PROBCATCH);
     private Label probCatchValue = new Label(
             Double.toString(probCatchBar.getValue()));
 
