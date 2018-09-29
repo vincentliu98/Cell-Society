@@ -139,8 +139,8 @@ public class WaTorModel implements SimulationModel<Fish> {
     }
 
     @Override
-    public XMLWriter<Fish> getXMLWriter(CellGraph<Fish> graph, File outFile) {
-        return new WaTorWriter(this, graph, outFile);
+    public XMLWriter<Fish> getXMLWriter(CellGraph<Fish> graph, File outFile, String language) {
+        return new WaTorWriter(this, graph, outFile, language);
     }
 
     @Override

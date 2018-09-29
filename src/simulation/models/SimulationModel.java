@@ -67,7 +67,7 @@ public interface SimulationModel<T> {
      * @param outFile
      * @return
      */
-    XMLWriter<T> getXMLWriter(CellGraph<T> graph, File outFile);
+    XMLWriter<T> getXMLWriter(CellGraph<T> graph, File outFile, String language);
 
     /**
      *

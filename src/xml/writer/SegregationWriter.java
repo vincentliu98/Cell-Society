@@ -15,8 +15,8 @@ import java.util.List;
 public class SegregationWriter extends XMLWriter<Integer> {
     private SegregationModel model;
 
-    public SegregationWriter(SegregationModel model_, CellGraph<Integer> graph_, File outFile_) {
-        super(graph_, outFile_);
+    public SegregationWriter(SegregationModel model_, CellGraph<Integer> graph_, File outFile_, String language) {
+        super(graph_, outFile_, language);
         model = model_;
     }
 

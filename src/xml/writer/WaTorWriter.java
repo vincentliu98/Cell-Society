@@ -17,8 +17,8 @@ import java.util.List;
 public class WaTorWriter extends XMLWriter<Fish> {
     private WaTorModel model;
 
-    public WaTorWriter(WaTorModel model_, CellGraph<Fish> graph_, File outFile_) {
-        super(graph_, outFile_);
+    public WaTorWriter(WaTorModel model_, CellGraph<Fish> graph_, File outFile_, String language) {
+        super(graph_, outFile_, language);
         model = model_;
     }
 

@@ -283,7 +283,7 @@ public class SimulationControl extends HBox {
             fileChooser.setTitle(myResources.getString("SaveFile"));
             File file = fileChooser.showSaveDialog(window);
             if(file == null) return; // display "OH NO!" DIALOG
-            modelControl.simulator().getWriter(file).generate();
+            modelControl.simulator().getWriter(file, myLanguage).generate();
         } catch (XMLException e) {
             showError(e);
         }

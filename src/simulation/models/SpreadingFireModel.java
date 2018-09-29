@@ -79,8 +79,8 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     }
 
     @Override
-    public XMLWriter<Integer> getXMLWriter(CellGraph<Integer> graph, File outFile) {
-        return new SpreadingFireWriter(this,graph,outFile);
+    public XMLWriter<Integer> getXMLWriter(CellGraph<Integer> graph, File outFile, String language) {
+        return new SpreadingFireWriter(this,graph,outFile, language);
     }
 
     @Override

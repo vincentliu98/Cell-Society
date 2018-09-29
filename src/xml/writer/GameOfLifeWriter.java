@@ -14,8 +14,8 @@ import java.util.List;
  */
 
 public class GameOfLifeWriter extends XMLWriter<Integer> {
-    public GameOfLifeWriter(CellGraph<Integer> graph_, File outFile_) {
-        super(graph_, outFile_);
+    public GameOfLifeWriter(CellGraph<Integer> graph_, File outFile_, String language) {
+        super(graph_, outFile_, language);
     }
 
     @Override
