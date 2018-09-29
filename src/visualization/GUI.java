@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
  * </p>
  * <p>SimulationControl manages the modelControl (i.e. update the model) and the modelChart (i.e. update the line chart),
  * and the modelControl manages simulationPanel (i.e. update the parameters for the existing model).</p>
- * <p>The controlPanel contains multiple buttons that will handle events, such as loading/saving settings
+ * <p>The controlPanel contains multiple buttons that will handle events, such as to load/save settings
  * from XML file, start/pause the simulation, change the rate of simulation, change the model, or change the cell shape</p>
  *
  * @author Vincent Liu
