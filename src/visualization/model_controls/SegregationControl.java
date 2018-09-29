@@ -24,10 +24,20 @@ public class SegregationControl extends ModelControl<Integer> {
     private Label thresholdValue = new Label(
             Double.toString(thresholdBar.getValue()));
 
+    /**
+     * Change the shape of cells based on the existing model
+     *
+     * @param shape
+     */
     public SegregationControl(String shape) {
         this(Segregation.generate(DEFAULT_CELL_NUM, shape));
     }
 
+    /**
+     * Generate a SegregationControl that contains a Slider to adjust the parameter threshold.
+     *
+     * @param sim
+     */
     public SegregationControl(Simulator<Integer> sim) {
         super(sim);
         thresholdBar.setShowTickMarks(true);

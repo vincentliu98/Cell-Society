@@ -6,12 +6,22 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
+ *  A Line Chart to display and update statistics for SegregationModel
+ *
  * @author Vincent Liu
  */
 
 public class SegregationStatistics extends ModelStatistics{
     public XYChart.Series Empty, Blue, Red;
 
+    /**
+     * Initialized the three Series
+     * <ul>
+     *     <li>Empty</li>
+     *     <li>Blue</li>
+     *     <li>Red</li>
+     * </ul>
+     */
     public SegregationStatistics() {
         super();
         Empty = new XYChart.Series();

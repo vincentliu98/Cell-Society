@@ -15,12 +15,18 @@ import java.util.ResourceBundle;
 
 /**
  * This is the Graphical User Interface for displaying the simulation models.
- * There are three main panels, SimulationControl - ModelControl - SimulationPanel.
- * SimulationControl also manages the modelControl, and the modelControl manages
- * simulationPanel.
- *
- * The controlPanel contains multiple buttons that will handle events, such as loading/saving settings
- * from XML file, start/pause the simulation, change the rate of simulation, or change the model
+ * <p>There are four main panels:
+ * <ul>
+ *     <li>SimulationControl</li>
+ *     <li>ModelChart</li>
+ *     <li>ModelControl</li>
+ *     <li>SimulationPanel</li>
+ * </ul>
+ * </p>
+ * <p>SimulationControl manages the modelControl (i.e. update the model) and the modelChart (i.e. update the line chart),
+ * and the modelControl manages simulationPanel (i.e. update the parameters for the existing model).</p>
+ * <p>The controlPanel contains multiple buttons that will handle events, such as to load/save settings
+ * from XML file, start/pause the simulation, change the rate of simulation, change the model, or change the cell shape</p>
  *
  * @author Vincent Liu
  * @author Inchan Hwang
@@ -40,6 +46,11 @@ public class GUI {
     private ResourceBundle myResources;
     private String myLanguage;
 
+    /**
+     * Construct a GridPane containing its four components
+     *
+     * @param language
+     */
     public GUI (String language) {
         myLanguage = language;
         myResources = ResourceBundle.getBundle(myLanguage);
@@ -67,6 +78,11 @@ public class GUI {
         root.add(simControl, 0, 2, 2, 1);
     }
 
+    /**
+     * Runs the GUI by adding the stylesheet and starting the animation
+     *
+     * @param primaryStage
+     */
     public void runGUI (Stage primaryStage) {
         window = primaryStage;
 
@@ -84,9 +100,10 @@ public class GUI {
     }
 
     /**
-     * step() ticks the simulation control, while checking whether
+     * Ticks the simulation control, while checking whether
      * it should update the view or not by checking simulation
      * control's status code
+     *
      * @param duration
      */
     public void step(double duration) {

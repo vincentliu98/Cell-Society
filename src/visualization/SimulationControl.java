@@ -1,6 +1,5 @@
 package visualization;
 
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -24,9 +23,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * SimulationControlPanel extends HBox and will be located in the bottom of UI
- * Within it, the user will be able to loading/saving settings from XML file,
- * start/pause the simulation, change the rate of simulation, or change the model
+ * A customized HBox that will be located in the bottom of UI. <br>
+ * Within it, the user will be able to load/save settings from XML file, start/pause the simulation, change the rate of
+ * simulation, change the model, or change the cell shape
  *
  * @author Inchan Hwang
  * @author Vincent Liu
@@ -55,6 +54,13 @@ public class SimulationControl extends HBox {
             SpreadingFireModel.MODEL_NAME
     };
 
+    /**
+     * Initialize the variables inside SimulationControl
+     *
+     * @param window_
+     * @param myResources
+     * @param myLanguage
+     */
     public SimulationControl(Window window_, ResourceBundle myResources, String myLanguage) {
         super(25);
         window = window_;
@@ -77,7 +83,7 @@ public class SimulationControl extends HBox {
 
 
     /**
-     *  Initializes the components, without any functionality
+     *  Initializes the basic components inside the Simulation Control, without any functionality
      */
     private void initializeStructure() {
         getStyleClass().add("simControlPanelWrapper");
@@ -106,6 +112,9 @@ public class SimulationControl extends HBox {
         getChildren().add(grid);
     }
 
+    /**
+     * Initialize buttons and boxes within the GridPane located in SimulationControl
+     */
     private void initializeElements() {
         save = new Button(myResources.getString("SaveButton"));
         load = new Button(myResources.getString("LoadButton"));
@@ -135,7 +144,7 @@ public class SimulationControl extends HBox {
     }
 
     /**
-     *  Sets up each component's interactions
+     * Sets up each component's interactions
      */
     private void initializeFunctionality() {
         save.setOnMouseClicked(e -> handleFileSave());
@@ -151,8 +160,9 @@ public class SimulationControl extends HBox {
     /**
      * It first checks whether it should update the model control,
      * reporting to the GUI via statusCode. <br>
-     *  It keeps a internal timer to tick once in simPeriod.
-     * @param duration
+     * It keeps a internal timer to tick once in simPeriod.
+     *
+     * @param duration, modelChart
      */
     public void tick(double duration, ModelStatistics modelChart) {
         if(modelControl.consumeIsDirty()) {
@@ -175,33 +185,56 @@ public class SimulationControl extends HBox {
         }
     }
 
+    /**
+     * Alter the text between "Stop" and "Play" depending on the state
+     */
     private void handlePlayStop() {
         isPlaying = !isPlaying;
         playStop.setText(isPlaying ? "Stop" : "Play");
         elapsedTime = 0;
     }
 
+    /**
+     * Stop the simulation
+     */
     private void stop() {
         isPlaying = true;
         handlePlayStop();
     }
 
+    /**
+     * Change the Step Rate of the simulation
+     *
+     * @param by
+     */
     private void handleSpeedChange(double by) {
         simPeriod = Math.min(Math.max(0.1, simPeriod+by), 20);
         stepRate.setText(myResources.getString("DefaultStepRateDisplay") +
                 ((double) Math.round(1/simPeriod * 100) / 100) + myResources.getString("StepRateUnit"));
     }
 
+    /**
+     * Change the model display on the simulationPanel with a different model
+     *
+     * @param newModel
+     */
     private void handleModelChange(String newModel) {
         stop();
         initializeModelControl(newModel, chooseShape.getValue());
     }
 
+    /**
+     * Change the model display on the simulationPanel with a new cell shape
+     * @param newShape
+     */
     private void handleShapeChange(String newShape) {
         stop();
         initializeModelControl(chooseModel.getValue(), newShape);
     }
 
+    /**
+     * Change the model state when the "Tick" button is clicked once
+     */
     private void handleSingleTick() {
         modelControl.simulator().tick();
         numTick.setText(myResources.getString("NumTickDynamic")+modelControl.simulator().tickCount());
@@ -210,6 +243,9 @@ public class SimulationControl extends HBox {
         durationCounter += 10;
     }
 
+    /**
+     * Allow the user to load an XML file
+     */
     private void handleFileLoad() {
         try {
             stop();
@@ -226,6 +262,9 @@ public class SimulationControl extends HBox {
         }
     }
 
+    /**
+     * Allow the user to save an XML file containing the current model parameters in local directory
+     */
     private void handleFileSave() {
         stop();
         FileChooser fileChooser = new FileChooser();
@@ -237,11 +276,11 @@ public class SimulationControl extends HBox {
 
     /**
      *  There are two ways of initializing a simulation - from file or from factory.
-     *  This one handles the former
+     *  This one handles the former.
+     *
      * @param modelName
      * @param file
      */
-
     private void initializeModelControl(String modelName, File file) {
         if(modelName.equals(GameOfLifeModel.MODEL_NAME)) {
             modelControl = new GameOfLifeControl(new GameOfLifeXMLParser(myLanguage).getSimulator(file));
@@ -264,6 +303,7 @@ public class SimulationControl extends HBox {
     /**
      *  There are two ways of initializing a simulation - from file or from factory.
      *  This one handles the latter
+     *
      * @param modelName
      * @param shape
      */
@@ -291,7 +331,7 @@ public class SimulationControl extends HBox {
 
     /**
      * It's named "consume" since once drawn, statusCode should go back to its default state.
-     * @return
+     * @return the enum type of status code to decide whether to update the model or not
      */
     public StatusCode consumeStatusCode() {
         var ret = statusCode;
@@ -299,5 +339,10 @@ public class SimulationControl extends HBox {
         return ret;
     }
 
+    /**
+     * A secure method to retrieve the names of the models
+     *
+     * @return an string array containing all the names of the models
+     */
     public String[] models() { return models; }
 }
