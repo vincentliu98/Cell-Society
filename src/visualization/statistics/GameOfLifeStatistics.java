@@ -6,12 +6,21 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
+ * A Line Chart to display and update statistics for GameOfLifeModel
+ *
  * @author Vincent Liu
  */
 
 public class GameOfLifeStatistics extends ModelStatistics{
     public XYChart.Series Alive, Dead;
 
+    /**
+     * Initialized the two Series
+     * <ul>
+     *     <li>Alive</li>
+     *     <li>Dead</li>
+     * </ul>
+     */
     public GameOfLifeStatistics() {
         super();
         Alive = new XYChart.Series();

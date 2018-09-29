@@ -6,12 +6,22 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
+ *  A Line Chart to display and update statistics for WaTorModel
+ *
  * @author Vincent Liu
  */
 
 public class WaTorStatistics extends ModelStatistics{
     public XYChart.Series Empty, Shark, Fish;
 
+    /**
+     * Initialized the three Series
+     * <ul>
+     *     <li>Empty</li>
+     *     <li>Shark</li>
+     *     <li>Fish</li>
+     * </ul>
+     */
     public WaTorStatistics() {
         super();
         Empty = new XYChart.Series();

@@ -6,9 +6,17 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * An abstract class that serves as a building block for customized line charts
- * Contains x and y axis of the time and the number of each elements from the model.
- * The line chart dynamically expand when the new data feeds in
+ * An abstract class that serves as a building block for customized line charts. <br>
+ * <ul>
+ *     <li>x Axis: time (0.1s)</li>
+ *     <li>y Axis: Number of Cells</li>
+ * </ul>
+ * The line chart dynamically expand when the new data feeds in.
+ * <br>
+ * This class is made abstract because the line chart specific to each model need to update their parameters,
+ * while their parameters differ in names and size. Therefore, I made the updateStatistics method abstract.
+ * The commonality between the different line charts are they share the same axes, thus the constructor of the
+ * ModelStatistics can achieve that.
  *
  * @author Vincent Liu
  */
@@ -18,7 +26,7 @@ public abstract class ModelStatistics extends LineChart{
     private final NumberAxis yAxis;
 
     /**
-     * Constructor: Add the axis and change some settings
+     * Adds the two axes and change settings for the chart and the axes
      */
     ModelStatistics() {
         super(new NumberAxis(), new NumberAxis());
@@ -38,7 +46,7 @@ public abstract class ModelStatistics extends LineChart{
     }
 
     /**
-     * Allow the specific objects from each model to update themselves
+     * An abstract method that allows the specific objects from each model to update themselves
      *
      * @param durationCounter
      * @param myResources

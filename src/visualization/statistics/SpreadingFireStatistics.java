@@ -6,12 +6,22 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
+ *  A Line Chart to display and update statistics for SpreadingFireModel
+ *
  * @author Vincent Liu
  */
 
 public class SpreadingFireStatistics extends ModelStatistics{
     public XYChart.Series Empty, Tree, Burning;
 
+    /**
+     * Initialized the three Series
+     * <ul>
+     *     <li>Empty</li>
+     *     <li>Tree</li>
+     *     <li>Burning</li>
+     * </ul>
+     */
     public SpreadingFireStatistics() {
         super();
         Empty = new XYChart.Series();
