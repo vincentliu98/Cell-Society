@@ -10,11 +10,12 @@ import javafx.scene.paint.Color;
 
 public class ColorUtils {
     /**
+     * Create a lighter version of the color of the cell that will be added if the mouse if clicked
      *
      * @param a
      * @param b
      * @param pA
-     * @return
+     * @return a color suggesting the type of the cell that will be added
      */
     public static Color mix(Color a, Color b, double pA) {
         double red = a.getRed()*pA + b.getRed()*(1-pA);
@@ -24,9 +25,10 @@ public class ColorUtils {
     }
 
     /**
+     * Invert the color in RGB scale
      *
      * @param c
-     * @return
+     * @return the contrary color
      */
     public static Color invert(Color c) {
         return new Color(

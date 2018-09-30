@@ -36,10 +36,21 @@ public class Simulator<T> {
     private Pane view;
     private int tickCount;
 
+    /**
+     * Create a default version of the simulator --- Game of Life with rectangle
+     *
+     * @return
+     */
     public static Simulator<Integer> defaultSimulator() {
         return GameOfLife.generate(ModelControl.DEFAULT_CELL_NUM, ShapeUtils.RECTANGULAR);
     }
 
+    /**
+     * Initialize a simulator that manages all the cells
+     *
+     * @param graph_
+     * @param model_
+     */
     public Simulator(CellGraph<T> graph_, SimulationModel<T> model_) {
         graph = graph_; model = model_;
         graph.getCells().forEach(c -> {
@@ -85,7 +96,6 @@ public class Simulator<T> {
     }
 
     /**
-     *
      * @return the graph consisting cells as a Node
      */
     public Node view() {
@@ -93,7 +103,6 @@ public class Simulator<T> {
     }
 
     /**
-     *
      * @return current count of the rounds that passed
      */
     public int tickCount() { return tickCount; }
@@ -121,6 +130,7 @@ public class Simulator<T> {
     }
 
     /**
+     * Update the cells in a global scale, especially for Segregation model
      */
     private void globalUpdate() { model.globalUpdate(graph); }
 
@@ -141,6 +151,9 @@ public class Simulator<T> {
      */
     public void updateSimulationModel(Map<String, String> params) { model.updateParams(params); }
 
+    /**
+     * @return shape of the cell represented by string
+     */
     public String peekShape() {
         var code = graph.getCells().iterator().next().shapeCode();
         if(code == ShapeUtils.RECTANGLE) return ShapeUtils.RECTANGULAR;
@@ -148,6 +161,11 @@ public class Simulator<T> {
         else return ""; // shouldn't happen for now
     }
 
+    /**
+     * Retrieve the statistics from the simulator
+     *
+     * @return a map of the cells, represented by the number from each model
+     */
     public Map<String, Integer> getStatistics() {
         return model.getStatisitcs(
                 graph.getCells()
