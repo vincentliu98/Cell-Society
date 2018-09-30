@@ -11,9 +11,7 @@ import visualization.model_controls.ModelControl;
 import xml.writer.XMLWriter;
 
 import java.io.File;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static javafx.scene.shape.StrokeType.INSIDE;
@@ -149,7 +147,7 @@ public class Simulator<T> {
     }
 
     public Map<String, Integer> getStatistics() {
-        return model.getStatisitcs(
+        return model.getStatistics(
                 graph.getCells()
                         .stream()
                         .map(Cell::value)
