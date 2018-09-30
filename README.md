@@ -1,17 +1,6 @@
 cell society
 ====
 
-TODO: comment for 
-* models/wator/Fish
-* models/SimulationModel
-* models/Cell
-* models/CellGraph
-* models/Simulator
-* utility
-* everything in parser folder
-* everything in writer folder
-* everything in factory folder
-
 This project implements a cellular automata simulator.
 
 Names: Inchan Hwang, Vincent Liu, Jay Pande
@@ -25,14 +14,17 @@ Finish Date: 9.30.2018
 Hours Spent: 100+
 
 ### Primary Roles
-Inchan Hwang: Simulation, XML writers, and a little bit of everything
-Vincent Liu: Visualization, and a little bit of Simulation
-Jay Pande: XML parsers and error checking
+_Inchan Hwang_: Simulation, XML writers, and a little bit of everything
+
+_Vincent Liu_: Visualization, and a little bit of Simulation
+
+_Jay Pande_: XML parsers and error checking
 
 ### Resources Used
 
-[Yanbo Fang's cell society project](https://github.com/yanbofang/cell_society)
-[Java Line Chart](https://docs.oracle.com/javafx/2/charts/line-chart.htm)
+* [Yanbo Fang's cell society project](https://github.com/yanbofang/cell_society)
+* [Java Line Chart](https://docs.oracle.com/javafx/2/charts/line-chart.htm)
+* **OTHER RESOURCES that Jay and Inchan used ?????????????**
 
 ### Running the Program
 
@@ -62,6 +54,8 @@ Jay Pande: XML parsers and error checking
 
 ##### Assumptions or Simplifications:
 
+* ?????????????
+
 ##### Known Bugs:
 * High Priority: None
 * Medium Priority: None
@@ -72,10 +66,14 @@ Jay Pande: XML parsers and error checking
 N/A
 
 ### Notes
-
+* ???????????????
 
 ### Impressions
-Vincent Liu: This was a great project that I worked on. I learned a lot from working my teammates and looking at their code. It was very fulfilling to build this simulation model from scratch and see the simulation running. 
+_Inchan Hwang_: ???????????????????
+
+_Vincent Liu_: This was a great project that I worked on. I learned a lot from working my teammates and looking at their code. It was very fulfilling to build this simulation model from scratch and see the simulation running.
+
+_Jay Pande_: ???????????????????
 
 ### src Folder Structure
 <pre>
