@@ -3,7 +3,6 @@ package xml.parser;
 import org.w3c.dom.Element;
 import simulation.CellGraph;
 import simulation.Simulator;
-import simulation.factory.GameOfLife;
 import simulation.models.GameOfLifeModel;
 
 import java.io.File;
@@ -31,7 +30,7 @@ public class GameOfLifeXMLParser extends ParentXMLParser {
      */
     public Simulator<Integer> getSimulator(File datafile) {
         GameOfLifeModel model = new GameOfLifeModel();
-        CellGraph<Integer> graph = getCellGraph(getRootElement(datafile));
+        CellGraph<Integer> graph = getCellGraph(getRootElement(datafile), model);
         return new Simulator<>(graph, model);
     }
 

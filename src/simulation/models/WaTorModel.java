@@ -122,7 +122,7 @@ public class WaTorModel implements SimulationModel<Fish> {
     public String modelName() { return MODEL_NAME; }
 
     @Override
-    public Map<String, Integer> getStatisitcs(List<Fish> values) {
+    public Map<String, Integer> getStatistics(List<Fish> values) {
         HashMap<String, Integer> myMap = new HashMap<>();
         int fishNum = 0;
         int sharkNum = 0;
@@ -148,6 +148,23 @@ public class WaTorModel implements SimulationModel<Fish> {
         fishBreedPeriod = Integer.parseInt(params.get(PARAM_FISHBREED));
         sharkBreedPeriod = Integer.parseInt(params.get(PARAM_SHARKBREED));
         sharkStarvePeriod = Integer.parseInt(params.get(PARAM_SHARKSTARVE));
+    }
+
+    @Override
+    public Fish getValFromCode(int code) {
+        switch (code) {
+            case FISH:
+                return new Fish();
+            case SHARK:
+                return new Shark();
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public List<Integer> getCodes() {
+        return List.of(FISH, SHARK, EMPTY);
     }
 
     public int getFishBreedPeriod() { return fishBreedPeriod; }

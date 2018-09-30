@@ -1,6 +1,5 @@
 package xml.parser;
 
-import javafx.util.Pair;
 import org.w3c.dom.Element;
 import simulation.CellGraph;
 import simulation.Simulator;
@@ -41,7 +40,7 @@ public class SpreadingFireXMLParser extends ParentXMLParser {
     public Simulator<Integer> getSimulator(File datafile) {
         Element root = getRootElement(datafile);
         SpreadingFireModel model = new SpreadingFireModel(getDoubleValue(root, PROB_CATCH_TAG, VAL_TAG_TO_RANGE_MAP));
-        CellGraph<Integer> graph = getCellGraph(root);
+        CellGraph<Integer> graph = getCellGraph(root, model);
         return new Simulator<>(graph, model);
     }
 

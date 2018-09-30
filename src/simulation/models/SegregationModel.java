@@ -76,7 +76,7 @@ public class SegregationModel implements SimulationModel<Integer> {
     public String modelName() { return MODEL_NAME; }
 
     @Override
-    public Map<String, Integer> getStatisitcs(List<Integer> values) {
+    public Map<String, Integer> getStatistics(List<Integer> values) {
         HashMap<String, Integer> myMap = new HashMap<>();
         int redNum = 0;
         int blueNum = 0;
@@ -100,6 +100,16 @@ public class SegregationModel implements SimulationModel<Integer> {
     @Override
     public void updateParams(Map<String, String> params) {
         satisfactionThreshold = Double.parseDouble(params.get(PARAM_SATISFACTION));
+    }
+
+    @Override
+    public Integer getValFromCode(int code) {
+        return code;
+    }
+
+    @Override
+    public List<Integer> getCodes() {
+        return List.of(EMPTY, BLUE, RED);
     }
 
     public double getSatisfactionThreshold() { return satisfactionThreshold; }

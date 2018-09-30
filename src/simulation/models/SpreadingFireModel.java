@@ -62,7 +62,7 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     public String modelName() { return MODEL_NAME; }
 
     @Override
-    public Map<String, Integer> getStatisitcs(List<Integer> values) {
+    public Map<String, Integer> getStatistics(List<Integer> values) {
         HashMap<String, Integer> myMap = new HashMap<>();
         int burnNum = 0;
         int treeNum = 0;
@@ -86,6 +86,16 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     @Override
     public void updateParams(Map<String, String> params) {
         probCatch = Double.parseDouble(params.get(PARAM_CATCHPROB));
+    }
+
+    @Override
+    public Integer getValFromCode(int code) {
+        return code;
+    }
+
+    @Override
+    public List<Integer> getCodes() {
+        return List.of(EMPTY, TREE, BURNING);
     }
 
     public double getProbCatch() { return probCatch; }
