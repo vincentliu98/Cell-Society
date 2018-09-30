@@ -1,13 +1,11 @@
 package xml.parser;
 
-import javafx.util.Pair;
 import org.w3c.dom.Element;
 import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.models.SegregationModel;
 
 import java.io.File;
-import java.util.EmptyStackException;
 import java.util.Map;
 
 /**
@@ -41,7 +39,7 @@ public class SegregationXMLParser extends ParentXMLParser {
     public Simulator<Integer> getSimulator(File datafile) {
         Element root = getRootElement(datafile);
         SegregationModel model = new SegregationModel(getDoubleValue(root, THRESHOLD_TAG, VAL_TAG_TO_RANGE_MAP));
-        CellGraph<Integer> graph = getCellGraph(root);
+        CellGraph<Integer> graph = getCellGraph(root, model);
         return new Simulator<>(graph, model);
     }
 

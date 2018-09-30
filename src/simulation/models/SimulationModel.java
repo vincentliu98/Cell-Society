@@ -59,7 +59,7 @@ public interface SimulationModel<T> {
      */
     String modelName();
 
-    Map<String, Integer> getStatisitcs(List<T> values);
+    Map<String, Integer> getStatistics(List<T> values);
 
     /**
      *
@@ -74,4 +74,8 @@ public interface SimulationModel<T> {
      * @param params
      */
     void updateParams(Map<String, String> params);
+
+    T getValFromCode(int code);
+
+    List<Integer> getCodes();
 }

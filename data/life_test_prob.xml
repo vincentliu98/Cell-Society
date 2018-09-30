@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<data>
+    <modelName>Game Of Life</modelName>
+    <cellsPerSide> 100 </cellsPerSide>
+    <probVals> 0.75, 1.0 </probVals>
+    <shapeCode> 0 </shapeCode>
+    <author> jgp17 </author>
+</data>
