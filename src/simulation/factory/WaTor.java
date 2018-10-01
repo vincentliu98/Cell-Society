@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- *  Convenience class to generateRect "Wa-Tor" Simulator.
+ *  Convenience class to generate "Wa-Tor" Simulator.
  *
  * @author Inchan Hwang
  */

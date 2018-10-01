@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- *  Convenience class to generateRect "Segregation" Simulator
+ *  Convenience class to generate "Segregation" Simulator
  *  @author Inchan Hwang
  */
 public class Segregation {

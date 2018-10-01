@@ -9,7 +9,8 @@ import java.io.File;
 import java.util.List;
 
 /**
- * WaTorWriter extends the abstract class XMLWriter
+ * WaTorWriter extends the abstract class XMLWriter,
+ * defining encoding methods for cell values and model parameters.
  *
  * @author Inchan Hwang
  */

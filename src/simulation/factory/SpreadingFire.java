@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Convenience class to generateRect "Spreading of Fire" CellGraph.
+ * Convenience class to generate "Spreading of Fire" Simulator.
  *
  * @author Vincent Liu
  */

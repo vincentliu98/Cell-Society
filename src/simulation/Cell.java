@@ -5,7 +5,8 @@ import simulation.models.SimulationModel;
 import utility.ShapeUtils;
 
 /**
- * Cell implements a basic unit of CA.
+ * Cell implements a basic unit of CA, and holds information of its
+ * internal value and shape/position.
  *
  * @param <T> The type of the value that this cell holds
  * @author Inchan Hwang

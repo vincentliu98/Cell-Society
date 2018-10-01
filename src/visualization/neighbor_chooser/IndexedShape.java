@@ -8,7 +8,7 @@ import static simulation.Simulator.MOUSE_ENTER_OPACITY;
 
 /**
  *   IndexedShape is a convenience class for NeighborChooserPane, wrapping
- *   shape and offset info together.
+ *   shape and offset info together, and handling mouse clicks for selection.
  */
 public class IndexedShape {
     private Shape shape;

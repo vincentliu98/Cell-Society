@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- *  Convenience class to generateRect "Game Of Life" CellGraph
+ *  Convenience class to generate "Game Of Life" Simulator
  *  @author Inchan Hwang
  */
 public class GameOfLife {
