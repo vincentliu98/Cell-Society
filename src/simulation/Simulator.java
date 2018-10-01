@@ -51,6 +51,12 @@ public class Simulator<T> {
     private Pane view;
     private int tickCount;
 
+    /**
+     * Initialize a simulator that manages a CellGraph and a SimulationModel
+     *
+     * @param graph_
+     * @param model_
+     */
     public Simulator(CellGraph<T> graph_, SimulationModel<T> model_) {
         graph = graph_; model = model_;
         graph.getCells().forEach(c -> {
@@ -81,7 +87,6 @@ public class Simulator<T> {
     }
 
     /**
-     *
      * @return the graph consisting cells as a Node
      */
     public Node view() {
@@ -89,7 +94,6 @@ public class Simulator<T> {
     }
 
     /**
-     *
      * @return current count of the rounds that passed
      */
     public int tickCount() { return tickCount; }
@@ -117,6 +121,21 @@ public class Simulator<T> {
     }
 
     /**
+     * Update the cells in a global scale, especially for Segregation model
+     */
+    private void globalUpdate() { model.globalUpdate(graph); }
+
+    /**
+     * Replace the current value with the value in the next round
+     */
+    private void commitAll() { for(var c: graph.getCells()) c.commit(); }
+
+    /**
+     * Change the color of the cells on the simulator according to the new value
+     */
+    private void updateView() { graph.getCells().forEach(c -> c.updateView(model)); }
+
+    /**
      * Update the parameters with the new value passed from the UI's ModelControl
      *
      * @param params
@@ -136,6 +155,7 @@ public class Simulator<T> {
 
     /**
      * Obtains statistics from cells, based on SimulationModel.
+     * @return a map of the cells, represented by the number from each model
      */
     public Map<String, Integer> getStatistics() {
         return model.getStatistics(
@@ -145,20 +165,6 @@ public class Simulator<T> {
                         .collect(Collectors.toList())
         );
     }
-
-    /**
-     */
-    private void globalUpdate() { model.globalUpdate(graph); }
-
-    /**
-     * Replace the current value with the value in the next round
-     */
-    private void commitAll() { for(var c: graph.getCells()) c.commit(); }
-
-    /**
-     * Change the color of the cells on the simulator according to the new value
-     */
-    private void updateView() { graph.getCells().forEach(c -> c.updateView(model)); }
 
     private void handleMouseEntered(Cell<T> cell) {
         var v = cell.view();

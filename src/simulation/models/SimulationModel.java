@@ -41,4 +41,7 @@ public interface SimulationModel<T> {
     String modelName();
     Map<String, Integer> getStatistics(List<T> values);
     XMLWriter<T> getXMLWriter(CellGraph<T> graph, File outFile, String language);
+
+    T getValFromCode(int code);
+    List<Integer> getCodes();
 }

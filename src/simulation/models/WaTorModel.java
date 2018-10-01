@@ -150,6 +150,23 @@ public class WaTorModel implements SimulationModel<Fish> {
         sharkStarvePeriod = Integer.parseInt(params.get(PARAM_SHARKSTARVE));
     }
 
+    @Override
+    public Fish getValFromCode(int code) {
+        switch (code) {
+            case FISH:
+                return new Fish();
+            case SHARK:
+                return new Shark();
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public List<Integer> getCodes() {
+        return List.of(FISH, SHARK, EMPTY);
+    }
+
     public int getFishBreedPeriod() { return fishBreedPeriod; }
     public int getSharkBreedPeriod() { return sharkBreedPeriod; }
     public int getSharkStarvePeriod() { return sharkStarvePeriod; }

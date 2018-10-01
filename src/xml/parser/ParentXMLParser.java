@@ -6,10 +6,8 @@ import org.xml.sax.SAXException;
 import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
-import simulation.models.GameOfLifeModel;
-import simulation.models.SegregationModel;
-import simulation.models.SpreadingFireModel;
-import simulation.models.WaTorModel;
+import simulation.factory.NeighborUtils;
+import simulation.models.SimulationModel;
 import utility.ShapeUtils;
 import xml.XMLException;
 
@@ -19,6 +17,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+
+import static xml.writer.XMLWriter.DELIMITER;
 
 /**
  * This class handles parsing XML files and returning a completed object.
@@ -30,25 +30,17 @@ import java.util.*;
  */
 
 public abstract class ParentXMLParser<T> {
-    // keep only one documentBuilder because it is expensive to make and can numCellChanged it before parsing
+    // keep only one documentBuilder because it is expensive to make and can reset it before parsing
     private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
+    private static ResourceBundle myResources;
     public static final String DEFAULT_RESOURCES = "Errors";
     private static final String LOAD_AGAIN_KEY = "LoadAgainMsg";
-    private static ResourceBundle myResources;
-    // name of root attribute that notes the type of file expecting to parse
-    public static final String MODEL_ATTRIBUTE_STRING = "modelName";
-    public static final List<String> VALID_MODEL_NAMES = List.of(
-            GameOfLifeModel.MODEL_NAME,
-            SegregationModel.MODEL_NAME,
-            SpreadingFireModel.MODEL_NAME,
-            WaTorModel.MODEL_NAME
-    );
-
-    public static final String WHITESPACE = "\\s";
+    public static final String MODEL_ATTRIBUTE_TAG = "modelName";
+    public static final String PROB_VALS_TAG = "probVals";
+    public static final String CELLS_PER_SIDE_TAG = "cellsPerSide";
     public static final String SHAPE_WIDTH_TAG = "shapeWidth";
     public static final String SHAPE_HEIGHT_TAG = "shapeHeight";
     public static final String SHAPE_CODE_TAG = "shapeCode";
-
     public static final String CELL_TAG = "cell";
     public static final String CELL_UNIQUE_ID_TAG = "uniqueID";
     public static final String CELL_NEIGHBORS_TAG = "neighbors";
@@ -60,13 +52,15 @@ public abstract class ParentXMLParser<T> {
     public static final Map<String, Map<String, Object>> STD_TAG_TO_RANGE_MAP = Map.ofEntries(
             Map.entry(SHAPE_CODE_TAG, Map.of(MIN_STRING, Collections.min(ShapeUtils.shapeCodes()), MAX_STRING,
             Collections.min(ShapeUtils.shapeCodes()))),
-            Map.entry(SHAPE_WIDTH_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)), //, DEF_STRING, 10.0
+            Map.entry(CELLS_PER_SIDE_TAG, Map.of(MIN_STRING, 1, MAX_STRING, 100, DEF_STRING, 10)),
+            Map.entry(SHAPE_WIDTH_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)),
             Map.entry(SHAPE_HEIGHT_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)),
             Map.entry(CELL_UNIQUE_ID_TAG, Map.of(MIN_STRING, Integer.MIN_VALUE, MAX_STRING, Integer.MAX_VALUE)),
             Map.entry(CELL_XPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE)),
             Map.entry(CELL_YPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE))
     );
-
+    private static final double MARGIN = 0.5;
+    public static final String WHITESPACE = "\\s";
 
     /**
      * Create a parser for XML files of given type.
@@ -83,13 +77,20 @@ public abstract class ParentXMLParser<T> {
 
     public abstract T getCellValue(Element e);
 
+    public CellGraph<T> getCellGraph(Element root, SimulationModel<T> model) {
+        if (root.getElementsByTagName(PROB_VALS_TAG).getLength() != 0) {
+            return graphFromProbs(root, model);
+        } else {
+            return getCellGraphFromLayout(root);
+        }
+    }
+
     /**
      *
      * @param root
      * @return
      */
-    public CellGraph<T> getCellGraph(Element root) {
-        CellGraph<T> graph = new CellGraph<>();
+    public CellGraph<T> getCellGraphFromLayout(Element root) {
         NodeList cells = root.getElementsByTagName(CELL_TAG);
         Map<Integer, Cell<T>> IDToCellMap = new HashMap<>();
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
@@ -102,6 +103,7 @@ public abstract class ParentXMLParser<T> {
             double yPos = getDoubleValue(curCell, CELL_YPOS_TAG, STD_TAG_TO_RANGE_MAP);
             IDToCellMap.put(uniqueID, new Cell<>(getCellValue(curCell), shapeCode, xPos, yPos, shapeWidth, shapeHeight));
         }
+        CellGraph<T> graph = new CellGraph<>();
         for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
             Element curCell = (Element) cells.item(cIndex);
             int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG, STD_TAG_TO_RANGE_MAP);
@@ -115,6 +117,87 @@ public abstract class ParentXMLParser<T> {
         return graph;
     }
 
+    public CellGraph<T> graphFromProbs(Element root, SimulationModel<T> model) {
+        int n = getIntValue(root, CELLS_PER_SIDE_TAG, STD_TAG_TO_RANGE_MAP);
+        Map<T, Double> valToProbMap = getValToProbMap(root, model);
+        var rng = new Random();
+        ArrayList<ArrayList<T>> tmp = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            ArrayList<T> row = new ArrayList<>();
+            for (int j = 0; j < n; j++) {
+                var x = rng.nextDouble();
+                for (T v : valToProbMap.keySet()) {
+                    if (x < valToProbMap.get(v)) {
+                        row.add(v);
+                    }
+                }
+            }
+            tmp.add(row);
+        }
+        int shapeCode = getIntValue(root, SHAPE_CODE_TAG, STD_TAG_TO_RANGE_MAP);
+        if (shapeCode == 0) {
+            return generateRect(n, n, tmp);
+        } else {
+            return generateTri(n, n, tmp);
+        }
+    }
+
+    public Map<T, Double> getValToProbMap(Element root, SimulationModel<T> model) {
+            String neighborStr = getTextValue(root, PROB_VALS_TAG);
+            List<Double> probList = new ArrayList<>();
+            String[] neighborStrArray = neighborStr.replaceAll("\\s", "").split(DELIMITER);
+            for (String s : neighborStrArray) {
+                probList.add(Double.parseDouble(s));
+            }
+            List<Integer> codes = model.getCodes();
+            if (codes.size() != probList.size()) {
+                probList.clear();
+                double inc = 1.0 / codes.size();
+                for (int c = 0; c < codes.size(); c++) {
+                    probList.add(inc*(c+1));
+                }
+            }
+            Map<T, Double> valToProb = new HashMap<>();
+            for (int c = 0; c < codes.size(); c++) {
+                var val = model.getValFromCode(codes.get(c));
+                valToProb.put(val, probList.get(c));
+            }
+            return valToProb;
+    }
+
+    public CellGraph<T> generateRect(int row, int column, ArrayList<ArrayList<T>> vals) {
+        ArrayList<Cell<T>> cells = new ArrayList<>();
+        double width = Simulator.SIMULATION_SX / column;
+        double height = Simulator.SIMULATION_SY / row;
+
+        for(int i = 0 ; i < row ; i ++) {
+            for(int j = 0 ; j < column ; j ++) {
+                var cell = new Cell<>(vals.get(i).get(j), ShapeUtils.RECTANGLE,
+                        (j+MARGIN)*width, (i+MARGIN)*height,
+                        width, height
+                );
+                cells.add(cell);
+            }
+        }
+        return NeighborUtils.rectangularGraph(cells, row, column, NeighborUtils.indicesFor8Rectangle());
+    }
+
+    public CellGraph<T> generateTri(int row, int column, ArrayList<ArrayList<T>> vals) {
+        ArrayList<Cell<T>> cells = new ArrayList<>();
+        double width = Simulator.SIMULATION_SX / ((column+1)/2);
+        double height = Simulator.SIMULATION_SY / row;
+
+        for(int i = 0 ; i < row ; i ++) {
+            for(int j = 0 ; j < column ; j ++) {
+                var cell = new Cell<>(vals.get(i).get(j), (i+j)%2==0 ? ShapeUtils.TRIANGLE : ShapeUtils.TRIANGLE_FLIP,
+                        (MARGIN*j)*width, (i+MARGIN)*height,
+                        width, height);
+                cells.add(cell);
+            }
+        }
+        return NeighborUtils.triangularGraph(cells, row, column, NeighborUtils.indicesFor12Triangle());
+    }
+
     /**
      *
      * @param root
@@ -123,17 +206,11 @@ public abstract class ParentXMLParser<T> {
     public static List<Integer> parseNeighbors(Element root) {
         String neighborStr = getTextValue(root, CELL_NEIGHBORS_TAG);
         ArrayList<Integer> neighborArrayList = new ArrayList<>();
-        String[] neighborStrArray = neighborStr.replaceAll("\\s", "").split(",");
-        for (String s : neighborStrArray)
+        String[] neighborStrArray = neighborStr.replaceAll("\\s", "").split(DELIMITER);
+        for (String s : neighborStrArray) {
             neighborArrayList.add(Integer.parseInt(s));
+        }
         return neighborArrayList;
-    }
-
-    /**
-     * Get value of Element's attribute
-     */
-    public static String getAttribute(Element e, String attributeName) {
-        return e.getAttribute(attributeName);
     }
 
     /**
@@ -225,7 +302,7 @@ public abstract class ParentXMLParser<T> {
     }
 
     public static String peekModelName(File xmlFile) {
-        return getTextValue(getRootElement(xmlFile), MODEL_ATTRIBUTE_STRING);
+        return getTextValue(getRootElement(xmlFile), MODEL_ATTRIBUTE_TAG);
     }
 
     /**

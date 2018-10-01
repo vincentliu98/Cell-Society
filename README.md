@@ -1,17 +1,6 @@
 cell society
 ====
 
-TODO: comment for 
-* models/wator/Fish
-* models/SimulationModel
-* models/Cell
-* models/CellGraph
-* models/Simulator
-* utility
-* everything in parser folder
-* everything in writer folder
-* everything in factory folder
-
 This project implements a cellular automata simulator.
 
 Names: Inchan Hwang, Vincent Liu, Jay Pande
@@ -25,14 +14,19 @@ Finish Date: 9.30.2018
 Hours Spent: 100+
 
 ### Primary Roles
-Inchan Hwang: Simulation, XML writers, and a little bit of everything
-Vincent Liu: Visualization, and a little bit of Simulation
-Jay Pande: XML parsers and error checking
+_Inchan Hwang_: Simulation, XML writers, and a little bit of everything
+
+_Vincent Liu_: Visualization, and a little bit of Simulation
+
+_Jay Pande_: XML parsers and error checking
 
 ### Resources Used
 
-[Yanbo Fang's cell society project](https://github.com/yanbofang/cell_society)
-[Java Line Chart](https://docs.oracle.com/javafx/2/charts/line-chart.htm)
+* [Yanbo Fang's cell society project](https://github.com/yanbofang/cell_society)
+* [Java Line Chart](https://docs.oracle.com/javafx/2/charts/line-chart.htm)
+* [JavaFX Documentation](https://docs.oracle.com/javase/8/javafx/api/javafx/scene/Node.html)
+* [Lynda Course on JavaFX](https://www.lynda.com/Java-tutorials/JavaFX-GUI-Development/466182-2.html?srchtrk=index%3a1%0alinktypeid%3a2%0aq%3ajavafx%0apage%3a1%0as%3arelevance%0asa%3atrue%0aproducttypeid%3a2)
+* **OTHER RESOURCES that Jay and Inchan used ?????????????**
 
 ### Running the Program
 
@@ -62,20 +56,27 @@ Jay Pande: XML parsers and error checking
 
 ##### Assumptions or Simplifications:
 
+* This project does not support displaying multiple simulations simultaneously
+* ????????????????
+
 ##### Known Bugs:
 * High Priority: None
 * Medium Priority: None
 * Low Priority
     * After switching the model, the num tick doesn't update immediately. It updates back to 0 only when the simulation starts.
-
+    * When error occurs in loading XML, the same error message occurs twice in the same window.
 ##### Extra credit:
 N/A
 
 ### Notes
-
+* ???????????????
 
 ### Impressions
-Vincent Liu: This was a great project that I worked on. I learned a lot from working my teammates and looking at their code. It was very fulfilling to build this simulation model from scratch and see the simulation running. 
+_Inchan Hwang_: ???????????????????
+
+_Vincent Liu_: This was a great project that I worked on. I learned a lot from working my teammates and looking at their code. It was very fulfilling to build this simulation model from scratch and see the simulation running.
+
+_Jay Pande_: ???????????????????
 
 ### src Folder Structure
 <pre>

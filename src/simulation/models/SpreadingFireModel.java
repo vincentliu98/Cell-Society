@@ -88,5 +88,15 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
         probCatch = Double.parseDouble(params.get(PARAM_CATCHPROB));
     }
 
+    @Override
+    public Integer getValFromCode(int code) {
+        return code;
+    }
+
+    @Override
+    public List<Integer> getCodes() {
+        return List.of(EMPTY, TREE, BURNING);
+    }
+
     public double getProbCatch() { return probCatch; }
 }

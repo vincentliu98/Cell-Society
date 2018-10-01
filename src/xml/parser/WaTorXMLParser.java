@@ -2,20 +2,13 @@ package xml.parser;
 
 
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
-import simulation.factory.WaTor;
-import simulation.models.GameOfLifeModel;
 import simulation.models.WaTorModel;
 import simulation.models.wator.Fish;
 import simulation.models.wator.Shark;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,7 +51,7 @@ public class WaTorXMLParser extends ParentXMLParser {
         int sharkBreedPeriod = getIntValue(root, SHARK_BREED_PERIOD_TAG, VAL_TAG_TO_RANGE_MAP);
         int sharkStarvePeriod = getIntValue(root, SHARK_STARVE_PERIOD_TAG, VAL_TAG_TO_RANGE_MAP);
         WaTorModel model = new WaTorModel(fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod);
-        CellGraph<Fish> graph = getCellGraph(root);
+        CellGraph<Fish> graph = getCellGraph(root, model);
         return new Simulator<>(graph, model);
     }
 

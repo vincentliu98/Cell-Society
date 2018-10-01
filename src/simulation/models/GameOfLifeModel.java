@@ -69,4 +69,14 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
     public void updateModelParams(Map<String, String> params) {
         // game of life doesn't have any parameters
     }
+
+    @Override
+    public Integer getValFromCode(int code) {
+        return code;
+    }
+
+    @Override
+    public List<Integer> getCodes() {
+        return List.of(DEAD, ALIVE);
+    }
 }

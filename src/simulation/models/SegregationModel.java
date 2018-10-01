@@ -102,5 +102,15 @@ public class SegregationModel implements SimulationModel<Integer> {
         satisfactionThreshold = Double.parseDouble(params.get(PARAM_SATISFACTION));
     }
 
+    @Override
+    public Integer getValFromCode(int code) {
+        return code;
+    }
+
+    @Override
+    public List<Integer> getCodes() {
+        return List.of(EMPTY, BLUE, RED);
+    }
+
     public double getSatisfactionThreshold() { return satisfactionThreshold; }
 }

@@ -8,7 +8,7 @@ import simulation.Simulator;
 import java.util.List;
 
 /**
- * ShapeUtils provide methods to make a shape based on shapeCode
+ * Utilities to help with creating and changing shapes
  *
  * @author Inchan Hwang
  */
@@ -21,11 +21,28 @@ public class ShapeUtils {
     public static final int TRIANGLE = 1;
     public static final int TRIANGLE_FLIP = 2;
 
+    /**
+     * Center the shape in its bounds
+     *
+     * @param s
+     * @param cx
+     * @param cy
+     */
     public static void centerShape(Shape s, double cx, double cy) {
         s.setLayoutX(cx - s.getLayoutBounds().getMinX() - s.getLayoutBounds().getWidth()/2);
         s.setLayoutY(cy - s.getLayoutBounds().getMinY() - s.getLayoutBounds().getHeight()/2);
     }
 
+    /**
+     * Create a shape of a cell
+     *
+     * @param shapeCode
+     * @param cx
+     * @param cy
+     * @param w
+     * @param h
+     * @return a shape specified by the shapeCode
+     */
     public static Shape makeShape(int shapeCode, double cx, double cy, double w, double h) {
         Shape ret;
         if(shapeCode == TRIANGLE) {
@@ -50,6 +67,9 @@ public class ShapeUtils {
                 new Rectangle(0, 0, Simulator.SIMULATION_SX, Simulator.SIMULATION_SY));
     }
 
+    /**
+     * @return a list of shapes code represented by integer
+     */
     public static List<Integer> shapeCodes() {
         return List.of(
             RECTANGLE,
@@ -58,6 +78,9 @@ public class ShapeUtils {
         );
     }
 
+    /**
+     * @return an array of the shapes available, represented by string
+     */
     public static String[] shapes() {
         return new String[] {
             RECTANGULAR,
