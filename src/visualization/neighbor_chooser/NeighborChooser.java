@@ -4,6 +4,9 @@ import javafx.scene.control.Dialog;
 import javafx.util.Pair;
 import java.util.List;
 
+/**
+ *  NeighborChooser mounts and delegates all operations to the NeighborChooserPane.
+ */
 public class NeighborChooser extends Dialog<List<Pair<Integer, Integer>>> {
     private NeighborChooserPane dialogPane;
     public NeighborChooser(String shapeType) {

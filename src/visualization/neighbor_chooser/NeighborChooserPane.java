@@ -9,6 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * NeighborChooserPane is mounted on NeighborChooser, and it contains
+ * simple UI to allow users to choose which neighbors of a cell they would
+ * consider as actual neighbors.
+ *
+ * @Author Inchan Hwang
+ */
 public class NeighborChooserPane extends DialogPane {
     public static final double DIALOG_WIDTH = 700;
     public static final double DIALOG_HEIGHT = 500;
@@ -34,7 +41,6 @@ public class NeighborChooserPane extends DialogPane {
             indexedShapes.stream().map(s -> s.shape()).collect(Collectors.toList())
         );
 
-        getButtonTypes().add(ButtonType.CANCEL);
         getButtonTypes().add(ButtonType.APPLY);
     }
 
@@ -46,6 +52,10 @@ public class NeighborChooserPane extends DialogPane {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Initializes neighbor choosing UI for rectangular grid
+     * @param indexedShapes
+     */
     private void initializeRectangle(ArrayList<IndexedShape> indexedShapes) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -62,8 +72,12 @@ public class NeighborChooserPane extends DialogPane {
         }
     }
 
+    /**
+     * Initializes neighbor choosing UI for triangular grid
+     * @param indexedShapes
+     */
     private void initializeTriangle(ArrayList<IndexedShape> indexedShapes) {
-        // take a breath, and draw a triangular graph and you'll understand.
+        // take a deep breath, and draw a triangular graph centered at (0,0) and you'll understand.
         for (int i = -1; i <= 1; i++) {
             for (int j = -2; j <= 2; j++) {
                 if (i == -1 && (j == -2 || j == 2)) continue;

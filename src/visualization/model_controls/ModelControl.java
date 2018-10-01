@@ -91,6 +91,12 @@ public abstract class ModelControl<T> extends VBox {
         });
     }
 
+    /**
+     * Since various models handle neighbors in different way, the reinitialization is
+     * left for each model's controller
+     * @param numCell
+     * @param neighborIndices
+     */
     public abstract void handleNeighborChange(int numCell, List<Pair<Integer, Integer>> neighborIndices);
 
     /**

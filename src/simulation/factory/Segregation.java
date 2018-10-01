@@ -40,14 +40,7 @@ public class Segregation {
         var graph = NeighborUtils.triangularGraph(cells, row, column, indices);
         return new Simulator<>(graph, model);
     }
-    /**
-     *
-     * @param row
-     * @param column
-     * @param initial
-     * @param threshold
-     * @return
-     */
+
     public static Simulator<Integer> generateRect(
             int row, int column,
             int[][] initial, double threshold,
@@ -72,11 +65,6 @@ public class Segregation {
         return new Simulator<>(graph, model);
     }
 
-    /**
-     *
-     * @param n
-     * @return
-     */
     public static Simulator<Integer> generate(int n, String shape, List<Pair<Integer, Integer>> indices) {
         var rng = new Random();
         int tmp[][] = new int[n][n];

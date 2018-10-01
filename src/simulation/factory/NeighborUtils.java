@@ -9,6 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ *  NeighborUtils provide <br>
+ *  <ol>
+ *      <li>function to find neighbors based on offsets</li>
+ *      <li>common neighborhoods for various shapes </li>
+ *      <li>common neighborhood offsets for various shapes </li>
+ *  </oi>
+ */
 public class NeighborUtils {
     private static <T> List<Cell<T>> findNeighbor(
             List<Cell<T>> cells, int cellIdx,

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- *  Convenience class to generateRect "Wa-Tor" Simulator
+ *  Convenience class to generateRect "Wa-Tor" Simulator.
  *
  * @author Inchan Hwang
  */
@@ -49,16 +49,7 @@ public class WaTor {
         var graph = NeighborUtils.triangularGraphWrap(cells, row, column, indices);
         return new Simulator<>(graph, model);
     }
-    /**
-     *
-     * @param row
-     * @param column
-     * @param initial
-     * @param fishBreedPeriod
-     * @param sharkBreedPeriod
-     * @param sharkStarvePeriod
-     * @return
-     */
+
     public static Simulator<Fish> generateRect(
             int row, int column, int[][] initial,
             int fishBreedPeriod, int sharkBreedPeriod, int sharkStarvePeriod,
@@ -84,12 +75,6 @@ public class WaTor {
         var graph = NeighborUtils.rectangularGraphWrap(cells, row, column, indices);
         return new Simulator<>(graph, model);
     }
-
-    /**
-     *
-     * @param n
-     * @return
-     */
 
     public static Simulator<Fish> generate(int n, String shape, List<Pair<Integer, Integer>> indices) {
         var rng = new Random();

@@ -41,7 +41,7 @@ public class WaTorModel implements SimulationModel<Fish> {
     }
 
     @Override
-    public int getPriority(Fish myVal) {
+    public int updatePriority(Fish myVal) {
         return myVal == null ? 2 :
                 myVal.kind() == SHARK ? 0 : 1;
     }
@@ -122,7 +122,7 @@ public class WaTorModel implements SimulationModel<Fish> {
     public String modelName() { return MODEL_NAME; }
 
     @Override
-    public Map<String, Integer> getStatisitcs(List<Fish> values) {
+    public Map<String, Integer> getStatistics(List<Fish> values) {
         HashMap<String, Integer> myMap = new HashMap<>();
         int fishNum = 0;
         int sharkNum = 0;
@@ -144,7 +144,7 @@ public class WaTorModel implements SimulationModel<Fish> {
     }
 
     @Override
-    public void updateParams(Map<String, String> params) {
+    public void updateModelParams(Map<String, String> params) {
         fishBreedPeriod = Integer.parseInt(params.get(PARAM_FISHBREED));
         sharkBreedPeriod = Integer.parseInt(params.get(PARAM_SHARKBREED));
         sharkStarvePeriod = Integer.parseInt(params.get(PARAM_SHARKSTARVE));

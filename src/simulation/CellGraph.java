@@ -15,33 +15,18 @@ import java.util.stream.Collectors;
  */
 
 public class CellGraph<T> extends HashMap<Cell<T>, List<Cell<T>>> {
-    /**
-     *
-     * @return
-     */
     public Set<Cell<T>> getCells() { return keySet(); }
 
     /**
-     *
-     * @param model
-     * @return
+     * returns cells, sorted according to model's priority
      */
     public List<Cell<T>> getOrderedCells(SimulationModel<T> model) {
         return keySet().stream()
-                .sorted(Comparator.comparingInt(c -> model.getPriority(c.value())))
+                .sorted(Comparator.comparingInt(c -> model.updatePriority(c.value())))
                 .collect(Collectors.toList());
     }
 
-    /**
-     *
-     * @return
-     */
     public Set<Node> getViews() { return getCells().stream().map(Cell::view).collect(Collectors.toSet()); }
 
-    /**
-     *
-     * @param cell
-     * @return
-     */
     public List<Cell<T>> getNeighbors(Cell<T> cell) { return get(cell); }
 }

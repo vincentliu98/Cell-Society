@@ -6,6 +6,10 @@ import javafx.util.Pair;
 
 import static simulation.Simulator.MOUSE_ENTER_OPACITY;
 
+/**
+ *   IndexedShape is a convenience class for NeighborChooserPane, wrapping
+ *   shape and offset info together.
+ */
 public class IndexedShape {
     private Shape shape;
     private int rowOffset, columnOffset;

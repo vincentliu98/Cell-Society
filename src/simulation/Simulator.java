@@ -3,23 +3,38 @@ package simulation;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import simulation.factory.GameOfLife;
 import simulation.models.SimulationModel;
 import utility.ColorUtils;
 import utility.ShapeUtils;
-import visualization.model_controls.ModelControl;
 import xml.writer.XMLWriter;
 
 import java.io.File;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static javafx.scene.shape.StrokeType.INSIDE;
 
 /**
- * A simulator that display and update the cells from the CellGraph
+ * The entry point for all simulation-related things. The basic architecture looks like: <br>
+ *
+ * <ul>
+ *  <li> Simulator </li>
+ *      <ul>
+ *      <li> SimulationModel </li>
+ *          <ul>
+ *              <li> Various SimulationModels</li>
+ *          </ul>
+ *      <li> CellGraph </li>
+ *          <ul>
+ *              <li> Cell </li>
+ *          </ul>
+ *      </ul>
+ * </ul>
+ *
+ * <b>ANY</b> interaction between CellGraph and SimulationModel is
+ * handled via this class, including batch update/commit. Also,
+ * <b> ANY </b> interaction between "outside world" and simulation
+ * models have to go through Simulator, either directly or indirectly.
  *
  * @param <T> Type of the Cell's value
  * @author Inchan Hwang
@@ -36,35 +51,15 @@ public class Simulator<T> {
     private Pane view;
     private int tickCount;
 
-    public static Simulator<Integer> defaultSimulator() {
-        return GameOfLife.generate(ModelControl.DEFAULT_CELL_NUM, ShapeUtils.RECTANGULAR);
-    }
-
     public Simulator(CellGraph<T> graph_, SimulationModel<T> model_) {
         graph = graph_; model = model_;
         graph.getCells().forEach(c -> {
             var v = c.view();
             v.setStrokeType(INSIDE);
 
-            v.setOnMouseEntered(e -> {
-                v.toFront();
-                v.setFill(ColorUtils
-                        .mix(model.chooseColor(c.value()), model.chooseColor(model.nextValue(c.value())), MIX_INDEX));
-                v.setStroke(model.chooseColor(c.value()));
-                v.setStrokeDashOffset(5);
-                v.getStrokeDashArray().addAll(10d);
-                v.setOpacity(MOUSE_ENTER_OPACITY);
-            });
-
-            v.setOnMouseExited(e -> {
-                v.setFill(model.chooseColor(c.value()));
-                v.setStroke(new Color(0,0,0,0));
-                v.setOpacity(1);
-            });
-            v.setOnMouseClicked(e -> {
-                c.handleClick(model);
-                v.getOnMouseEntered().handle(e);
-            });
+            v.setOnMouseEntered(e -> handleMouseEntered(c));
+            v.setOnMouseExited(e -> handleMouseExited(c));
+            v.setOnMouseClicked(e -> { c.handleClick(model); v.getOnMouseEntered().handle(e); });
             c.updateView(model);
         });
         view = new Pane();
@@ -72,6 +67,7 @@ public class Simulator<T> {
 
         tickCount = 0;
     }
+
 
     /**
      * Increment the count of the tick and update the cells
@@ -121,6 +117,36 @@ public class Simulator<T> {
     }
 
     /**
+     * Update the parameters with the new value passed from the UI's ModelControl
+     *
+     * @param params
+     */
+    public void updateSimulationModel(Map<String, String> params) { model.updateModelParams(params); }
+
+    /**
+     * Cheesy method to obtain shape information by looking at a cell within the graph to
+     * get overall shape info.
+     */
+    public String peekShape() {
+        var code = graph.getCells().iterator().next().shapeCode();
+        if(code == ShapeUtils.RECTANGLE) return ShapeUtils.RECTANGULAR;
+        else if(code == ShapeUtils.TRIANGLE || code == ShapeUtils.TRIANGLE_FLIP) return ShapeUtils.TRIANGULAR;
+        else return ""; // shouldn't happen for now
+    }
+
+    /**
+     * Obtains statistics from cells, based on SimulationModel.
+     */
+    public Map<String, Integer> getStatistics() {
+        return model.getStatistics(
+                graph.getCells()
+                        .stream()
+                        .map(Cell::value)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    /**
      */
     private void globalUpdate() { model.globalUpdate(graph); }
 
@@ -134,26 +160,21 @@ public class Simulator<T> {
      */
     private void updateView() { graph.getCells().forEach(c -> c.updateView(model)); }
 
-    /**
-     * Update the parameters with the new value passed from the UI's ModelControl
-     *
-     * @param params
-     */
-    public void updateSimulationModel(Map<String, String> params) { model.updateParams(params); }
-
-    public String peekShape() {
-        var code = graph.getCells().iterator().next().shapeCode();
-        if(code == ShapeUtils.RECTANGLE) return ShapeUtils.RECTANGULAR;
-        else if(code == ShapeUtils.TRIANGLE || code == ShapeUtils.TRIANGLE_FLIP) return ShapeUtils.TRIANGULAR;
-        else return ""; // shouldn't happen for now
+    private void handleMouseEntered(Cell<T> cell) {
+        var v = cell.view();
+        v.toFront();
+        v.setFill(ColorUtils
+                .mix(model.chooseColor(cell.value()), model.chooseColor(model.nextValue(cell.value())), MIX_INDEX));
+        v.setStroke(model.chooseColor(cell.value()));
+        v.setStrokeDashOffset(5);
+        v.getStrokeDashArray().addAll(10d);
+        v.setOpacity(MOUSE_ENTER_OPACITY);
     }
 
-    public Map<String, Integer> getStatistics() {
-        return model.getStatisitcs(
-                graph.getCells()
-                        .stream()
-                        .map(Cell::value)
-                        .collect(Collectors.toList())
-        );
+    private void handleMouseExited(Cell<T> cell) {
+        var v = cell.view();
+        v.setFill(model.chooseColor(cell.value()));
+        v.setStroke(new Color(0,0,0,0));
+        v.setOpacity(1);
     }
 }

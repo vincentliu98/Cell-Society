@@ -8,7 +8,7 @@ import simulation.Simulator;
 import java.util.List;
 
 /**
- * ???
+ * ShapeUtils provide methods to make a shape based on shapeCode
  *
  * @author Inchan Hwang
  */

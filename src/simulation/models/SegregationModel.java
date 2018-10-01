@@ -26,7 +26,7 @@ public class SegregationModel implements SimulationModel<Integer> {
     public SegregationModel(double threshold) { satisfactionThreshold = threshold; }
 
     @Override
-    public int getPriority(Integer myVal) { return 0; }
+    public int updatePriority(Integer myVal) { return 0; }
 
     @Override
     public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) {
@@ -76,7 +76,7 @@ public class SegregationModel implements SimulationModel<Integer> {
     public String modelName() { return MODEL_NAME; }
 
     @Override
-    public Map<String, Integer> getStatisitcs(List<Integer> values) {
+    public Map<String, Integer> getStatistics(List<Integer> values) {
         HashMap<String, Integer> myMap = new HashMap<>();
         int redNum = 0;
         int blueNum = 0;
@@ -98,7 +98,7 @@ public class SegregationModel implements SimulationModel<Integer> {
     }
 
     @Override
-    public void updateParams(Map<String, String> params) {
+    public void updateModelParams(Map<String, String> params) {
         satisfactionThreshold = Double.parseDouble(params.get(PARAM_SATISFACTION));
     }
 
