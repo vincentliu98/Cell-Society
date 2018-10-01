@@ -23,17 +23,4 @@ public class ColorUtils {
         return new Color(red, green, blue, 1);
     }
 
-    /**
-     *
-     * @param c
-     * @return
-     */
-    public static Color invert(Color c) {
-        return new Color(
-                1-c.getRed(),
-                1-c.getGreen(),
-                1-c.getBlue(),
-                1
-        );
-    }
 }
