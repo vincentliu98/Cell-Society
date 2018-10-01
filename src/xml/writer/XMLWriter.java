@@ -4,7 +4,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import simulation.Cell;
 import simulation.CellGraph;
-import utility.ShapeUtils;
 import xml.XMLException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -109,22 +108,15 @@ public abstract class XMLWriter<T> {
         return parent;
     }
 
-    /**
-     *
-     * @return
-     */
     protected abstract String getModelName();
 
     /**
-     *
-     * @param value
-     * @return
+     * Encodes model-specific values inside a cell into XML format.
      */
     protected abstract List<Element> encodeCellValue(T value);
 
     /**
-     *
-     * @return
+     * Encodes model-specific parameters into XML format.
      */
     protected abstract List<Element> parseModelParams();
 }

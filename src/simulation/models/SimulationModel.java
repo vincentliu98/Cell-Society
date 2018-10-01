@@ -10,72 +10,38 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  An interface for all simulation models.
- *  It has the methods to update individual or all value of cells and change the color accordingly.
- *  It is also changes the parameters of the model when the parameters from UI change.
- *  When saving XML file, SimulationModel returns a specific XMLWriter for the model.
+ *  An interface for <b>all</b> model-specific functions;
+ *  When adding a model, the <b>first</b> thing to do is to
+ *  implement this interface, before moving on to UI/XML parts
+ *  that creates a Simulator/SimulationModel. What methods must
+ *  do should be evident from the method name and its
+ *  input/output type signatures.
  *
  * @param <T> Type of the cell's value for a model
  * @author Inchan Hwang
  */
 public interface SimulationModel<T> {
     /**
-     *
-     * @param myVal
-     * @return
+     *  MODEL-SPECIFIC UPDATE RULES
      */
-    int getPriority(T myVal);
-
-    /**
-     *
-     * @param me
-     * @param neighbors
-     */
+    int updatePriority(T myVal);
     void localUpdate(Cell<T> me, List<Cell<T>> neighbors);
-
-    /**
-     *
-     * @param graph
-     */
     void globalUpdate(CellGraph<T> graph);
-
-    /**
-     *
-     * @param myVal
-     * @return
-     */
+    void updateModelParams(Map<String, String> params);
     T nextValue(T myVal);
 
     /**
-     *
-     * @param myVal
-     * @return
+     *  MODEL-SPECIFIC UI CONFIGURATIONS
      */
     Color chooseColor(T myVal);
 
     /**
-     *
-     * @return
+     *  MODEL-SPECIFIC DATA
      */
     String modelName();
-
     Map<String, Integer> getStatistics(List<T> values);
-
-    /**
-     *
-     * @param graph
-     * @param outFile
-     * @return
-     */
     XMLWriter<T> getXMLWriter(CellGraph<T> graph, File outFile, String language);
 
-    /**
-     *
-     * @param params
-     */
-    void updateParams(Map<String, String> params);
-
     T getValFromCode(int code);
-
     List<Integer> getCodes();
 }

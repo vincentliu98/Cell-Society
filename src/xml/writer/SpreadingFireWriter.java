@@ -2,7 +2,6 @@ package xml.writer;
 
 import org.w3c.dom.Element;
 import simulation.CellGraph;
-import simulation.models.SimulationModel;
 import simulation.models.SpreadingFireModel;
 
 import java.io.File;
@@ -10,6 +9,7 @@ import java.util.List;
 
 /**
  * SpreadingOfFireWriter extends the abstract class XMLWriter
+ * defining encoding methods for cell values and model parameters.
  *
  * @author Vincent Liu
  */

@@ -13,6 +13,15 @@
     -fx-background-color:linear-gradient(#61a2b1,#2A5058);
 }
 
+.neighbor-button {
+    -fx-text-fill:white;
+    -fx-font-family:"Arial";
+    -fx-font-size: 14px;
+    -fx-font-weight:bold;
+    -fx-pref-width: 200px;
+    -fx-background-color:linear-gradient(#61a2b1,#2A5058);
+}
+
 .button:hover {
     -fx-background-color:linear-gradient(#5192a1,#1A4048);
 }

@@ -29,7 +29,7 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     }
 
     @Override
-    public int getPriority(Integer myVal) { return 0; }
+    public int updatePriority(Integer myVal) { return 0; }
 
     @Override
     public void localUpdate(Cell<Integer> me, List<Cell<Integer>> neighbors) {
@@ -84,7 +84,7 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
     }
 
     @Override
-    public void updateParams(Map<String, String> params) {
+    public void updateModelParams(Map<String, String> params) {
         probCatch = Double.parseDouble(params.get(PARAM_CATCHPROB));
     }
 

@@ -1,15 +1,17 @@
 package simulation.factory;
 
+import javafx.util.Pair;
 import simulation.Cell;
 import simulation.Simulator;
 import simulation.models.GameOfLifeModel;
 import utility.ShapeUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
- *  Convenience class to generateRect "Game Of Life" CellGraph
+ *  Convenience class to generate "Game Of Life" Simulator
  *  @author Inchan Hwang
  */
 public class GameOfLife {
@@ -21,7 +23,8 @@ public class GameOfLife {
      * @param initial
      * @return
      */
-    public static Simulator<Integer> generateTri(int row, int column, int[][] initial) {
+    public static Simulator<Integer> generateTri(int row, int column,
+                                                 int[][] initial, List<Pair<Integer, Integer>> indices) {
         var model = new GameOfLifeModel();
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / ((column+1)/2);
@@ -37,7 +40,8 @@ public class GameOfLife {
             }
         }
 
-        var graph = new TriangleGridUtils<Integer>().graphWith3Neighbors(cells, row, column);
+        var graph = NeighborUtils.triangularGraph(cells, row, column, indices);
+
         return new Simulator<>(graph, model);
     }
 
@@ -47,7 +51,8 @@ public class GameOfLife {
      * @param initial
      * @return
      */
-    public static Simulator<Integer> generateRect(int row, int column, int[][] initial) {
+    public static Simulator<Integer> generateRect(int row, int column,
+                                                  int[][] initial, List<Pair<Integer, Integer>> indices) {
         var model = new GameOfLifeModel();
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / column;
@@ -63,7 +68,7 @@ public class GameOfLife {
             }
         }
 
-        var graph = new SquareGridUtils<Integer>().graphWith8Neighbors(cells, row, column);
+        var graph = NeighborUtils.rectangularGraph(cells, row, column, indices);
         return new Simulator<>(graph, model);
     }
 
@@ -72,7 +77,7 @@ public class GameOfLife {
      * @param n
      * @return
      */
-    public static Simulator<Integer> generate(int n, String shape) {
+    public static Simulator<Integer> generate(int n, String shape, List<Pair<Integer, Integer>> indices) {
         var rng = new Random();
         int tmp[][] = new int[n][n];
         for(int i = 0 ; i < n ; i ++) {
@@ -81,8 +86,15 @@ public class GameOfLife {
                 tmp[i][j] = x < 0.5 ? 0 : 1;
             }
         }
-        if(shape.equals(ShapeUtils.RECTANGULAR)) return GameOfLife.generateRect(n, n, tmp);
-        else if(shape.equals(ShapeUtils.TRIANGULAR)) return GameOfLife.generateTri(n, n, tmp);
-        return null;
+
+        if (shape.equals(ShapeUtils.RECTANGULAR)) return GameOfLife.generateRect(
+                n, n, tmp,
+                indices == null ? NeighborUtils.indicesFor8Rectangle() : indices);
+        else if (shape.equals(ShapeUtils.TRIANGULAR)) return GameOfLife.generateTri(
+                n, n, tmp,
+                indices == null ? NeighborUtils.indicesFor12Triangle() : indices);
+        else return null;
     }
+
+    public static Simulator<Integer> generate(int n, String shape) { return generate(n, shape, null); }
 }

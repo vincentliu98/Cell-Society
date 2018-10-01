@@ -2,12 +2,14 @@ package visualization.model_controls;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.util.Pair;
 import simulation.Simulator;
 import simulation.factory.Segregation;
 import simulation.models.SegregationModel;
 import visualization.SimulationPanel;
 
 import java.util.HashMap;
+import java.util.List;
 
 import static simulation.factory.Segregation.DEFAULT_THRESHOLD;
 
@@ -50,6 +52,14 @@ public class SegregationControl extends ModelControl<Integer> {
         thresholdBar.valueProperty().addListener((ov, old_val, new_val) ->
                 thresholdValue.setText(String.valueOf(new_val.doubleValue())));
         getChildren().addAll(thresholdCaption, thresholdValue, thresholdBar);
+    }
+
+    @Override
+    public void handleNeighborChange(int numCell, List<Pair<Integer, Integer>> neighborIndices) {
+        isDirty = true;
+        simPanel = new SimulationPanel<>(
+                Segregation.generate(numCell, simPanel.simulator().peekShape(), neighborIndices)
+        );
     }
 
     @Override
