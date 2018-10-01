@@ -1,5 +1,6 @@
 package simulation.factory;
 
+import javafx.util.Pair;
 import simulation.Cell;
 import simulation.Simulator;
 import simulation.models.WaTorModel;
@@ -8,10 +9,11 @@ import simulation.models.wator.Shark;
 import utility.ShapeUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
- *  Convenience class to generateRect "Wa-Tor" Simulator
+ *  Convenience class to generate "Wa-Tor" Simulator.
  *
  * @author Inchan Hwang
  */
@@ -22,8 +24,11 @@ public class WaTor {
     public static final int DEFAULT_SHARKBREED_PERIOD = 5;
     public static final int DEFAULT_SHARKSTARVE_PERIOD = 5;
 
-    public static Simulator<Fish> generateTri(int row, int column, int[][] initial, int fishBreedPeriod,
-                                               int sharkBreedPeriod, int sharkStarvePeriod) {
+    public static Simulator<Fish> generateTri(
+            int row, int column, int[][] initial,
+            int fishBreedPeriod, int sharkBreedPeriod, int sharkStarvePeriod,
+            List<Pair<Integer, Integer>> indices
+    ) {
         var model = new WaTorModel(fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod);
         ArrayList<Cell<Fish>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / ((column+1)/2);
@@ -41,21 +46,15 @@ public class WaTor {
             }
         }
 
-        var graph = new TriangleGridUtils<Fish>().graphWith3NeighborsWithNoBoundary(cells, row, column);
+        var graph = NeighborUtils.triangularGraphWrap(cells, row, column, indices);
         return new Simulator<>(graph, model);
     }
-    /**
-     *
-     * @param row
-     * @param column
-     * @param initial
-     * @param fishBreedPeriod
-     * @param sharkBreedPeriod
-     * @param sharkStarvePeriod
-     * @return
-     */
-    public static Simulator<Fish> generateRect(int row, int column, int[][] initial, int fishBreedPeriod,
-                                               int sharkBreedPeriod, int sharkStarvePeriod) {
+
+    public static Simulator<Fish> generateRect(
+            int row, int column, int[][] initial,
+            int fishBreedPeriod, int sharkBreedPeriod, int sharkStarvePeriod,
+            List<Pair<Integer, Integer>> indices
+    ) {
         var model = new WaTorModel(fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod);
         ArrayList<Cell<Fish>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / column;
@@ -73,16 +72,11 @@ public class WaTor {
             }
         }
 
-        var graph = new SquareGridUtils<Fish>().graphWith8NeighborsNoBoundary(cells, row, column);
+        var graph = NeighborUtils.rectangularGraphWrap(cells, row, column, indices);
         return new Simulator<>(graph, model);
     }
 
-    /**
-     *
-     * @param n
-     * @return
-     */
-    public static Simulator<Fish> generate(int n, String shape) {
+    public static Simulator<Fish> generate(int n, String shape, List<Pair<Integer, Integer>> indices) {
         var rng = new Random();
         int tmp[][] = new int[n][n];
         for(int i = 0 ; i < n ; i ++) {
@@ -92,10 +86,15 @@ public class WaTor {
                         x < 0.55 ? WaTorModel.SHARK : 2;
             }
         }
+
         if(shape.equals(ShapeUtils.RECTANGULAR)) return WaTor.generateRect(n, n, tmp,
-                DEFAULT_FISHBREED_PERIOD, DEFAULT_SHARKBREED_PERIOD, DEFAULT_SHARKSTARVE_PERIOD);
+                DEFAULT_FISHBREED_PERIOD, DEFAULT_SHARKBREED_PERIOD, DEFAULT_SHARKSTARVE_PERIOD,
+                indices == null ? NeighborUtils.indicesFor8Rectangle() : indices);
         else if(shape.equals(ShapeUtils.TRIANGULAR)) return WaTor.generateTri(n, n, tmp,
-                DEFAULT_FISHBREED_PERIOD, DEFAULT_SHARKBREED_PERIOD, DEFAULT_SHARKSTARVE_PERIOD);
-        return null;
+                DEFAULT_FISHBREED_PERIOD, DEFAULT_SHARKBREED_PERIOD, DEFAULT_SHARKSTARVE_PERIOD,
+                indices == null ? NeighborUtils.indicesFor12Triangle() : indices);
+        else return null;
     }
+
+    public static Simulator<Fish> generate(int n, String shape) { return generate(n, shape, null); }
 }

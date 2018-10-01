@@ -4,6 +4,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
+import javafx.util.Pair;
 import simulation.Simulator;
 import simulation.factory.WaTor;
 import simulation.models.WaTorModel;
@@ -11,6 +12,7 @@ import simulation.models.wator.Fish;
 import visualization.SimulationPanel;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * WaTorControl extends the abstract class ModelControl.
@@ -100,6 +102,14 @@ public class WaTorControl extends ModelControl<Fish> {
         
         scrollPane.setContent(wrapper);
         getChildren().add(scrollPane);
+    }
+
+    @Override
+    public void handleNeighborChange(int numCell, List<Pair<Integer, Integer>> neighborIndices) {
+        isDirty = true;
+        simPanel = new SimulationPanel<>(
+                WaTor.generate(numCell, simPanel.simulator().peekShape(), neighborIndices)
+        );
     }
 
     @Override

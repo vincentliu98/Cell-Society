@@ -2,12 +2,14 @@ package visualization.model_controls;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.util.Pair;
 import simulation.Simulator;
 import simulation.factory.SpreadingFire;
 import simulation.models.SpreadingFireModel;
 import visualization.SimulationPanel;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * SpreadingFireControl extends the abstract class ModelControl.
@@ -50,6 +52,14 @@ public class SpreadingFireControl extends ModelControl<Integer> {
         probCatchBar.valueProperty().addListener((ov, old_val, new_val) ->
                 probCatchValue.setText(String.valueOf(new_val.doubleValue())));
         getChildren().addAll(probCatchCaption, probCatchValue, probCatchBar);
+    }
+
+    @Override
+    public void handleNeighborChange(int numCell, List<Pair<Integer, Integer>> neighborIndices) {
+        isDirty = true;
+        simPanel = new SimulationPanel<>(
+                SpreadingFire.generate(numCell, simPanel.simulator().peekShape(), neighborIndices)
+        );
     }
 
     @Override

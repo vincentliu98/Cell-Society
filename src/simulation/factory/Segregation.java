@@ -1,21 +1,27 @@
 package simulation.factory;
 
+import javafx.util.Pair;
 import simulation.Cell;
 import simulation.Simulator;
 import simulation.models.SegregationModel;
 import utility.ShapeUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
- *  Convenience class to generateRect "Segregation" Simulator
+ *  Convenience class to generate "Segregation" Simulator
  *  @author Inchan Hwang
  */
 public class Segregation {
     public static final double DEFAULT_THRESHOLD = 0.3;
 
-    public static Simulator<Integer> generateTri(int row, int column, int[][] initial, double threshold) {
+    public static Simulator<Integer> generateTri(
+            int row, int column,
+            int[][] initial, double threshold,
+            List<Pair<Integer, Integer>> indices
+    ) {
         var model = new SegregationModel(threshold);
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / ((column+1)/2);
@@ -31,18 +37,15 @@ public class Segregation {
             }
         }
 
-        var graph = new TriangleGridUtils<Integer>().graphWith3Neighbors(cells, row, column);
+        var graph = NeighborUtils.triangularGraph(cells, row, column, indices);
         return new Simulator<>(graph, model);
     }
-    /**
-     *
-     * @param row
-     * @param column
-     * @param initial
-     * @param threshold
-     * @return
-     */
-    public static Simulator<Integer> generateRect(int row, int column, int[][] initial, double threshold) {
+
+    public static Simulator<Integer> generateRect(
+            int row, int column,
+            int[][] initial, double threshold,
+            List<Pair<Integer, Integer>> indices
+    ) {
         var model = new SegregationModel(threshold);
         ArrayList<Cell<Integer>> cells = new ArrayList<>();
         double width = Simulator.SIMULATION_SX / column;
@@ -58,16 +61,11 @@ public class Segregation {
             }
         }
 
-        var graph = new SquareGridUtils<Integer>().graphWith8Neighbors(cells, row, column);
+        var graph = NeighborUtils.rectangularGraph(cells, row, column, indices);
         return new Simulator<>(graph, model);
     }
 
-    /**
-     *
-     * @param n
-     * @return
-     */
-    public static Simulator<Integer> generate(int n, String shape) {
+    public static Simulator<Integer> generate(int n, String shape, List<Pair<Integer, Integer>> indices) {
         var rng = new Random();
         int tmp[][] = new int[n][n];
         for(int i = 0 ; i < n ; i ++) {
@@ -77,8 +75,15 @@ public class Segregation {
                             x < 0.7 ? 1 : 2;
             }
         }
-        if(shape.equals(ShapeUtils.RECTANGULAR)) return Segregation.generateRect(n, n, tmp, DEFAULT_THRESHOLD);
-        else if(shape.equals(ShapeUtils.TRIANGULAR)) return Segregation.generateTri(n, n, tmp, DEFAULT_THRESHOLD);
-        return null;
+
+        if (shape.equals(ShapeUtils.RECTANGULAR)) return Segregation.generateRect(
+                n, n, tmp, DEFAULT_THRESHOLD,
+                indices == null ? NeighborUtils.indicesFor8Rectangle() : indices);
+        else if (shape.equals(ShapeUtils.TRIANGULAR)) return Segregation.generateTri(
+                n, n, tmp, DEFAULT_THRESHOLD,
+                indices == null ? NeighborUtils.indicesFor12Triangle() : indices);
+        else return null;
     }
+
+    public static Simulator<Integer> generate(int n, String shape) { return generate(n, shape, null); }
 }

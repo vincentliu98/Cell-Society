@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 public class CellGraph<T> extends HashMap<Cell<T>, List<Cell<T>>> {
     /**
+     * returns cells, sorted according to model's priority
      * @return a Set of the cells
      */
     public Set<Cell<T>> getCells() { return keySet(); }
@@ -27,7 +28,7 @@ public class CellGraph<T> extends HashMap<Cell<T>, List<Cell<T>>> {
      */
     public List<Cell<T>> getOrderedCells(SimulationModel<T> model) {
         return keySet().stream()
-                .sorted(Comparator.comparingInt(c -> model.getPriority(c.value())))
+                .sorted(Comparator.comparingInt(c -> model.updatePriority(c.value())))
                 .collect(Collectors.toList());
     }
 

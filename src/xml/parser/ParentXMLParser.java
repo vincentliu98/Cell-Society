@@ -6,8 +6,7 @@ import org.xml.sax.SAXException;
 import simulation.Cell;
 import simulation.CellGraph;
 import simulation.Simulator;
-import simulation.factory.SquareGridUtils;
-import simulation.factory.TriangleGridUtils;
+import simulation.factory.NeighborUtils;
 import simulation.models.SimulationModel;
 import utility.ShapeUtils;
 import xml.XMLException;
@@ -85,7 +84,6 @@ public abstract class ParentXMLParser<T> {
         int n = getIntValue(root, CELLS_PER_SIDE_TAG, 1, 100, 10);
         ArrayList<ArrayList<T>> cellVals;
         if (root.getElementsByTagName(PROB_VALS_TAG).getLength() != 0) {
-            System.out.print("here3");
             cellVals = cellValsFromProbs(root, model, n);
         } else {
             cellVals = cellValsFromList(root, model, n);
@@ -208,7 +206,7 @@ public abstract class ParentXMLParser<T> {
                 cells.add(cell);
             }
         }
-        return new SquareGridUtils<T>().graphWith8Neighbors(cells, row, column);
+        return NeighborUtils.rectangularGraph(cells, row, column, NeighborUtils.indicesFor8Rectangle());
     }
 
     public CellGraph<T> generateTri(int row, int column, ArrayList<ArrayList<T>> vals) {
@@ -224,7 +222,7 @@ public abstract class ParentXMLParser<T> {
                 cells.add(cell);
             }
         }
-        return new TriangleGridUtils<T>().graphWith3Neighbors(cells, row, column);
+        return NeighborUtils.triangularGraph(cells, row, column, NeighborUtils.indicesFor12Triangle());
     }
 
 //    /**

@@ -1,10 +1,15 @@
 package visualization.model_controls;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
+import javafx.util.Pair;
 import simulation.Simulator;
 import visualization.SimulationPanel;
+import visualization.neighbor_chooser.NeighborChooser;
+
+import java.util.List;
 
 /**
  *  For various model-specific panels that defines uniform theme across different panels.
@@ -27,11 +32,13 @@ public abstract class ModelControl<T> extends VBox {
     public static final double MAX_CELL_NUM = 100;
     public static final int BLOCK_INCREMENT = 4;
     public static final int MAJOR_TICK_UNIT = 20;
+    public static final String CELLNUM_TEXT = "Cell Number / Side: ";
 
-    public static final Label CELL_NUMBER_CAPTION = new Label("Cell Number / Side:");
 
+    private Label cellNumCaption = new Label(CELLNUM_TEXT + "0");
     private Slider numberBar = new Slider(MIN_CELL_NUM, MAX_CELL_NUM, DEFAULT_CELL_NUM);
-    private Label cellNumValue = new Label(Integer.toString((int) numberBar.getValue()));
+    private Button chooseNeighbor;
+    private NeighborChooser chooseNeighborDialog;
 
     protected SimulationPanel<T> simPanel;
     protected boolean isDirty;
@@ -48,6 +55,13 @@ public abstract class ModelControl<T> extends VBox {
         isDirty = false;
         simPanel = new SimulationPanel<>(sim);
 
+        setupNumberBar();
+        setupNeighborChooser();
+
+        getChildren().addAll(cellNumCaption, numberBar, chooseNeighbor);
+    }
+
+    private void setupNumberBar() {
         numberBar.setShowTickMarks(true);
         numberBar.setShowTickLabels(true);
         numberBar.setMajorTickUnit(MAJOR_TICK_UNIT);
@@ -55,17 +69,35 @@ public abstract class ModelControl<T> extends VBox {
         numberBar.setBlockIncrement(BLOCK_INCREMENT);
 
         numberBar.setOnMouseReleased(e -> {
-            cellNumValue.setText(Integer.toString((int) numberBar.getValue()));
+            cellNumCaption.setText(CELLNUM_TEXT + Integer.toString((int) numberBar.getValue()));
             handleNumCellChange((int) numberBar.getValue());
             handleParamChange();
         });
 
         numberBar.valueProperty().addListener((ov, old_val, new_val) -> {
-            cellNumValue.setText(String.valueOf(new_val.intValue()));
+            cellNumCaption.setText(CELLNUM_TEXT + String.valueOf(new_val.intValue()));
         });
-
-        getChildren().addAll(CELL_NUMBER_CAPTION, cellNumValue, numberBar);
     }
+
+    private void setupNeighborChooser() {
+        // TODO: REMOVE HARDCODE
+        chooseNeighborDialog = new NeighborChooser(simulator().peekShape());
+        chooseNeighbor = new Button("Select Neighbor");
+        chooseNeighbor.getStyleClass().add("neighbor-button");
+        chooseNeighbor.setOnMouseClicked(e -> {
+            var optRes = chooseNeighborDialog.showAndWait();
+            optRes.ifPresent(res -> handleNeighborChange((int) numberBar.getValue(), res));
+            handleParamChange();
+        });
+    }
+
+    /**
+     * Since various models handle neighbors in different way, the reinitialization is
+     * left for each model's controller
+     * @param numCell
+     * @param neighborIndices
+     */
+    public abstract void handleNeighborChange(int numCell, List<Pair<Integer, Integer>> neighborIndices);
 
     /**
      * Since various models have different factory methods, the reinitialization

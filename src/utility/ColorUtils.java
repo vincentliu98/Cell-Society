@@ -23,19 +23,4 @@ public class ColorUtils {
         double blue = a.getBlue()*pA + b.getBlue()*(1-pA);
         return new Color(red, green, blue, 1);
     }
-
-    /**
-     * Invert the color in RGB scale
-     *
-     * @param c
-     * @return the contrary color
-     */
-    public static Color invert(Color c) {
-        return new Color(
-                1-c.getRed(),
-                1-c.getGreen(),
-                1-c.getBlue(),
-                1
-        );
-    }
 }
