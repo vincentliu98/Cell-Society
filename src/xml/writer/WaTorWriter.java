@@ -28,7 +28,7 @@ public class WaTorWriter extends XMLWriter<Fish> {
 
     @Override
     protected List<Element> encodeCellValue(Fish value) {
-        var kind = doc.createElement("kind");
+        var kind = doc.createElement("code");
         var breedCounter = doc.createElement("breedCounter");
         var starveCounter = doc.createElement("starveCounter");
 
