@@ -21,13 +21,7 @@ public class GameOfLifeControl extends ModelControl<Integer> {
     public GameOfLifeControl(String shape) { this(GameOfLife.generate(DEFAULT_CELL_NUM, shape)); }
 
     @Override
-    public void handleNumCellChange(int numCell) {
-        isDirty = true;
-        simPanel = new SimulationPanel<>(GameOfLife.generate(numCell, simPanel.simulator().peekShape()));
-    }
-
-    @Override
-    public void handleNeighborChange(int numCell, List<Pair<Integer, Integer>> neighborIndices) {
+    public void handleStructureChange(int numCell, List<Pair<Integer, Integer>> neighborIndices) {
         isDirty = true;
         simPanel = new SimulationPanel<>(
                 GameOfLife.generate(numCell, simPanel.simulator().peekShape(), neighborIndices)

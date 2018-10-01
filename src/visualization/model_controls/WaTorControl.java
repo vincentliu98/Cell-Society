@@ -105,17 +105,11 @@ public class WaTorControl extends ModelControl<Fish> {
     }
 
     @Override
-    public void handleNeighborChange(int numCell, List<Pair<Integer, Integer>> neighborIndices) {
+    public void handleStructureChange(int numCell, List<Pair<Integer, Integer>> neighborIndices) {
         isDirty = true;
         simPanel = new SimulationPanel<>(
                 WaTor.generate(numCell, simPanel.simulator().peekShape(), neighborIndices)
         );
-    }
-
-    @Override
-    public void handleNumCellChange(int numCell) {
-        isDirty = true;
-        simPanel = new SimulationPanel<>(WaTor.generate(numCell, simPanel.simulator().peekShape()));
     }
 
     @Override
