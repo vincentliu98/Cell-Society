@@ -70,7 +70,7 @@ public abstract class ModelControl<T> extends VBox {
 
         numberBar.setOnMouseReleased(e -> {
             cellNumCaption.setText(CELLNUM_TEXT + Integer.toString((int) numberBar.getValue()));
-            handleNumCellChange((int) numberBar.getValue());
+            handleStructureChange((int) numberBar.getValue(), chooseNeighborDialog.getResult());
             handleParamChange();
         });
 
@@ -80,13 +80,12 @@ public abstract class ModelControl<T> extends VBox {
     }
 
     private void setupNeighborChooser() {
-        // TODO: REMOVE HARDCODE
         chooseNeighborDialog = new NeighborChooser(simulator().peekShape());
         chooseNeighbor = new Button("Select Neighbor");
         chooseNeighbor.getStyleClass().add("neighbor-button");
         chooseNeighbor.setOnMouseClicked(e -> {
             var optRes = chooseNeighborDialog.showAndWait();
-            optRes.ifPresent(res -> handleNeighborChange((int) numberBar.getValue(), res));
+            optRes.ifPresent(res -> handleStructureChange((int) numberBar.getValue(), res));
             handleParamChange();
         });
     }
@@ -97,16 +96,7 @@ public abstract class ModelControl<T> extends VBox {
      * @param numCell
      * @param neighborIndices
      */
-    public abstract void handleNeighborChange(int numCell, List<Pair<Integer, Integer>> neighborIndices);
-
-    /**
-     * Since various models have different factory methods, the reinitialization
-     * is left for each model's controller
-     *
-     * @param numCell
-     */
-    public abstract void handleNumCellChange(int numCell);
-
+    public abstract void handleStructureChange(int numCell, List<Pair<Integer, Integer>> neighborIndices);
     /**
      * Since various models have different set of parameters, they
      * handle the parameter changes in their own way

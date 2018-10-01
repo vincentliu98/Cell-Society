@@ -230,6 +230,7 @@ public class SimulationControl extends HBox {
     private void handleModelChange(String newModel) {
         stop();
         initializeModelControl(newModel, chooseShape.getValue());
+        numTick.setText(myResources.getString("NumTickDynamic")+modelControl.simulator().tickCount());
     }
 
     /**
@@ -239,6 +240,7 @@ public class SimulationControl extends HBox {
     private void handleShapeChange(String newShape) {
         stop();
         initializeModelControl(chooseModel.getValue(), newShape);
+        numTick.setText(myResources.getString("NumTickDynamic")+modelControl.simulator().tickCount());
     }
 
     /**
