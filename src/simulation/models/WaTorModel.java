@@ -167,6 +167,11 @@ public class WaTorModel implements SimulationModel<Fish> {
         return List.of(FISH, SHARK, EMPTY);
     }
 
+    @Override
+    public int getDefaultCode() {
+        return EMPTY;
+    }
+
     public int getFishBreedPeriod() { return fishBreedPeriod; }
     public int getSharkBreedPeriod() { return sharkBreedPeriod; }
     public int getSharkStarvePeriod() { return sharkStarvePeriod; }

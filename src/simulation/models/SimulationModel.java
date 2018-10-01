@@ -44,4 +44,6 @@ public interface SimulationModel<T> {
 
     T getValFromCode(int code);
     List<Integer> getCodes();
+
+    int getDefaultCode();
 }

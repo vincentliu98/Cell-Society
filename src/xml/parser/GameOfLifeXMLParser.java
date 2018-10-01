@@ -34,8 +34,8 @@ public class GameOfLifeXMLParser extends ParentXMLParser {
         return new Simulator<>(graph, model);
     }
 
-    @Override
-    public Integer getCellValue(Element e) {
-        return getIntValue(e, IS_ALIVE_TAG, VAL_TAG_TO_RANGE_MAP);
-    }
+//    @Override
+//    public Integer getCellValue(Element e) {
+//        return getIntValue(e, IS_ALIVE_TAG, VAL_TAG_TO_RANGE_MAP);
+//    }
 }

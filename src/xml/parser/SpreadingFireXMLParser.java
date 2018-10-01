@@ -39,13 +39,13 @@ public class SpreadingFireXMLParser extends ParentXMLParser {
 
     public Simulator<Integer> getSimulator(File datafile) {
         Element root = getRootElement(datafile);
-        SpreadingFireModel model = new SpreadingFireModel(getDoubleValue(root, PROB_CATCH_TAG, VAL_TAG_TO_RANGE_MAP));
+        SpreadingFireModel model = new SpreadingFireModel(getDoubleValue(root, PROB_CATCH_TAG, 0.0, 1.0, 0.5));
         CellGraph<Integer> graph = getCellGraph(root, model);
         return new Simulator<>(graph, model);
     }
 
-    @Override
-    public Integer getCellValue(Element e) {
-        return getIntValue(e, LIVE_STATE_TAG, VAL_TAG_TO_RANGE_MAP);
-    }
+//    @Override
+//    public Integer getCellValue(Element e) {
+//        return getIntValue(e, LIVE_STATE_TAG, VAL_TAG_TO_RANGE_MAP);
+//    }
 }

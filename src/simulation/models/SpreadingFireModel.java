@@ -98,5 +98,10 @@ public class SpreadingFireModel implements SimulationModel<Integer> {
         return List.of(EMPTY, TREE, BURNING);
     }
 
+    @Override
+    public int getDefaultCode() {
+        return EMPTY;
+    }
+
     public double getProbCatch() { return probCatch; }
 }

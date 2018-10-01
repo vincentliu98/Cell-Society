@@ -79,4 +79,9 @@ public class GameOfLifeModel implements SimulationModel<Integer> {
     public List<Integer> getCodes() {
         return List.of(DEAD, ALIVE);
     }
+
+    @Override
+    public int getDefaultCode() {
+        return DEAD;
+    }
 }
