@@ -24,9 +24,8 @@ _Jay Pande_: XML parsers and error checking
 
 * [Yanbo Fang's cell society project](https://github.com/yanbofang/cell_society)
 * [Java Line Chart](https://docs.oracle.com/javafx/2/charts/line-chart.htm)
-* [JavaFX Documentation](https://docs.oracle.com/javase/8/javafx/api/javafx/scene/Node.html)
+* [JavaFX Documentation](https://docs.oracle.com/javase/8/javafx/api/javafx/)
 * [Lynda Course on JavaFX](https://www.lynda.com/Java-tutorials/JavaFX-GUI-Development/466182-2.html?srchtrk=index%3a1%0alinktypeid%3a2%0aq%3ajavafx%0apage%3a1%0as%3arelevance%0asa%3atrue%0aproducttypeid%3a2)
-* **OTHER RESOURCES that Jay and Inchan used ?????????????**
 
 ### Running the Program
 
@@ -57,22 +56,19 @@ _Jay Pande_: XML parsers and error checking
 ##### Assumptions or Simplifications:
 
 * This project does not support displaying multiple simulations simultaneously
-* ????????????????
 
 ##### Known Bugs:
 * High Priority: None
 * Medium Priority: None
 * Low Priority
-    * After switching the model, the num tick doesn't update immediately. It updates back to 0 only when the simulation starts.
     * When error occurs in loading XML, the same error message occurs twice in the same window.
 ##### Extra credit:
 N/A
 
 ### Notes
-* ???????????????
 
 ### Impressions
-_Inchan Hwang_: ???????????????????
+_Inchan Hwang_: It was a fun project to experiment how Java Generics could be utilized. It was a real joy to have great teammates who were willing to shoot for the stars together.
 
 _Vincent Liu_: This was a great project that I worked on. I learned a lot from working my teammates and looking at their code. It was very fulfilling to build this simulation model from scratch and see the simulation running.
 
@@ -80,7 +76,8 @@ _Jay Pande_: ???????????????????
 
 ### src Folder Structure
 <pre>
-src                                                         #
+src                                                           #
+├── autoTree.py                                       #
 ├── module-info.java                                  #
 ├── README.md                                         #
 ├── simulation                                        #
@@ -88,10 +85,9 @@ src                                                         #
 │   ├── Cell.java                                   #
 │   ├── factory                                     #
 │   │   ├── GameOfLife.java                       #
-│   │   ├── SpreadingFire.java                    #
+│   │   ├── NeighborUtils.java                    #
 │   │   ├── Segregation.java                      #
-│   │   ├── SquareGridUtils.java                  #
-│   │   ├── TriangleGridUtils.java                #
+│   │   ├── SpreadingFire.java                    #
 │   │   └── WaTor.java                            #
 │   ├── models                                      #
 │   │   ├── GameOfLifeModel.java                  #
@@ -115,6 +111,10 @@ src                                                         #
 │   │   ├── SegregationControl.java               #
 │   │   └── WaTorControl.java                     #
 │   ├── Main.java                                   #
+│   ├── neighbor_chooser                            #
+│   │   ├── IndexedShape.java                     #
+│   │   ├── NeighborChooser.java                  #
+│   │   └── NeighborChooserPane.java              #
 │   ├── statistics                                  #
 │   │   ├── GameOfLifeStatistics.java             #
 │   │   ├── ModelStatistics.java                  #
@@ -138,4 +138,5 @@ src                                                         #
     │   ├── WaTorWriter.java                        #
     │   └── XMLWriter.java                          #
     └── XMLException.java                             #
+
 </pre>
