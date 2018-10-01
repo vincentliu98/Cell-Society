@@ -41,6 +41,7 @@ public class SimulationControl extends HBox {
 
     private Window window; // for load/save binding
     private ResourceBundle myResources;
+    private ResourceBundle myErrorsResources;
     private String myLanguage;
 
     private StatusCode statusCode;
@@ -77,6 +78,7 @@ public class SimulationControl extends HBox {
         simPeriod = 1;
         this.myResources = myResources;
         this.myLanguage = myLanguage;
+        this.myErrorsResources = ResourceBundle.getBundle("Errors"+this.myLanguage);
         models[0] = myResources.getString("GameOfLifeModelName");
         models[1] = myResources.getString("SegregationModelName");
         models[2] = myResources.getString("WaTorModelName");
@@ -310,6 +312,9 @@ public class SimulationControl extends HBox {
         } else if(modelName.equals(WaTorModel.MODEL_NAME)) {
             modelControl = new WaTorControl(new WaTorXMLParser(myLanguage).getSimulator(file));
             modelChart = new WaTorStatistics();
+        } else {
+            throw new XMLException(myErrorsResources.getString("ModelNameErrorMsg")
+                    +myErrorsResources.getString("LoadAgainMsg"), modelName);
         }
 
         statusCode = StatusCode.UPDATE;

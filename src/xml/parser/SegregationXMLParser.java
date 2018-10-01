@@ -38,13 +38,13 @@ public class SegregationXMLParser extends ParentXMLParser {
 
     public Simulator<Integer> getSimulator(File datafile) {
         Element root = getRootElement(datafile);
-        SegregationModel model = new SegregationModel(getDoubleValue(root, THRESHOLD_TAG, VAL_TAG_TO_RANGE_MAP));
+        SegregationModel model = new SegregationModel(getDoubleValue(root, THRESHOLD_TAG, 0.0, 1.0, 0.5));
         CellGraph<Integer> graph = getCellGraph(root, model);
         return new Simulator<>(graph, model);
     }
 
-    @Override
-    public Integer getCellValue(Element e) {
-        return getIntValue(e, TYPE_VALUE_TAG, VAL_TAG_TO_RANGE_MAP);
-    }
+//    @Override
+//    public Integer getCellValue(Element e) {
+//        return getIntValue(e, TYPE_VALUE_TAG, VAL_TAG_TO_RANGE_MAP);
+//    }
 }

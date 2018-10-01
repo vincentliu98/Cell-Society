@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--need to fix cx and cy before this will load-->
+<data>
+    <modelName>Game Of Life</modelName>
+    <shapeCode>0</shapeCode>
+    <cellsPerSide> 3 </cellsPerSide>
+    <cell>
+        <code> 1 </code>
+    </cell>
+    <cell>
+        <code> 0 </code>
+    </cell>
+    <cell>
+        <code> 1 </code>
+    </cell>
+    <cell>
+        <code> 0 </code>
+    </cell>
+    <cell>
+        <code> 1 </code>
+    </cell>
+    <cell>
+        <code> 0 </code>
+    </cell>
+    <cell>
+        <code> 1 </code>
+    </cell>
+    <cell>
+        <code> 0 </code>
+    </cell>
+    <cell>
+        <code> 1 </code>
+    </cell>
+    <author> jgp17 </author>
+</data>
+

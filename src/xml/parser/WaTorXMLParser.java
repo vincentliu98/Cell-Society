@@ -47,26 +47,26 @@ public class WaTorXMLParser extends ParentXMLParser {
      */
     public Simulator<Fish> getSimulator(File datafile) {
         Element root = getRootElement(datafile);
-        int fishBreedPeriod = getIntValue(root, FISH_BREED_PERIOD_TAG, VAL_TAG_TO_RANGE_MAP);
-        int sharkBreedPeriod = getIntValue(root, SHARK_BREED_PERIOD_TAG, VAL_TAG_TO_RANGE_MAP);
-        int sharkStarvePeriod = getIntValue(root, SHARK_STARVE_PERIOD_TAG, VAL_TAG_TO_RANGE_MAP);
+        int fishBreedPeriod = getIntValue(root, FISH_BREED_PERIOD_TAG, 0, Integer.MAX_VALUE, 4);
+        int sharkBreedPeriod = getIntValue(root, SHARK_BREED_PERIOD_TAG, 0, Integer.MAX_VALUE, 5);
+        int sharkStarvePeriod = getIntValue(root, SHARK_STARVE_PERIOD_TAG, 0, Integer.MAX_VALUE, 4);
         WaTorModel model = new WaTorModel(fishBreedPeriod, sharkBreedPeriod, sharkStarvePeriod);
         CellGraph<Fish> graph = getCellGraph(root, model);
         return new Simulator<>(graph, model);
     }
 
-    @Override
-    public Fish getCellValue(Element e) {
-        int kind = getIntValue(e, CELL_KIND_TAG, VAL_TAG_TO_RANGE_MAP);
-        Fish val = null;
-        if (kind == WaTorModel.FISH || kind == WaTorModel.SHARK) {
-            int breedCounter = getIntValue(e, CELL_BREED_COUNTER_TAG, VAL_TAG_TO_RANGE_MAP);
-            int starveCounter = getIntValue(e, CELL_STARVE_COUNTER_TAG, VAL_TAG_TO_RANGE_MAP);
-            if (kind == WaTorModel.FISH)
-                val = new Fish(breedCounter);
-            else
-                val = new Shark(breedCounter, starveCounter);
-        }
-        return val;
-    }
+//    @Override
+//    public Fish getCellValue(Element e) {
+//        int kind = getIntValue(e, CELL_KIND_TAG, VAL_TAG_TO_RANGE_MAP);
+//        Fish val = null;
+//        if (kind == WaTorModel.FISH || kind == WaTorModel.SHARK) {
+//            int breedCounter = getIntValue(e, CELL_BREED_COUNTER_TAG, VAL_TAG_TO_RANGE_MAP);
+//            int starveCounter = getIntValue(e, CELL_STARVE_COUNTER_TAG, VAL_TAG_TO_RANGE_MAP);
+//            if (kind == WaTorModel.FISH)
+//                val = new Fish(breedCounter);
+//            else
+//                val = new Shark(breedCounter, starveCounter);
+//        }
+//        return val;
+//    }
 }

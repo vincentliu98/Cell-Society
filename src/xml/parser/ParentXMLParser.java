@@ -8,7 +8,6 @@ import simulation.CellGraph;
 import simulation.Simulator;
 import simulation.factory.SquareGridUtils;
 import simulation.factory.TriangleGridUtils;
-import simulation.models.GameOfLifeModel;
 import simulation.models.SimulationModel;
 import utility.ShapeUtils;
 import xml.XMLException;
@@ -20,8 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static simulation.Simulator.SIMULATION_SX;
-import static simulation.Simulator.SIMULATION_SY;
+import static java.lang.Math.round;
 import static xml.writer.XMLWriter.DELIMITER;
 
 /**
@@ -36,35 +34,37 @@ import static xml.writer.XMLWriter.DELIMITER;
 public abstract class ParentXMLParser<T> {
     // keep only one documentBuilder because it is expensive to make and can reset it before parsing
     private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
+    public static final String VAL_CODE_TAG = "code";
     private static ResourceBundle myResources;
     public static final String DEFAULT_RESOURCES = "Errors";
     private static final String LOAD_AGAIN_KEY = "LoadAgainMsg";
     public static final String MODEL_ATTRIBUTE_TAG = "modelName";
     public static final String PROB_VALS_TAG = "probVals";
     public static final String CELLS_PER_SIDE_TAG = "cellsPerSide";
-    public static final String SHAPE_WIDTH_TAG = "shapeWidth";
-    public static final String SHAPE_HEIGHT_TAG = "shapeHeight";
+//    public static final String SHAPE_WIDTH_TAG = "shapeWidth";
+//    public static final String SHAPE_HEIGHT_TAG = "shapeHeight";
     public static final String SHAPE_CODE_TAG = "shapeCode";
     public static final String CELL_TAG = "cell";
-    public static final String CELL_UNIQUE_ID_TAG = "uniqueID";
-    public static final String CELL_NEIGHBORS_TAG = "neighbors";
-    public static final String CELL_XPOS_TAG = "cx";
-    public static final String CELL_YPOS_TAG = "cy";
+//    public static final String CELL_UNIQUE_ID_TAG = "uniqueID";
+//    public static final String CELL_NEIGHBORS_TAG = "neighbors";
+//    public static final String CELL_XPOS_TAG = "cx";
+//    public static final String CELL_YPOS_TAG = "cy";
     public static final String MIN_STRING = "min";
     public static final String MAX_STRING = "max";
     public static final String DEF_STRING = "def";
     public static final Map<String, Map<String, Object>> STD_TAG_TO_RANGE_MAP = Map.ofEntries(
             Map.entry(SHAPE_CODE_TAG, Map.of(MIN_STRING, Collections.min(ShapeUtils.shapeCodes()), MAX_STRING,
             Collections.min(ShapeUtils.shapeCodes()))),
-            Map.entry(CELLS_PER_SIDE_TAG, Map.of(MIN_STRING, 1, MAX_STRING, 100, DEF_STRING, 10)),
-            Map.entry(SHAPE_WIDTH_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)),
-            Map.entry(SHAPE_HEIGHT_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)),
-            Map.entry(CELL_UNIQUE_ID_TAG, Map.of(MIN_STRING, Integer.MIN_VALUE, MAX_STRING, Integer.MAX_VALUE)),
-            Map.entry(CELL_XPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE)),
-            Map.entry(CELL_YPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE))
+            Map.entry(CELLS_PER_SIDE_TAG, Map.of(MIN_STRING, 1, MAX_STRING, 100, DEF_STRING, 10))//,
+//            Map.entry(SHAPE_WIDTH_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)),
+//            Map.entry(SHAPE_HEIGHT_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)),
+//            Map.entry(CELL_UNIQUE_ID_TAG, Map.of(MIN_STRING, Integer.MIN_VALUE, MAX_STRING, Integer.MAX_VALUE)),
+//            Map.entry(CELL_XPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE)),
+//            Map.entry(CELL_YPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE))
     );
     private static final double MARGIN = 0.5;
     public static final String WHITESPACE = "\\s";
+    public static final String EMPTY = "";
 
     /**
      * Create a parser for XML files of given type.
@@ -79,78 +79,103 @@ public abstract class ParentXMLParser<T> {
 
     public abstract Simulator<T> getSimulator(File datafile);
 
-    public abstract T getCellValue(Element e);
+//    public abstract T getCellValue(Element e);
 
     public CellGraph<T> getCellGraph(Element root, SimulationModel<T> model) {
+        int n = getIntValue(root, CELLS_PER_SIDE_TAG, 1, 100, 10);
+        ArrayList<ArrayList<T>> cellVals;
         if (root.getElementsByTagName(PROB_VALS_TAG).getLength() != 0) {
-            return graphFromProbs(root, model);
+            System.out.print("here3");
+            cellVals = cellValsFromProbs(root, model, n);
         } else {
-            return getCellGraphFromLayout(root);
+            cellVals = cellValsFromList(root, model, n);
+        }
+        int shapeCode = getIntValue(root, SHAPE_CODE_TAG, Collections.min(ShapeUtils.shapeCodes()),
+                Collections.max(ShapeUtils.shapeCodes()), 0);
+        if (shapeCode == 0) {
+            return generateRect(n, n, cellVals);
+        } else {
+            return generateTri(n, n, cellVals);
         }
     }
 
-    /**
-     *
-     * @param root
-     * @return
-     */
-    public CellGraph<T> getCellGraphFromLayout(Element root) {
+    public ArrayList<ArrayList<T>> cellValsFromList(Element root, SimulationModel<T> model, int n) {
         NodeList cells = root.getElementsByTagName(CELL_TAG);
-        Map<Integer, Cell<T>> IDToCellMap = new HashMap<>();
-        for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
-            Element curCell = (Element) cells.item(cIndex);
-            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG, STD_TAG_TO_RANGE_MAP);
-            int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG, STD_TAG_TO_RANGE_MAP);
-            double shapeWidth = getDoubleValue(curCell, SHAPE_WIDTH_TAG, STD_TAG_TO_RANGE_MAP);
-            double shapeHeight = getDoubleValue(curCell, SHAPE_HEIGHT_TAG, STD_TAG_TO_RANGE_MAP);
-            double xPos = getDoubleValue(curCell, CELL_XPOS_TAG, STD_TAG_TO_RANGE_MAP);
-            double yPos = getDoubleValue(curCell, CELL_YPOS_TAG, STD_TAG_TO_RANGE_MAP);
-            IDToCellMap.put(uniqueID, new Cell<>(getCellValue(curCell), shapeCode, xPos, yPos, shapeWidth, shapeHeight));
-        }
-        CellGraph<T> graph = new CellGraph<>();
-        for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
-            Element curCell = (Element) cells.item(cIndex);
-            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG, STD_TAG_TO_RANGE_MAP);
-            List<Integer> neighborIDs = parseNeighbors(curCell);
-            List<Cell<T>> neighborList = new ArrayList<>();
-            for (int n : neighborIDs) {
-                neighborList.add(IDToCellMap.get(n));
-            }
-            graph.put(IDToCellMap.get(uniqueID), neighborList);
-        }
-        return graph;
-    }
-
-    public CellGraph<T> graphFromProbs(Element root, SimulationModel<T> model) {
-        int n = getIntValue(root, CELLS_PER_SIDE_TAG, STD_TAG_TO_RANGE_MAP);
-        Map<T, Double> valToProbMap = getValToProbMap(root, model);
-        var rng = new Random();
-        ArrayList<ArrayList<T>> tmp = new ArrayList<>();
+        ArrayList<ArrayList<T>> cellVals = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             ArrayList<T> row = new ArrayList<>();
             for (int j = 0; j < n; j++) {
-                var x = rng.nextDouble();
-                for (T v : valToProbMap.keySet()) {
-                    if (x < valToProbMap.get(v)) {
-                        row.add(v);
-                    }
-                }
+                Element curCell = (Element) cells.item(i*n+j);
+                int code = getIntValue(curCell, VAL_CODE_TAG, Collections.min(model.getCodes()),
+                        Collections.max(model.getCodes()), model.getDefaultCode());
+                row.add(model.getValFromCode(code));
             }
-            tmp.add(row);
+            cellVals.add(row);
         }
-        int shapeCode = getIntValue(root, SHAPE_CODE_TAG, STD_TAG_TO_RANGE_MAP);
-        if (shapeCode == 0) {
-            return generateRect(n, n, tmp);
-        } else {
-            return generateTri(n, n, tmp);
+        return cellVals;
+    }
+
+//    /**
+//     *
+//     * @param root
+//     * @return
+//     */
+//    public CellGraph<T> getCellGraphFromLayout(Element root, SimulationModel<T> model, int n) {
+//        NodeList cells = root.getElementsByTagName(CELL_TAG);
+//        Map<Integer, Cell<T>> IDToCellMap = new HashMap<>();
+//        for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
+//            Element curCell = (Element) cells.item(cIndex);
+//            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG, STD_TAG_TO_RANGE_MAP);
+//            int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG, STD_TAG_TO_RANGE_MAP);
+//            double shapeWidth = getDoubleValue(curCell, SHAPE_WIDTH_TAG, STD_TAG_TO_RANGE_MAP);
+//            double shapeHeight = getDoubleValue(curCell, SHAPE_HEIGHT_TAG, STD_TAG_TO_RANGE_MAP);
+//            double xPos = getDoubleValue(curCell, CELL_XPOS_TAG, STD_TAG_TO_RANGE_MAP);
+//            double yPos = getDoubleValue(curCell, CELL_YPOS_TAG, STD_TAG_TO_RANGE_MAP);
+//            IDToCellMap.put(uniqueID, new Cell<>(getCellValue(curCell), shapeCode, xPos, yPos, shapeWidth, shapeHeight));
+//        }
+//        CellGraph<T> graph = new CellGraph<>();
+//        for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
+//            Element curCell = (Element) cells.item(cIndex);
+//            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG, STD_TAG_TO_RANGE_MAP);
+//            List<Integer> neighborIDs = parseNeighbors(curCell);
+//            List<Cell<T>> neighborList = new ArrayList<>();
+//            for (int neighborID : neighborIDs) {
+//                neighborList.add(IDToCellMap.get(neighborID));
+//            }
+//            graph.put(IDToCellMap.get(uniqueID), neighborList);
+//        }
+//        return graph;
+//    }
+
+    public ArrayList<ArrayList<T>> cellValsFromProbs(Element root, SimulationModel<T> model, int n) {
+        Random rng = new Random();
+        ArrayList<ArrayList<T>> cellVals = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            ArrayList<T> row = new ArrayList<>();
+            for (int j = 0; j < n; j++) {
+                var val = getRandomVal(getValToProbMap(root, model), rng);
+                row.add(val);
+            }
+            cellVals.add(row);
         }
+        return cellVals;
+    }
+
+    private T getRandomVal(Map<T, Double> valToProbMap, Random rng) {
+        var x = rng.nextDouble();
+        for (T v : valToProbMap.keySet()) {
+            if (x < valToProbMap.get(v)) {
+                return v;
+            }
+        }
+        return null;
     }
 
     public Map<T, Double> getValToProbMap(Element root, SimulationModel<T> model) {
-            String neighborStr = getTextValue(root, PROB_VALS_TAG);
+            String probStr = getTextValue(root, PROB_VALS_TAG);
             List<Double> probList = new ArrayList<>();
-            String[] neighborStrArray = neighborStr.replaceAll("\\s", "").split(DELIMITER);
-            for (String s : neighborStrArray) {
+            String[] probStrArray = probStr.split(DELIMITER);
+            for (String s : probStrArray) {
                 probList.add(Double.parseDouble(s));
             }
             List<Integer> codes = model.getCodes();
@@ -202,20 +227,20 @@ public abstract class ParentXMLParser<T> {
         return new TriangleGridUtils<T>().graphWith3Neighbors(cells, row, column);
     }
 
-    /**
-     *
-     * @param root
-     * @return
-     */
-    public static List<Integer> parseNeighbors(Element root) {
-        String neighborStr = getTextValue(root, CELL_NEIGHBORS_TAG);
-        ArrayList<Integer> neighborArrayList = new ArrayList<>();
-        String[] neighborStrArray = neighborStr.replaceAll("\\s", "").split(DELIMITER);
-        for (String s : neighborStrArray) {
-            neighborArrayList.add(Integer.parseInt(s));
-        }
-        return neighborArrayList;
-    }
+//    /**
+//     *
+//     * @param root
+//     * @return
+//     */
+//    public static List<Integer> parseNeighbors(Element root) {
+//        String neighborStr = getTextValue(root, CELL_NEIGHBORS_TAG);
+//        ArrayList<Integer> neighborArrayList = new ArrayList<>();
+//        String[] neighborStrArray = neighborStr.split(DELIMITER);
+//        for (String s : neighborStrArray) {
+//            neighborArrayList.add(Integer.parseInt(s));
+//        }
+//        return neighborArrayList;
+//    }
 
     /**
      * Get value of Element's text
@@ -236,11 +261,9 @@ public abstract class ParentXMLParser<T> {
      * @param tagName
      * @return
      */
-    public static int getIntValue(Element e, String tagName, Map<String, Map<String, Object>> rangeMap) {
+    public static int getIntValue(Element e, String tagName, int min, int max, int def) {
         try {
-            int min = (int) rangeMap.get(tagName).get(MIN_STRING);
-            int max = (int) rangeMap.get(tagName).get(MAX_STRING);
-            String str = getTextValue(e, tagName).replaceAll("\\s", "");
+            String str = getTextValue(e, tagName).replaceAll(WHITESPACE, EMPTY);
             try {
                 int i = Integer.parseInt(str);
                 if (i < min || i > max) {
@@ -251,7 +274,7 @@ public abstract class ParentXMLParser<T> {
                 throw new XMLException(myResources.getString("ValueNotIntMsg"), tagName, str);
             }
         } catch (XMLException ex){
-            return (int) getDefault(tagName, rangeMap, ex);
+            return def;
         }
     }
 
@@ -261,11 +284,9 @@ public abstract class ParentXMLParser<T> {
      * @param tagName
      * @return
      */
-    public static double getDoubleValue(Element e, String tagName, Map<String, Map<String, Object>> rangeMap) {
+    public static double getDoubleValue(Element e, String tagName, double min, double max, double def) {
         try {
-            double min = (double) rangeMap.get(tagName).get(MIN_STRING);
-            double max = (double) rangeMap.get(tagName).get(MAX_STRING);
-            String str = getTextValue(e, tagName).replaceAll("\\s", "");
+            String str = getTextValue(e, tagName).replaceAll(WHITESPACE, EMPTY);
             try {
                 double db = Double.parseDouble(str);
                 if (db < min || db > max) {
@@ -276,18 +297,18 @@ public abstract class ParentXMLParser<T> {
                 throw new XMLException(myResources.getString("ValueNotDoubleMsg"), tagName, str);
             }
         } catch (XMLException ex){
-            return (double) getDefault(tagName, rangeMap, ex);
+            return def;
         }
     }
 
-    private static Object getDefault(String tagName, Map<String, Map<String, Object>> rangeMap, Exception ex) {
-            var def = rangeMap.get(tagName).get(DEF_STRING);
-            if (def == null) {
-                throw new XMLException(ex.getMessage() + myResources.getString("NoDefaultMsg") +
-                        myResources.getString(LOAD_AGAIN_KEY), tagName);
-            }
-            return rangeMap.get(tagName).get(DEF_STRING);
-    }
+//    private static Object getDefault(String tagName, Map<String, Map<String, Object>> rangeMap, Exception ex) {
+//            var def = rangeMap.get(tagName).get(DEF_STRING);
+//            if (def == null) {
+//                throw new XMLException(ex.getMessage() + myResources.getString("NoDefaultMsg") +
+//                        myResources.getString(LOAD_AGAIN_KEY), tagName);
+//            }
+//            return rangeMap.get(tagName).get(DEF_STRING);
+//    }
 
     /**
      * Get root element of an XML file

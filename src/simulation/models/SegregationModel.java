@@ -112,5 +112,10 @@ public class SegregationModel implements SimulationModel<Integer> {
         return List.of(EMPTY, BLUE, RED);
     }
 
+    @Override
+    public int getDefaultCode() {
+        return EMPTY;
+    }
+
     public double getSatisfactionThreshold() { return satisfactionThreshold; }
 }
