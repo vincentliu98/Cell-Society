@@ -24,7 +24,7 @@ public class GameOfLifeWriter extends XMLWriter<Integer> {
 
     @Override
     protected List<Element> encodeCellValue(Integer value) {
-        var isAlive = doc.createElement("isAlive");
+        var isAlive = doc.createElement("code");
         isAlive.appendChild(doc.createTextNode(value.toString()));
         return List.of(isAlive);
     }

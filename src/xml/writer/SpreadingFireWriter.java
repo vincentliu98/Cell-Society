@@ -27,7 +27,7 @@ public class SpreadingFireWriter extends XMLWriter<Integer> {
 
     @Override
     protected List<Element> encodeCellValue(Integer value) {
-        var liveState = doc.createElement("liveState");
+        var liveState = doc.createElement("code");
         liveState.appendChild(doc.createTextNode(value.toString()));
         return List.of(liveState);
     }

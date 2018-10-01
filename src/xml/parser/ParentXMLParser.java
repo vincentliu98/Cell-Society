@@ -39,28 +39,11 @@ public abstract class ParentXMLParser<T> {
     private static final String LOAD_AGAIN_KEY = "LoadAgainMsg";
     public static final String MODEL_ATTRIBUTE_TAG = "modelName";
     public static final String PROB_VALS_TAG = "probVals";
-    public static final String CELLS_PER_SIDE_TAG = "cellsPerSide";
-//    public static final String SHAPE_WIDTH_TAG = "shapeWidth";
-//    public static final String SHAPE_HEIGHT_TAG = "shapeHeight";
     public static final String SHAPE_CODE_TAG = "shapeCode";
     public static final String CELL_TAG = "cell";
-//    public static final String CELL_UNIQUE_ID_TAG = "uniqueID";
-//    public static final String CELL_NEIGHBORS_TAG = "neighbors";
-//    public static final String CELL_XPOS_TAG = "cx";
-//    public static final String CELL_YPOS_TAG = "cy";
     public static final String MIN_STRING = "min";
     public static final String MAX_STRING = "max";
     public static final String DEF_STRING = "def";
-    public static final Map<String, Map<String, Object>> STD_TAG_TO_RANGE_MAP = Map.ofEntries(
-            Map.entry(SHAPE_CODE_TAG, Map.of(MIN_STRING, Collections.min(ShapeUtils.shapeCodes()), MAX_STRING,
-            Collections.min(ShapeUtils.shapeCodes()))),
-            Map.entry(CELLS_PER_SIDE_TAG, Map.of(MIN_STRING, 1, MAX_STRING, 100, DEF_STRING, 10))//,
-//            Map.entry(SHAPE_WIDTH_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)),
-//            Map.entry(SHAPE_HEIGHT_TAG, Map.of(MIN_STRING, 0.1, MAX_STRING, Double.MAX_VALUE)),
-//            Map.entry(CELL_UNIQUE_ID_TAG, Map.of(MIN_STRING, Integer.MIN_VALUE, MAX_STRING, Integer.MAX_VALUE)),
-//            Map.entry(CELL_XPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE)),
-//            Map.entry(CELL_YPOS_TAG, Map.of(MIN_STRING, 0.0, MAX_STRING, Double.MAX_VALUE))
-    );
     private static final double MARGIN = 0.5;
     public static final String WHITESPACE = "\\s";
     public static final String EMPTY = "";
@@ -78,10 +61,8 @@ public abstract class ParentXMLParser<T> {
 
     public abstract Simulator<T> getSimulator(File datafile);
 
-//    public abstract T getCellValue(Element e);
-
     public CellGraph<T> getCellGraph(Element root, SimulationModel<T> model) {
-        int n = getIntValue(root, CELLS_PER_SIDE_TAG, 1, 100, 10);
+        int n = (int) Math.round(Math.sqrt(root.getElementsByTagName(CELL_TAG).getLength()));
         ArrayList<ArrayList<T>> cellVals;
         if (root.getElementsByTagName(PROB_VALS_TAG).getLength() != 0) {
             cellVals = cellValsFromProbs(root, model, n);
@@ -112,38 +93,6 @@ public abstract class ParentXMLParser<T> {
         }
         return cellVals;
     }
-
-//    /**
-//     *
-//     * @param root
-//     * @return
-//     */
-//    public CellGraph<T> getCellGraphFromLayout(Element root, SimulationModel<T> model, int n) {
-//        NodeList cells = root.getElementsByTagName(CELL_TAG);
-//        Map<Integer, Cell<T>> IDToCellMap = new HashMap<>();
-//        for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
-//            Element curCell = (Element) cells.item(cIndex);
-//            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG, STD_TAG_TO_RANGE_MAP);
-//            int shapeCode = getIntValue(curCell, SHAPE_CODE_TAG, STD_TAG_TO_RANGE_MAP);
-//            double shapeWidth = getDoubleValue(curCell, SHAPE_WIDTH_TAG, STD_TAG_TO_RANGE_MAP);
-//            double shapeHeight = getDoubleValue(curCell, SHAPE_HEIGHT_TAG, STD_TAG_TO_RANGE_MAP);
-//            double xPos = getDoubleValue(curCell, CELL_XPOS_TAG, STD_TAG_TO_RANGE_MAP);
-//            double yPos = getDoubleValue(curCell, CELL_YPOS_TAG, STD_TAG_TO_RANGE_MAP);
-//            IDToCellMap.put(uniqueID, new Cell<>(getCellValue(curCell), shapeCode, xPos, yPos, shapeWidth, shapeHeight));
-//        }
-//        CellGraph<T> graph = new CellGraph<>();
-//        for (int cIndex = 0; cIndex < cells.getLength(); cIndex++) {
-//            Element curCell = (Element) cells.item(cIndex);
-//            int uniqueID = getIntValue(curCell, CELL_UNIQUE_ID_TAG, STD_TAG_TO_RANGE_MAP);
-//            List<Integer> neighborIDs = parseNeighbors(curCell);
-//            List<Cell<T>> neighborList = new ArrayList<>();
-//            for (int neighborID : neighborIDs) {
-//                neighborList.add(IDToCellMap.get(neighborID));
-//            }
-//            graph.put(IDToCellMap.get(uniqueID), neighborList);
-//        }
-//        return graph;
-//    }
 
     public ArrayList<ArrayList<T>> cellValsFromProbs(Element root, SimulationModel<T> model, int n) {
         Random rng = new Random();
@@ -225,21 +174,6 @@ public abstract class ParentXMLParser<T> {
         return NeighborUtils.triangularGraph(cells, row, column, NeighborUtils.indicesFor12Triangle());
     }
 
-//    /**
-//     *
-//     * @param root
-//     * @return
-//     */
-//    public static List<Integer> parseNeighbors(Element root) {
-//        String neighborStr = getTextValue(root, CELL_NEIGHBORS_TAG);
-//        ArrayList<Integer> neighborArrayList = new ArrayList<>();
-//        String[] neighborStrArray = neighborStr.split(DELIMITER);
-//        for (String s : neighborStrArray) {
-//            neighborArrayList.add(Integer.parseInt(s));
-//        }
-//        return neighborArrayList;
-//    }
-
     /**
      * Get value of Element's text
      */
@@ -298,15 +232,6 @@ public abstract class ParentXMLParser<T> {
             return def;
         }
     }
-
-//    private static Object getDefault(String tagName, Map<String, Map<String, Object>> rangeMap, Exception ex) {
-//            var def = rangeMap.get(tagName).get(DEF_STRING);
-//            if (def == null) {
-//                throw new XMLException(ex.getMessage() + myResources.getString("NoDefaultMsg") +
-//                        myResources.getString(LOAD_AGAIN_KEY), tagName);
-//            }
-//            return rangeMap.get(tagName).get(DEF_STRING);
-//    }
 
     /**
      * Get root element of an XML file

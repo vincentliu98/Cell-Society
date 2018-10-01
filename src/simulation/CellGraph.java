@@ -44,4 +44,8 @@ public class CellGraph<T> extends HashMap<Cell<T>, List<Cell<T>>> {
      * @return a list of neighbors
      */
     public List<Cell<T>> getNeighbors(Cell<T> cell) { return get(cell); }
+
+    public int shapeCode() {
+        return getCells().iterator().next().shapeCode();
+    }
 }

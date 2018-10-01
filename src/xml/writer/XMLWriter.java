@@ -57,6 +57,10 @@ public abstract class XMLWriter<T> {
             var modelName = doc.createElement("modelName");
             modelName.appendChild(doc.createTextNode(getModelName()));
             rootElement.appendChild(modelName);
+            var shapeCode = doc.createElement("shapeCode");
+            shapeCode.appendChild(doc.createTextNode(Integer.toString(graph.shapeCode())));
+            rootElement.appendChild(shapeCode);
+
             graph.getCells().forEach(c -> rootElement.appendChild(encodeCell(c)));
 
             parseModelParams().forEach(p -> rootElement.appendChild(p));
@@ -64,7 +68,7 @@ public abstract class XMLWriter<T> {
             TransformerFactory.newInstance().newTransformer().transform(
                     new DOMSource(doc), new StreamResult(outFile));
         } catch (TransformerException tfe) {
-            tfe.printStackTrace(); // Do some user-friendly things
+            throw new XMLException(myResources.getString("TransformErrorMsg"));
         }
     }
 

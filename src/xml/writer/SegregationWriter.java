@@ -26,7 +26,7 @@ public class SegregationWriter extends XMLWriter<Integer> {
 
     @Override
     protected List<Element> encodeCellValue(Integer value) {
-        var type = doc.createElement("type");
+        var type = doc.createElement("code");
         type.appendChild(doc.createTextNode(Integer.toString(value)));
         return List.of(type);
     }

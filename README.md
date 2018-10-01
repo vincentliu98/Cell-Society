@@ -26,7 +26,8 @@ _Jay Pande_: XML parsers and error checking
 * [Java Line Chart](https://docs.oracle.com/javafx/2/charts/line-chart.htm)
 * [JavaFX Documentation](https://docs.oracle.com/javase/8/javafx/api/javafx/scene/Node.html)
 * [Lynda Course on JavaFX](https://www.lynda.com/Java-tutorials/JavaFX-GUI-Development/466182-2.html?srchtrk=index%3a1%0alinktypeid%3a2%0aq%3ajavafx%0apage%3a1%0as%3arelevance%0asa%3atrue%0aproducttypeid%3a2)
-* **OTHER RESOURCES that Jay and Inchan used ?????????????**
+* [Stack Overflow Code to display error](https://stackoverflow.com/questions/39149242/how-can-i-do-an-error-messages-in-javafx)
+
 
 ### Running the Program
 
@@ -36,7 +37,6 @@ _Jay Pande_: XML parsers and error checking
 * resources/English.properties
 * resources/ErrorsEnglish.properties
 * resources/style.css
-* data/error_files
 
 ##### Interesting data files:
 * data/*
@@ -46,7 +46,8 @@ _Jay Pande_: XML parsers and error checking
     * Implement a 2D grid of cells with flexible model (Game Of Life, Spreading Of Fire, Segregation, Wa-Tor), size (1-10000 cells), and shape (triangle, rectangle)
     * Display a dynamic line chart consisting the number of the each kind of cells
 * Configuration
-    * Read in an XML formatted file that contains the initial settings for a simulation
+    * Read in an XML formatted file that contains the initial settings for a simulation, either with values for all cells given, 
+    or with probabilities/concentrations for determining values randomly given.
     * Allow users to save the current parameters of the model and save it as an XML file.
 * Visualization
     * Display the current states of the 2D grid and animate the simulation from its initial state until the user stops it.
@@ -57,7 +58,10 @@ _Jay Pande_: XML parsers and error checking
 ##### Assumptions or Simplifications:
 
 * This project does not support displaying multiple simulations simultaneously
-* ????????????????
+* Styling has not been implemented, except the desired cell shape (rectangular or triangular) can be encoded in 
+the XML file.
+* This project does not support initialization by total number of locations to occupy.
+* Assumed that simulations have the same number of rows and columns.
 
 ##### Known Bugs:
 * High Priority: None
@@ -65,6 +69,8 @@ _Jay Pande_: XML parsers and error checking
 * Low Priority
     * After switching the model, the num tick doesn't update immediately. It updates back to 0 only when the simulation starts.
     * When error occurs in loading XML, the same error message occurs twice in the same window.
+    * The error message displayed when a non-xml file is loaded is cryptic.
+    
 ##### Extra credit:
 N/A
 
@@ -76,7 +82,7 @@ _Inchan Hwang_: ???????????????????
 
 _Vincent Liu_: This was a great project that I worked on. I learned a lot from working my teammates and looking at their code. It was very fulfilling to build this simulation model from scratch and see the simulation running.
 
-_Jay Pande_: ???????????????????
+_Jay Pande_: It was frustrating that I ran out of time to implement all of the configuration features.
 
 ### src Folder Structure
 <pre>
