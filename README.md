@@ -62,6 +62,9 @@ _Jay Pande_: XML parsers and error checking
 the XML file.
 * This project does not support initialization by total number of locations to occupy.
 * Assumed that simulations have the same number of rows and columns.
+* We have a set probabilities for the distribution of cells, although the cells ARE generated randomly from those probabilities.
+* Design-wise, we have only considered one simulation at a time.
+
 
 ##### Known Bugs:
 * High Priority: None
